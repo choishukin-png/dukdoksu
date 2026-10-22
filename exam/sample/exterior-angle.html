@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>三角形外角（示例）— 公開試專區 — 讀數獨數</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../index.html">首頁</a>
+        <a href="../../teaching/index.html">教學內容</a>
+        <a href="../index.html" aria-current="page">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑">
+        <a href="../../index.html">首頁</a>
+        <span class="sep"></span>
+        <a href="../index.html">公開試專區</a>
+        <span class="sep"></span>
+        <a href="../compulsory/index.html">必修</a>
+        <span class="sep"></span>
+        <span>三角形外角（示例）</span>
+      </nav>
+      <h1>三角形外角 <span class="chip">示例</span></h1>
+      <p class="sub">BY TOPIC 題目生成頁面結構示例。完整題庫稍後接入；此頁示範介面與答案顯示方式。</p>
+    </div>
+
+    <div class="panel">
+      <h2>設定</h2>
+      <p>選擇難度與題數後按「生成題目」（第一版為靜態示例，尚未真正隨機出題）。</p>
+      <p style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;margin:1rem 0 0;">
+        <label>難度
+          <select id="difficulty" disabled aria-describedby="gen-note">
+            <option>基礎</option>
+            <option selected>中等</option>
+            <option>進階</option>
+          </select>
+        </label>
+        <label>題數
+          <select id="count" disabled>
+            <option>3</option>
+            <option selected>5</option>
+            <option>10</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn-primary" id="btn-gen" disabled>生成題目</button>
+      </p>
+      <p class="note" id="gen-note">題目生成器稍後推出。下方為一題靜態示例。</p>
+    </div>
+
+    <div class="panel" id="questions">
+      <h2>題目</h2>
+      <h3>題目 1（示例）</h3>
+      <p>在 \(\triangle ABC\) 中，\(D\) 為 \(BC\) 延長線上的一點。已知 \(\angle BAC = 40^\circ\)，\(\angle ABC = 65^\circ\)。求 \(\angle ACD\)。</p>
+      <div class="katex-demo" id="q-formula"></div>
+      <p style="margin-top:1rem;">
+        <button type="button" class="btn btn-secondary" id="btn-ans" aria-expanded="false" aria-controls="answer-box">顯示答案</button>
+        <a class="btn btn-ghost" href="../../teaching/f2/angles/exterior-angle/index.html">相關教學內容</a>
+      </p>
+      <div id="answer-box" hidden style="margin-top:1rem;padding:1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <h2 class="mt-0" style="margin-top:0;font-size:1.15rem;">答案</h2>
+        <h3 class="mt-0" style="margin-top:0.75rem;font-size:1rem;">簡略步驟</h3>
+        <p>由三角形內角和：\(\angle ACB = 180^\circ - 40^\circ - 65^\circ = 75^\circ\)。</p>
+        <p>又 \(ACD\) 與 \(ACB\) 為鄰角（直線上），故 \(\angle ACD = 180^\circ - 75^\circ = 105^\circ\)。</p>
+        <p>亦可直接用外角定理：\(\angle ACD = \angle BAC + \angle ABC = 40^\circ + 65^\circ = 105^\circ\)。</p>
+        <p><strong>答：</strong> \(105^\circ\)</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById("questions"), {
+          delimiters: [
+            { left: "\\(", right: "\\)", display: false },
+            { left: "\\[", right: "\\]", display: true }
+          ],
+          throwOnError: false
+        });
+      }
+      var btn = document.getElementById("btn-ans");
+      var box = document.getElementById("answer-box");
+      if (btn && box) {
+        btn.addEventListener("click", function () {
+          var open = box.hidden;
+          box.hidden = !open;
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          btn.textContent = open ? "隱藏答案" : "顯示答案";
+          if (open && window.renderMathInElement) {
+            renderMathInElement(box, {
+              delimiters: [
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+              ],
+              throwOnError: false
+            });
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

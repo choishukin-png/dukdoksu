@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>讀數獨數 — 中學數學教學網站</title>
+  <meta name="description" content="讀數獨數：分級教學內容與 DSE 公開試專區，筆記、互動教材與題目練習。">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="index.html" aria-current="page">首頁</a>
+        <a href="teaching/index.html">教學內容</a>
+        <a href="exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <h1>讀數獨數</h1>
+      <p class="lead">蔡樹堅老師為香港中學數學而設的教學網站：按級別與課題瀏覽筆記、互動 HTML 與教學影片；公開試專區按課題練習 DSE 必修部分及延伸部分（M1／M2）。</p>
+    </section>
+
+    <div class="wrap card-grid">
+      <a class="card" href="teaching/index.html">
+        <h2>教學內容</h2>
+        <p>分級別再分課題，放筆記、互動 HTML 與教學影片。已上架中二「三角形外角」「恆等式的性質」、中四「求函數未知常數」、中五「圓內接四邊形」等課題。</p>
+        <span class="meta">中一至中六 · 陸續上架 →</span>
+      </a>
+      <a class="card" href="exam/index.html">
+        <h2>公開試專區</h2>
+        <p>按課題（BY TOPIC）整理題目及答案，涵蓋 DSE 必修部分與延伸部分（M1／M2）。</p>
+        <span class="meta">必修 · M1 · M2 →</span>
+      </a>
+    </div>
+
+    <div class="wrap">
+      <div class="panel" id="latest">
+        <h2>最新上架</h2>
+        <ul class="topic-list">
+          <li>
+            <a href="teaching/f2/identities/identity-properties/index.html">
+              <span class="topic-meta">
+                恆等式的性質
+                <small>中二 · 恆等式 · 筆記／互動 HTML／教學影片</small>
+              </span>
+              <span class="badge">已上架</span>
+            </a>
+          </li>
+          <li>
+            <a href="teaching/f5/circles-basic/cyclic-quad/index.html">
+              <span class="topic-meta">
+                圓內接四邊形對角互補（定理 12.18）
+                <small>中五 · 圓的基本性質 · HTML 互動示範</small>
+              </span>
+              <span class="badge">已上架</span>
+            </a>
+          </li>
+          <li>
+            <a href="teaching/f5/circles-basic/inscribed-angle/index.html">
+              <span class="topic-meta">
+                圓心角兩倍於圓周角
+                <small>中五 · 圓的基本性質 · HTML 互動示範</small>
+              </span>
+              <span class="badge">已上架</span>
+            </a>
+          </li>
+          <li>
+            <a href="teaching/f4/functions/find-unknown-constant/index.html">
+              <span class="topic-meta">
+                求函數中的未知常數（例題 3.7）
+                <small>中四 · 函數 · 教案／學生筆記／互動示範</small>
+              </span>
+              <span class="badge">已上架</span>
+            </a>
+          </li>
+          <li>
+            <a href="teaching/f2/angles/exterior-angle/index.html">
+              <span class="topic-meta">
+                三角形外角
+                <small>中二 · 與三角形及多邊形相關的角 · 筆記／互動示範／題目逐步示範</small>
+              </span>
+              <span class="badge">已上架</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>公式示例</h2>
+        <p class="note mt-0">網站公式以 LaTeX 編寫，並以 KaTeX 顯示。例如三角形外角定理：</p>
+        <div class="katex-demo" id="formula-demo" aria-label="外角等於兩不相鄰內角之和"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var el = document.getElementById("formula-demo");
+      if (el && window.katex) {
+        katex.render(
+          "\\text{外角} = \\text{兩不相鄰內角之和}",
+          el,
+          { throwOnError: false, displayMode: true }
+        );
+      }
+    });
+  </script>
+</body>
+</html>
