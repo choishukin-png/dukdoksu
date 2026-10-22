@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3.2 完全平方的恆等式 — 中二 — 讀數獨數</title>
+  <meta name="description" content="中二第3章：完全平方的恆等式。含學生筆記與教學影片。">
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../../index.html">首頁</a>
+        <a href="../../../index.html" aria-current="page">教學內容</a>
+        <a href="../../../../exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑">
+        <a href="../../../../index.html">首頁</a>
+        <span class="sep"></span>
+        <a href="../../../index.html">教學內容</a>
+        <span class="sep"></span>
+        <a href="../../index.html">中二</a>
+        <span class="sep"></span>
+        <a href="../index.html">恆等式</a>
+        <span class="sep"></span>
+        <span>3.2 完全平方的恆等式</span>
+      </nav>
+      <h1>3.2 完全平方的恆等式</h1>
+      <p class="sub">中二 · 第3章 恆等式</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>運用完全平方恆等式，把兩數和或兩數差的平方展開，或把二次式寫成完全平方。</p>
+      <div class="katex-demo" id="formula" aria-label="完全平方恆等式"></div>
+      <p class="note">公式以 LaTeX／KaTeX 顯示；完整筆記見下方 PDF。</p>
+    </div>
+
+    <div class="panel" id="notes">
+      <h2>筆記</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="label">學生筆記</span>
+          <span class="desc">3.2 完全平方的恆等式學生筆記（PDF）— 課堂填寫／複習用。</span>
+          <span class="actions">
+            <a class="btn btn-primary" href="notes.pdf" target="_blank" rel="noopener">開啟 PDF</a>
+            <a class="btn btn-secondary" href="notes.pdf" download="3.2_完全平方的恆等式_學生筆記.pdf">下載</a>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="interactive">
+      <h2>互動 HTML</h2>
+      <div class="placeholder">
+        <strong>陸續上架</strong>
+        <p>此課題的互動 HTML 尚未上載。</p>
+      </div>
+    </div>
+
+    <div class="panel" id="video">
+      <h2>教學影片</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="label">教學影片</span>
+          <span class="desc">3.2 完全平方的恆等式教學短片（約 6 分 25 秒，粵語旁白，1920×1080，畫面已燒錄繁體中文字幕）。</span>
+          <span class="actions">
+            <a class="btn btn-primary" href="video.mp4" download="3.2_完全平方的恆等式.mp4">下載 MP4</a>
+            <a class="btn btn-secondary" href="video.srt" download="3.2_完全平方的恆等式.srt">下載字幕 (SRT)</a>
+          </span>
+        </li>
+      </ul>
+      <div class="video-wrap" style="margin-top:1rem;">
+        <video controls playsinline preload="metadata" poster="thumb.png" style="width:100%;max-width:720px;border-radius:8px;background:#111;">
+          <source src="video.mp4" type="video/mp4">
+          <track kind="subtitles" src="video.vtt" srclang="zh-HK" label="繁體中文">
+          你的瀏覽器不支援影片播放，請<a href="video.mp4">下載 MP4</a>。
+        </video>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>同章相關</h2>
+      <ul>
+        <li><a href="../basic-concept/index.html">3.1A 恆等式的基本概念</a></li>
+        <li><a href="../unknown-constant/index.html">3.1B 求恆等式中的未知常數</a></li>
+        <li><a href="../difference-of-squares/index.html">3.3 平方差的恆等式</a></li>
+        <li><a href="../identity-properties/index.html">恆等式的性質</a></li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../../../../exam/compulsory/index.html">公開試專區 · 必修部分</a></li>
+        <li><a href="../../index.html">返回中二課題列表</a></li>
+        <li><a href="../index.html">返回恆等式</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.katex) return;
+      var el = document.getElementById("formula");
+      if (el) {
+        katex.render("(a+b)^2\\equiv a^2+2ab+b^2", el, { throwOnError: false, displayMode: true });
+      }
+    });
+  </script>
+</body>
+</html>

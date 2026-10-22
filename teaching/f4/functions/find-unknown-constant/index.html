@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>求函數中的未知常數（例題 3.7）— 中四 — 讀數獨數</title>
+  <meta name="description" content="中四課題：求函數中的未知常數（例題 3.7）。學生筆記、HTML 互動示範與教學影片。">
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../../index.html">首頁</a><a href="../../../../teaching/index.html" aria-current="page">教學內容</a><a href="../../../../exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑"><a href="../../../../index.html">首頁</a><span class="sep"></span><a href="../../../../teaching/index.html">教學內容</a><span class="sep"></span><a href="../../index.html">中四</a><span class="sep"></span><a href="../index.html">函數及其圖像</a><span class="sep"></span><span>求函數中的未知常數</span></nav>
+      <h1>求函數中的未知常數（例題 3.7）</h1>
+      <p class="sub">中四 · CH03 函數及其圖像（HMM2E 4A）</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>透過代入已知點座標，求函數式中的<strong>未知常數</strong>。本頁對應課本例題 3.7，附學生筆記、互動示範與教學影片。</p>
+      <div class="katex-demo" id="formula" aria-label="函數未知常數"></div>
+      <p class="note">公式以 LaTeX／KaTeX 顯示；完整筆記見下方 PDF。</p>
+    </div>
+
+    <div class="panel" id="notes">
+      <h2>筆記</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">學生筆記</span>
+            <span class="desc">例題 3.7 學生筆記（PDF）— 課堂填寫／複習用。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="學生筆記.pdf" target="_blank" rel="noopener">開啟 PDF</a><a class="btn btn-secondary" href="學生筆記.pdf" download="例題3.7_學生筆記.pdf">下載</a>
+            </span>
+          </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="interactive">
+      <h2>互動 HTML</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">互動示範</span>
+            <span class="desc">求函數未知常數互動示範 — 跟住步驟理解例題 3.7（離線可開）。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="demo.html" target="_blank" rel="noopener">開啟示範</a>
+            </span>
+          </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="video">
+      <h2>教學影片</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">教學影片</span>
+            <span class="desc">例題 3.7 教學短片（約 3 分，粵語旁白，1920×1080）。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="video.mp4">下載 MP4</a>
+            </span>
+          </li>
+      </ul>
+      <div class="video-wrap" style="margin-top:1rem;">
+        <video controls playsinline preload="metadata" style="width:100%;max-width:720px;border-radius:8px;background:#111;">
+          <source src="video.mp4" type="video/mp4">
+          你的瀏覽器不支援影片播放，請<a href="video.mp4">下載 MP4</a>。
+        </video>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>同章相關</h2>
+      <ul>
+        <li><a href="../common-functions/index.html">常見函數及其圖像</a></li>
+        <li><a href="../completing-square/index.html">配方法</a></li>
+        <li><a href="../vertex-form/index.html">頂點式</a></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../../../../exam/compulsory/index.html">公開試專區 · 必修部分</a></li>
+        <li><a href="../../index.html">返回中四課題列表</a></li>
+        <li><a href="../index.html">返回函數及其圖像</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.katex) return;
+      var el = document.getElementById("formula");
+      if (el) {
+        katex.render("f(x) = ax^2 + bx + c", el, { throwOnError: false, displayMode: true });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>頂點式 — 中四 — 讀數獨數</title>
+  <meta name="description" content="中四課題：頂點式 y = a(x−h)² + k。特徵總結、a／h／k 動態探究與小練習。含互動示範。">
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../../index.html">首頁</a><a href="../../../../teaching/index.html" aria-current="page">教學內容</a><a href="../../../../exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑"><a href="../../../../index.html">首頁</a><span class="sep"></span><a href="../../../../teaching/index.html">教學內容</a><span class="sep"></span><a href="../../index.html">中四</a><span class="sep"></span><a href="../index.html">函數及其圖像</a><span class="sep"></span><span>頂點式</span></nav>
+      <h1>頂點式</h1>
+      <p class="sub">中四 · CH03 函數及其圖像</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>認識<strong>頂點式</strong> <span id="formula-inline"></span>：由參數 <em>a</em>、<em>h</em>、<em>k</em> 讀出開口方向、對稱軸、頂點與極值，並以動態探究與小練習鞏固。</p>
+      <div class="katex-demo" id="formula" aria-label="頂點式"></div>
+      <p class="note">公式以 LaTeX／KaTeX 顯示；互動示範內嵌 KaTeX，可離線開啟。</p>
+    </div>
+
+    <div class="panel" id="notes">
+      <h2>筆記</h2>
+        <div class="placeholder">
+          <strong>陸續上架</strong>
+          <p>此課題的筆記尚未上載。</p>
+        </div>
+    </div>
+
+    <div class="panel" id="interactive">
+      <h2>互動 HTML</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">互動示範</span>
+            <span class="desc">頂點式互動示範 — 特徵總結（a&gt;0／a&lt;0 對照）；滑桿即時睇開口、對稱軸 x=h、頂點 (h,k)、極值；含小練習（離線可開）。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="demo.html" target="_blank" rel="noopener">開啟示範</a>
+            </span>
+          </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="video">
+      <h2>教學影片</h2>
+        <div class="placeholder">
+          <strong>陸續上架</strong>
+          <p>此課題的教學影片尚未上載。</p>
+        </div>
+    </div>
+
+    <div class="panel">
+      <h2>同章相關</h2>
+      <ul>
+        <li><a href="../find-unknown-constant/index.html">求函數中的未知常數（例題 3.7）</a></li>
+        <li><a href="../common-functions/index.html">常見函數及其圖像</a></li>
+        <li><a href="../completing-square/index.html">配方法</a></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../../../../exam/compulsory/index.html">公開試專區 · 必修部分</a></li>
+        <li><a href="../../index.html">返回中四課題列表</a></li>
+        <li><a href="../index.html">返回函數及其圖像</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.katex) return;
+      var el = document.getElementById("formula");
+      if (el) {
+        katex.render("y = a(x - h)^2 + k", el, { throwOnError: false, displayMode: true });
+      }
+      var inline = document.getElementById("formula-inline");
+      if (inline) {
+        katex.render("y = a(x - h)^2 + k", inline, { throwOnError: false, displayMode: false });
+      }
+    });
+  </script>
+</body>
+</html>

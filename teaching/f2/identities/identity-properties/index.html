@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>恆等式的性質 — 中二 — 讀數獨數</title>
+  <meta name="description" content="中二課題：恆等式的性質（恆等式一｜未到乘法公式）。含互動示範、學生筆記與教學影片。">
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../../index.html">首頁</a><a href="../../../../teaching/index.html" aria-current="page">教學內容</a><a href="../../../../exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑"><a href="../../../../index.html">首頁</a><span class="sep"></span><a href="../../../../teaching/index.html">教學內容</a><span class="sep"></span><a href="../../index.html">中二</a><span class="sep"></span><a href="../index.html">恆等式</a><span class="sep"></span><span>恆等式的性質</span></nav>
+      <h1>恆等式的性質</h1>
+      <p class="sub">中二 · 第3章 恆等式（恆等式一｜未到乘法公式）</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>區分<strong>恆等式</strong>與<strong>方程式</strong>；掌握代換、傳遞、加減乘除等性質；用展開或「一邊推另一邊」證明；並明白特殊值只能證偽、不能單獨證明。本節未講乘法公式。</p>
+      <div class="katex-demo" id="formula" aria-label="恆等式例子"></div>
+      <p class="note">公式以 LaTeX／KaTeX 顯示；完整筆記見下方 PDF。</p>
+    </div>
+
+    <div class="panel" id="notes">
+      <h2>筆記</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">學生筆記</span>
+            <span class="desc">恆等式的性質學生筆記（PDF）— 課堂填寫／複習用。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="學生筆記.pdf" target="_blank" rel="noopener">開啟 PDF</a><a class="btn btn-secondary" href="學生筆記.pdf" download="恆等式的性質_學生筆記.pdf">下載</a>
+            </span>
+          </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="interactive">
+      <h2>互動 HTML</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">互動示範</span>
+            <span class="desc">恆等式的性質互動示範 — 定義對照、性質與證明、代入探究；含小測驗（離線可開）。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="demo.html" target="_blank" rel="noopener">開啟示範</a>
+            </span>
+          </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="video">
+      <h2>教學影片</h2>
+      <ul class="resource-list">
+          <li>
+            <span class="label">教學影片</span>
+            <span class="desc">恆等式的性質教學短片（約 5 分 40 秒，粵語旁白，1920×1080）。</span>
+            <span class="actions">
+              <a class="btn btn-primary" href="video.mp4">下載 MP4</a>
+            </span>
+          </li>
+      </ul>
+      <div class="video-wrap" style="margin-top:1rem;">
+        <video controls playsinline preload="metadata" style="width:100%;max-width:720px;border-radius:8px;background:#111;">
+          <source src="video.mp4" type="video/mp4">
+          你的瀏覽器不支援影片播放，請<a href="video.mp4">下載 MP4</a>。
+        </video>
+      </div>
+    </div>
+
+
+    <div class="panel">
+      <h2>同章相關</h2>
+      <ul>
+        <li><a href="../basic-concept/index.html">3.1A 恆等式的基本概念</a></li>
+        <li><a href="../unknown-constant/index.html">3.1B 求恆等式中的未知常數</a></li>
+        <li><a href="../perfect-square/index.html">3.2 完全平方的恆等式</a></li>
+        <li><a href="../difference-of-squares/index.html">3.3 平方差的恆等式</a></li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../../../../exam/compulsory/index.html">公開試專區 · 必修部分</a></li>
+        <li><a href="../../index.html">返回中二課題列表</a></li>
+        <li><a href="../index.html">返回恆等式</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.katex) return;
+      var el = document.getElementById("formula");
+      if (el) {
+        katex.render("3(x+2)-x \\equiv 2x+6", el, { throwOnError: false, displayMode: true });
+      }
+    });
+  </script>
+</body>
+</html>

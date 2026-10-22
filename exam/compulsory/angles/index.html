@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>與三角形及多邊形有關的角 — 必修部分 — 讀數獨數</title>
+  <meta name="description" content="DSE 必修部分示例：三角形外角題目及答案。">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../index.html">首頁</a><a href="../../../teaching/index.html">教學內容</a><a href="../../../exam/index.html" aria-current="page">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑"><a href="../../../index.html">首頁</a><span class="sep"></span><a href="../../../exam/index.html">公開試專區</a><span class="sep"></span><a href="../index.html">必修部分</a><span class="sep"></span><span>與三角形及多邊形有關的角</span></nav>
+      <h1>與三角形及多邊形有關的角 <span class="chip">示例</span></h1>
+      <p class="sub">必修部分 · 初中基礎課題（卷一甲部常見）· 保留原站示例題</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>三角形外角等於兩不相鄰內角之和。下面保留原網站的靜態示例題；完整隨機題庫陸續上架。帶有難度與題數設定的介面示例見<a href="../../sample/exterior-angle.html">示例頁</a>。</p>
+    </div>
+
+    <div class="panel" id="questions">
+      <h2>題目</h2>
+      <h3>題目 1（示例）</h3>
+      <p>在 \(\triangle ABC\) 中，\(D\) 為 \(BC\) 延長線上的一點。已知 \(\angle BAC = 40^\circ\)，\(\angle ABC = 65^\circ\)。求 \(\angle ACD\)。</p>
+      <p style="margin-top:1rem;">
+        <a class="btn btn-ghost" href="../../../teaching/f2/angles/exterior-angle/index.html">相關教學內容</a>
+      </p>
+      <p class="note">更多題目陸續上架。</p>
+    </div>
+
+    <div class="panel" id="answers">
+      <h2>答案</h2>
+      <p>
+        <button type="button" class="btn btn-secondary" id="btn-ans" aria-expanded="false" aria-controls="answer-box">顯示答案</button>
+      </p>
+      <div id="answer-box" hidden style="margin-top:1rem;padding:1rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <h3 class="mt-0" style="margin-top:0;font-size:1rem;">簡略步驟</h3>
+        <p>由三角形內角和：\(\angle ACB = 180^\circ - 40^\circ - 65^\circ = 75^\circ\)。</p>
+        <p>又 \(ACD\) 與 \(ACB\) 為鄰角（直線上），故 \(\angle ACD = 180^\circ - 75^\circ = 105^\circ\)。</p>
+        <p>亦可直接用外角定理：\(\angle ACD = \angle BAC + \angle ABC = 40^\circ + 65^\circ = 105^\circ\)。</p>
+        <p><strong>答：</strong> \(105^\circ\)</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../index.html">返回必修部分</a></li>
+        <li><a href="../../sample/exterior-angle.html">原站介面示例</a></li>
+        <li><a href="../../../exam/index.html">返回公開試專區</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var opts = {
+        delimiters: [
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true }
+        ],
+        throwOnError: false
+      };
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById("questions"), opts);
+        renderMathInElement(document.getElementById("answers"), opts);
+      }
+      var btn = document.getElementById("btn-ans");
+      var box = document.getElementById("answer-box");
+      if (btn && box) {
+        btn.addEventListener("click", function () {
+          var open = box.hidden;
+          box.hidden = !open;
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          btn.textContent = open ? "隱藏答案" : "顯示答案";
+        });
+      }
+    });
+  </script>
+</body>
+</html>
