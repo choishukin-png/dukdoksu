@@ -532,3 +532,26 @@ a.card:hover {
   background: #e8f6ee;
   border-color: #c5e5d2;
 }
+
+.demo-preview {
+  display: block;
+  margin: 0.85rem 0;
+  max-width: 720px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #111;
+}
+.demo-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.demo-preview:hover {
+  border-color: var(--accent);
+}
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
