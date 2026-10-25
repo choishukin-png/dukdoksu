@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>7.1 直方圖、頻數多邊形和頻數曲線 — 中二 — 讀數獨數</title>
+  <meta name="description" content="中二第7章：直方圖、頻數多邊形和頻數曲線。含學生筆記與互動示範。">
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="brand" href="../../../../index.html">讀數獨數 <span class="tag">中學數學</span></a>
+      <nav class="nav" aria-label="主選單">
+        <a href="../../../../index.html">首頁</a>
+        <a href="../../../index.html" aria-current="page">教學內容</a>
+        <a href="../../../../exam/index.html">公開試專區</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <nav class="breadcrumb" aria-label="麵包屑">
+        <a href="../../../../index.html">首頁</a>
+        <span class="sep"></span>
+        <a href="../../../index.html">教學內容</a>
+        <span class="sep"></span>
+        <a href="../../index.html">中二</a>
+        <span class="sep"></span>
+        <a href="../index.html">統計 (二)</a>
+        <span class="sep"></span>
+        <span>7.1 直方圖、頻數多邊形和頻數曲線</span>
+      </nav>
+      <h1>7.1 直方圖、頻數多邊形和頻數曲線</h1>
+      <p class="sub">中二 · 第7章 統計 (二)</p>
+    </div>
+
+    <div class="panel">
+      <h2>課題簡介</h2>
+      <p>用組距分組的數據繪製<strong>直方圖</strong>，並把各組中點連成<strong>頻數多邊形</strong>及<strong>頻數曲線</strong>。組距不相等時，直條高度用頻數密度表示。</p>
+      <div class="katex-demo" id="formula" aria-label="頻數密度"></div>
+      <p class="note">公式以 LaTeX／KaTeX 顯示；完整筆記見下方 PDF。</p>
+    </div>
+
+    <div class="panel" id="notes">
+      <h2>筆記</h2>
+      <ul class="resource-list">
+        <li>
+          <span class="label">學生筆記</span>
+          <span class="desc">7.1 直方圖、頻數多邊形和頻數曲線學生筆記（PDF）— 課堂填寫／複習用。</span>
+          <span class="actions">
+            <a class="btn btn-primary" href="notes.pdf" target="_blank" rel="noopener">開啟 PDF</a>
+            <a class="btn btn-secondary" href="notes.pdf" download="7.1_直方圖頻數多邊形和頻數曲線_學生筆記.pdf">下載</a>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="interactive">
+      <h2>互動 HTML</h2>
+      <p>7.1 直方圖、頻數多邊形和頻數曲線互動示範，可離線開啟。預覽圖為探究模式。</p>
+      <a class="demo-preview" href="interactive.html" target="_blank" rel="noopener">
+        <img src="preview.png" alt="7.1 直方圖、頻數多邊形和頻數曲線互動示範預覽（探究模式）">
+      </a>
+      <div class="demo-actions">
+        <a class="btn btn-primary" href="interactive.html" target="_blank" rel="noopener">開啟示範</a>
+        <a class="btn btn-secondary" href="interactive.html" target="_blank" rel="noopener">全螢幕開啟</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>同章相關</h2>
+      <ul>
+        <li><a href="../cumulative-frequency/index.html">7.2 累積頻數多邊形和累積頻數曲線</a></li>
+        <li><a href="../charts-misuse/index.html">7.3 統計圖的應用及誤用</a></li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>相關連結</h2>
+      <ul>
+        <li><a href="../../../../exam/compulsory/index.html">公開試專區 · 必修部分</a></li>
+        <li><a href="../../index.html">返回中二課題列表</a></li>
+        <li><a href="../index.html">返回統計 (二)</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap inner">
+      <span>讀數獨數 · 蔡樹堅老師 · 教學用途</span>
+      <span>託管：GitHub Pages</span>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!window.katex) return;
+      var el = document.getElementById("formula");
+      if (el) {
+        katex.render("\\text{頻數密度}=\\dfrac{\\text{該組頻數}}{\\text{組距}}", el, { throwOnError: false, displayMode: true });
+      }
+    });
+  </script>
+</body>
+</html>
