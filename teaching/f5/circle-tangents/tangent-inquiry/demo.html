@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>圓的切線探究 — 中五 第13章</title>
+<style>
+:root{
+  --green:#c3e6a8; --green-d:#2f5d1f;
+  --purple:#7a3fa8; --purple-f:rgba(140,80,200,.30);
+  --blue:#1d6fd8; --blue-f:rgba(40,130,235,.22);
+  --ink:#1f2937; --muted:#5b6575;
+  --orange:#e07a1a; --circ:#3d9a4a;
+  --cjk:'Microsoft JhengHei','PingFang TC','Noto Sans TC','Noto Sans CJK TC','Heiti TC',sans-serif;
+  --math:'Cambria Math','Times New Roman','STIX Two Text','Latin Modern Roman','Noto Serif','DejaVu Serif',serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 20px;background:#fff;border-bottom:4px solid var(--blue)}
+h1{font-size:28px;margin:0;letter-spacing:1px}
+h1 small{font-size:18px;color:var(--muted);font-weight:normal;margin-left:10px}
+button{font-family:inherit;font-size:20px;border:2px solid var(--blue);background:#fff;color:var(--blue);border-radius:12px;padding:9px 16px;cursor:pointer;min-height:48px;touch-action:manipulation;transition:background .15s}
+button:hover{background:#e8f1fd}
+button:disabled{opacity:.4;cursor:default;background:#fff}
+button.primary{background:var(--blue);color:#fff}
+button.primary:hover{background:#155bb5}
+button.sm{font-size:17px;padding:6px 12px;min-height:42px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:14px 18px;align-items:start}
+@media (max-width:1100px), (orientation:portrait){ main{grid-template-columns:1fr} }
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px}
+.stagehead{display:flex;flex-direction:column;gap:8px;min-height:72px}
+.flags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{background:#a9c4ea;color:#fff;padding:6px 28px 6px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);font-weight:bold;font-size:18px;cursor:pointer;user-select:none}
+.flag.on{background:var(--blue)}
+.caption{font-size:24px;font-weight:bold;line-height:1.35}
+.caption .sub{display:block;font-size:18px;font-weight:normal;color:var(--muted);margin-top:2px}
+svg#stage{width:100%;height:auto;max-height:calc(100vh - 260px);min-height:340px;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding-top:8px}
+.panel h2{font-size:22px;margin:4px 0 10px;color:var(--blue)}
+.panel p{margin:6px 0;line-height:1.5}
+.hidden{display:none !important}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m .mi{font-style:italic;padding:0 .02em}
+.m .mo{padding:0 .26em}
+.m .mn{font-style:normal}
+.m .mt{font-family:var(--cjk);font-style:normal;font-size:.88em}
+.m .sp{display:inline-block;width:.6em}
+.reason{font-family:var(--cjk);color:#444;margin-left:.5em;font-size:.92em;white-space:nowrap}
+.concl{border:3px solid var(--blue);border-radius:14px;padding:10px 12px;background:#f2f7ff;text-align:center;font-size:22px;margin:8px 0;line-height:1.45}
+.concl.green{border-color:var(--green-d);background:#f0f8ea}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:20px;align-items:baseline;margin:8px 0}
+.read .v{font-family:var(--math);font-weight:bold;text-align:right}
+.ok{margin-top:10px;padding:10px 12px;border-radius:12px;background:#e6f6e6;color:#1d6b2a;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7cc58a}
+.warn{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff4e8;color:#8a4b00;font-weight:bold;font-size:20px;text-align:center;border:2px solid #e07a1a}
+.info{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eaf3ff;color:#155bb5;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7ab0e8}
+.note{font-size:16px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kbd{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+label.chk{display:flex;align-items:center;gap:8px;font-size:18px;margin:8px 0;cursor:pointer}
+label.chk input{width:22px;height:22px}
+input[type=range]{width:100%;height:28px;accent-color:var(--blue)}
+.slider-row{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;margin:8px 0;font-size:17px}
+.slider-row .val{font-family:var(--math);font-weight:bold;text-align:right}
+.proof{font-size:18px;line-height:1.85;margin:6px 0 0;width:100%;border-collapse:collapse}
+.proof td{padding:2px 4px;vertical-align:baseline}
+.proof .reason{font-size:16px;margin-left:.3em}
+.term{color:var(--blue);font-weight:bold}
+.lbl{font-family:var(--math);font-style:italic;font-weight:bold;font-size:32px;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;pointer-events:none}
+.lbl-cjk{font-family:var(--cjk);font-style:normal;font-weight:bold;font-size:22px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.handle{cursor:grab}
+.handle:active{cursor:grabbing}
+.case-badge{display:inline-block;padding:4px 12px;border-radius:8px;font-weight:bold;font-size:18px;color:#fff;margin-right:6px}
+.case-badge.c1{background:var(--orange)}
+.case-badge.c2{background:var(--blue)}
+.case-badge.c3{background:#6b7280}
+</style>
+</head>
+<body>
+<header>
+  <h1>圓的切線<small>中五數學 · 第13章</small></h1>
+</header>
+
+<main>
+  <section class="card">
+    <div class="stagehead">
+      <div class="flags" id="flags">
+        <div class="flag on" data-mode="def">① 定義：三種情況</div>
+        <div class="flag" data-mode="thm">② 切線⊥半徑</div>
+        <div class="flag" data-mode="conv">③ 逆定理</div>
+      </div>
+      <div class="caption" id="caption"></div>
+    </div>
+    <svg id="stage" viewBox="0 0 1000 560" aria-label="圓的切線探究舞台"></svg>
+    <div class="controls" id="controls"></div>
+    <div class="kbd" id="kbdHint"></div>
+  </section>
+  <aside class="card panel" id="panel"></aside>
+</main>
+
+<script>
+(function(){
+'use strict';
+const TEXSYM={circ:'°',therefore:'∴',because:'∵',times:'×',cdot:'·',perp:'⊥',parallel:'∥',quad:'<span class="sp"></span>'};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function tex(src){
+  let i=0,out='';
+  function group(){
+    if(src[i]==='{'){let depth=1,j=i+1;while(j<src.length&&depth){if(src[j]==='{')depth++;else if(src[j]==='}')depth--;j++;}const g=src.slice(i+1,j-1);i=j;return g;}
+    if(src[i]==='\\'){const m=/^\\[a-zA-Z]+/.exec(src.slice(i));i+=m[0].length;return m[0];}
+    return src[i++];
+  }
+  while(i<src.length){
+    const ch=src[i];
+    if(ch==='\\'){
+      const m=/^\\([a-zA-Z]+)/.exec(src.slice(i));
+      if(!m){i++;continue;}
+      i+=m[0].length;
+      if(m[1]==='text'){out+='<span class="mt">'+esc(group())+'</span>';}
+      else if(m[1]==='circ'){out+='<span class="mn">°</span>';}
+      else if(m[1]==='perp'){out+='<span class="mo">⊥</span>';}
+      else if(m[1]==='angle'){out+='<span class="mn">∠</span>';}
+      else out+=(m[1]==='therefore'||m[1]==='because')?'<span class="mn">'+TEXSYM[m[1]]+'</span><span class="sp"></span>':'<span class="mn">'+(TEXSYM[m[1]]||m[1])+'</span>';
+    } else if(ch==='^'){i++;const g=group();out+=(g==='\\circ')?'<span class="mn">°</span>':'<sup>'+tex(g)+'</sup>';}
+    else if(ch==='_'){i++;out+='<sub>'+tex(group())+'</sub>';}
+    else if(/[A-Za-z]/.test(ch)){out+='<i class="mi">'+ch+'</i>';i++;}
+    else if(/[0-9.]/.test(ch)){let j=i;while(j<src.length&&/[0-9.]/.test(src[j]))j++;out+='<span class="mn">'+src.slice(i,j)+'</span>';i=j;}
+    else if('=+-<>'.indexOf(ch)>=0){out+='<span class="mo">'+(ch==='-'?'−':esc(ch))+'</span>';i++;}
+    else if(ch===' '){i++;}
+    else {out+='<span class="mn">'+esc(ch)+'</span>';i++;}
+  }
+  return out;
+}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(e=>{e.innerHTML=tex(e.getAttribute('data-tex'));});}
+
+const svg=document.getElementById('stage');
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,kids){
+  const n=document.createElementNS(NS,tag);
+  if(attrs) for(const k in attrs){
+    if(k==='textContent') n.textContent=attrs[k];
+    else if(k==='class') n.setAttribute('class',attrs[k]);
+    else n.setAttribute(k,attrs[k]);
+  }
+  if(kids) kids.forEach(c=>n.appendChild(c));
+  return n;
+}
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+
+const OX=500, OY=250, R=140;
+const state={
+  mode:'def',
+  dist:140,      // perpendicular distance from O to line (def mode)
+  angle:0,       // line angle in degrees (0 = horizontal)
+  showOT:true,
+  Rpos:220,      // distance along line from T for point R (thm mode), signed
+  showOR:true,
+  drag:null
+};
+
+function caseOf(d){
+  const eps=2.5;
+  if(Math.abs(d-R)<eps) return 2;
+  if(d<R) return 1;
+  return 3;
+}
+
+function lineGeom(dist,angDeg){
+  const a=angDeg*Math.PI/180;
+  // unit normal pointing "up" relative to line direction
+  const nx=-Math.sin(a), ny=Math.cos(a);
+  const dx=Math.cos(a), dy=Math.sin(a);
+  // foot of perpendicular from O to line: O + dist * normal (signed: + means line below O when ang=0)
+  // When ang=0 (horizontal), normal=(0,1), foot=(OX, OY+dist) — line below center if dist>0
+  const fx=OX+nx*dist, fy=OY+ny*dist;
+  const L=520;
+  return {
+    a,nx,ny,dx,dy,fx,fy,
+    p1:{x:fx-dx*L,y:fy-dy*L},
+    p2:{x:fx+dx*L,y:fy+dy*L},
+    // labels P leftish, Q rightish along direction
+    P:{x:fx-dx*380,y:fy-dy*380},
+    Q:{x:fx+dx*380,y:fy+dy*380}
+  };
+}
+
+function intersectCircle(dist){
+  const c=caseOf(dist);
+  if(c===3) return [];
+  if(c===2) return [{t:0,x:0,y:0}]; // relative to foot; filled later
+  const h=Math.sqrt(Math.max(0,R*R-dist*dist));
+  return [{t:-h},{t:h}];
+}
+
+function snapDist(d){
+  if(Math.abs(d-R)<3) return R;
+  return Math.max(0,Math.min(280,d));
+}
+
+/* ========== MODE ① DEFINITION ========== */
+function drawDef(){
+  clearSvg();
+  const g=lineGeom(state.dist,state.angle);
+  const c=caseOf(state.dist);
+  const pts=intersectCircle(state.dist);
+
+  // circle
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:R,fill:'#e8f6ea',stroke:'#3d9a4a','stroke-width':3}));
+  // center
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:5,fill:'#1f2937'}));
+  svg.appendChild(el('text',{x:OX-22,y:OY-12,class:'lbl',textContent:'O'}));
+
+  // OT optional
+  if(state.showOT){
+    svg.appendChild(el('line',{x1:OX,y1:OY,x2:g.fx,y2:g.fy,stroke:'#1d6fd8','stroke-width':2,'stroke-dasharray':c===2?'':'6 5'}));
+  }
+
+  // line PQ
+  svg.appendChild(el('line',{
+    x1:g.p1.x,y1:g.p1.y,x2:g.p2.x,y2:g.p2.y,
+    stroke:'#e07a1a','stroke-width':4,class:'handle',id:'linePQ'
+  }));
+
+  // drag handle on foot (perpendicular control)
+  svg.appendChild(el('circle',{cx:g.fx,cy:g.fy,r:14,fill:'rgba(224,122,26,.25)',stroke:'#e07a1a','stroke-width':2,class:'handle',id:'footHandle'}));
+
+  // intersection points
+  const labels=[];
+  if(c===1){
+    const h=Math.sqrt(Math.max(0,R*R-state.dist*state.dist));
+    const A={x:g.fx-g.dx*h,y:g.fy-g.dy*h};
+    const B={x:g.fx+g.dx*h,y:g.fy+g.dy*h};
+    [A,B].forEach((p,i)=>{
+      svg.appendChild(el('circle',{cx:p.x,cy:p.y,r:7,fill:'#e07a1a',stroke:'#fff','stroke-width':2}));
+      const off=i===0?-18:18;
+      svg.appendChild(el('text',{x:p.x+g.nx*22+g.dx*off,y:p.y+g.ny*22+g.dy*off+8,class:'lbl',textContent:i===0?'A':'B'}));
+    });
+  } else if(c===2){
+    const T={x:g.fx,y:g.fy};
+    svg.appendChild(el('circle',{cx:T.x,cy:T.y,r:8,fill:'#1d6fd8',stroke:'#fff','stroke-width':2}));
+    svg.appendChild(el('text',{x:T.x+g.nx*28+g.dx*18,y:T.y+g.ny*28+g.dy*18+8,class:'lbl',fill:'#1d6fd8',textContent:'T'}));
+    // labels 切線 / 切點
+    const midP={x:(g.P.x+T.x)/2,y:(g.P.y+T.y)/2};
+    svg.appendChild(el('text',{x:midP.x-g.nx*28,y:midP.y-g.ny*28,class:'lbl-cjk',fill:'#1d6fd8',textContent:'切線','text-anchor':'middle'}));
+    svg.appendChild(el('text',{x:T.x+g.nx*50,y:T.y+g.ny*50+6,class:'lbl-cjk',fill:'#1d6fd8',textContent:'切點','text-anchor':'middle'}));
+    if(state.showOT){
+      // right angle mark
+      const s=18;
+      const ax=T.x-g.dx*s, ay=T.y-g.dy*s;
+      const bx=ax-g.nx*s, by=ay-g.ny*s;
+      const cx2=T.x-g.nx*s, cy2=T.y-g.ny*s;
+      svg.appendChild(el('polyline',{points:`${ax},${ay} ${bx},${by} ${cx2},${cy2}`,fill:'none',stroke:'#1d6fd8','stroke-width':2.5}));
+    }
+  }
+
+  // P Q labels
+  svg.appendChild(el('text',{x:g.P.x,y:g.P.y-14,class:'lbl',fill:'#e07a1a',textContent:'P','text-anchor':'middle'}));
+  svg.appendChild(el('text',{x:g.Q.x,y:g.Q.y-14,class:'lbl',fill:'#e07a1a',textContent:'Q','text-anchor':'middle'}));
+
+  // caption + panel
+  const cap=document.getElementById('caption');
+  const titles={1:'情況 1：相交於兩點（割線）',2:'情況 2：只交於一點（切線）',3:'情況 3：不相交'};
+  const subs={
+    1:'直線 PQ 與圓相交於 A、B 兩點。',
+    2:'直線 PQ 與圓相切於 T 點。PQ 是切線，T 是切點。',
+    3:'直線 PQ 與圓並不相交。'
+  };
+  cap.innerHTML=titles[c]+'<span class="sub">'+subs[c]+'</span>';
+
+  const panel=document.getElementById('panel');
+  const nPts=c===1?2:c===2?1:0;
+  panel.innerHTML=`
+    <h2>直線與圓的位置關係</h2>
+    <p>平面上圓心 <span class="m" data-tex="O"></span> 與直線 <span class="m" data-tex="PQ"></span> 有三種情況。</p>
+    <div class="${c===2?'ok':c===1?'info':'warn'}">
+      <span class="case-badge c${c}">情況 ${c}</span>
+      交點數：<span class="m" data-tex="${nPts}"></span>
+    </div>
+    <div class="read">
+      <span>圓心到直線距離</span><span class="v m" data-tex="d = ${state.dist.toFixed(0)}"></span>
+      <span>圓的半徑</span><span class="v m" data-tex="r = ${R}"></span>
+      <span>比較</span><span class="v">${c===1?'d < r':c===2?'d = r':'d > r'}</span>
+    </div>
+    ${c===2?`
+      <div class="concl">
+        <span class="m" data-tex="PQ"></span> 與圓相切於 <span class="m" data-tex="T"></span>
+        <span class="reason">(切線)</span><br>
+        <span class="m" data-tex="T"></span> 稱為<span class="term">切點</span>
+        <span class="reason">(切點)</span>
+      </div>
+      <p class="note">定義：直線與圓只相交於一點時，稱該直線為圓的<span class="term">切線</span>，該點為<span class="term">切點</span>。</p>
+    `:c===1?`
+      <p><span class="m" data-tex="PQ"></span> 與圓相交於 <span class="m" data-tex="A"></span>、<span class="m" data-tex="B"></span> 兩點，此時 <span class="m" data-tex="PQ"></span> 稱為<span class="term">割線</span>。</p>
+    `:`
+      <p><span class="m" data-tex="PQ"></span> 與圓並不相交（整條直線都在圓外）。</p>
+    `}
+    <h2 style="margin-top:14px">一鍵跳到</h2>
+    <div class="presets" id="defPresets">
+      <button class="sm" data-case="1">情況 1（割線）</button>
+      <button class="sm" data-case="2">情況 2（切線）</button>
+      <button class="sm" data-case="3">情況 3（不相交）</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="chkOT" ${state.showOT?'checked':''}>顯示 <span class="m" data-tex="OT"></span>（圓心到直線的垂線）</label>
+    <div class="slider-row"><span>距離 <span class="m" data-tex="d"></span></span><input type="range" id="rngDist" min="0" max="260" value="${Math.round(state.dist)}"><span class="val" id="valDist">${Math.round(state.dist)}</span></div>
+    <div class="slider-row"><span>角度</span><input type="range" id="rngAng" min="-60" max="60" value="${Math.round(state.angle)}"><span class="val" id="valAng">${Math.round(state.angle)}°</span></div>
+    <p class="note">拖動橙色直線／腳點，或調滑桿，即可時切換三種情況。</p>
+  `;
+  renderTex(panel);
+  document.getElementById('defPresets').onclick=e=>{
+    const b=e.target.closest('button[data-case]'); if(!b) return;
+    const k=+b.dataset.case;
+    state.dist=k===1?70:k===2?R:210;
+    redraw();
+  };
+  document.getElementById('chkOT').onchange=e=>{state.showOT=e.target.checked;redraw();};
+  document.getElementById('rngDist').oninput=e=>{state.dist=snapDist(+e.target.value);document.getElementById('valDist').textContent=Math.round(state.dist);redraw();};
+  document.getElementById('rngAng').oninput=e=>{state.angle=+e.target.value;document.getElementById('valAng').textContent=Math.round(state.angle)+'°';redraw();};
+
+  document.getElementById('controls').innerHTML=`
+    <button class="sm" id="btnResetDef">↺ 重設</button>
+  `;
+  document.getElementById('btnResetDef').onclick=()=>{state.dist=R;state.angle=0;state.showOT=true;redraw();};
+  document.getElementById('kbdHint').textContent='拖動橙色直線上下移動（改距離）；滑桿可改角度';
+}
+
+/* ========== MODE ② THEOREM 13.1 ========== */
+function drawThm(){
+  clearSvg();
+  // Fixed tangent: horizontal line at y = OY+R, T at (OX, OY+R)
+  const Ty=OY+R, Tx=OX;
+  const lineY=Ty;
+  // Point R along the line
+  const Rx=Tx+state.Rpos, Ry=lineY;
+  const ORlen=Math.hypot(Rx-OX,Ry-OY);
+
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:R,fill:'#e8f6ea',stroke:'#3d9a4a','stroke-width':3}));
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:5,fill:'#1f2937'}));
+  svg.appendChild(el('text',{x:OX-22,y:OY-12,class:'lbl',textContent:'O'}));
+
+  // line PQ
+  svg.appendChild(el('line',{x1:80,y1:lineY,x2:920,y2:lineY,stroke:'#e07a1a','stroke-width':4}));
+  svg.appendChild(el('text',{x:100,y:lineY-16,class:'lbl',fill:'#e07a1a',textContent:'P'}));
+  svg.appendChild(el('text',{x:880,y:lineY-16,class:'lbl',fill:'#e07a1a',textContent:'Q'}));
+
+  // OT radius
+  svg.appendChild(el('line',{x1:OX,y1:OY,x2:Tx,y2:Ty,stroke:'#1d6fd8','stroke-width':3}));
+  // right angle
+  svg.appendChild(el('polyline',{points:`${Tx-18},${Ty} ${Tx-18},${Ty-18} ${Tx},${Ty-18}`,fill:'none',stroke:'#1d6fd8','stroke-width':2.5}));
+
+  // T
+  svg.appendChild(el('circle',{cx:Tx,cy:Ty,r:8,fill:'#1d6fd8',stroke:'#fff','stroke-width':2}));
+  svg.appendChild(el('text',{x:Tx+20,y:Ty+28,class:'lbl',fill:'#1d6fd8',textContent:'T'}));
+  svg.appendChild(el('text',{x:200,y:lineY+36,class:'lbl-cjk',fill:'#1d6fd8',textContent:'切線'}));
+  svg.appendChild(el('text',{x:Tx+40,y:Ty+50,class:'lbl-cjk',fill:'#1d6fd8',textContent:'切點'}));
+
+  // OR dashed
+  if(state.showOR && Math.abs(state.Rpos)>8){
+    svg.appendChild(el('line',{x1:OX,y1:OY,x2:Rx,y2:Ry,stroke:'#7a3fa8','stroke-width':2.5,'stroke-dasharray':'7 5'}));
+    svg.appendChild(el('circle',{cx:Rx,cy:Ry,r:10,fill:'#7a3fa8',stroke:'#fff','stroke-width':2,class:'handle',id:'ptR'}));
+    svg.appendChild(el('text',{x:Rx+14,y:Ry+28,class:'lbl',fill:'#7a3fa8',textContent:'R'}));
+    // length labels near midpoints
+    svg.appendChild(el('text',{x:OX+18,y:(OY+Ty)/2,class:'lbl-cjk',fill:'#1d6fd8',fontSize:'18',textContent:'OT = r'}));
+    const mx=(OX+Rx)/2, my=(OY+Ry)/2;
+    svg.appendChild(el('text',{x:mx+10,y:my-8,class:'lbl-cjk',fill:'#7a3fa8',fontSize:'18',textContent:'OR'}));
+  } else {
+    // still show R handle near T offset
+    const defR=Tx+180;
+    svg.appendChild(el('circle',{cx:Rx,cy:Ry,r:10,fill:'#7a3fa8',stroke:'#fff','stroke-width':2,class:'handle',id:'ptR'}));
+    svg.appendChild(el('text',{x:Rx+14,y:Ry+28,class:'lbl',fill:'#7a3fa8',textContent:'R'}));
+    if(state.showOR){
+      svg.appendChild(el('line',{x1:OX,y1:OY,x2:Rx,y2:Ry,stroke:'#7a3fa8','stroke-width':2.5,'stroke-dasharray':'7 5'}));
+    }
+  }
+
+  const cap=document.getElementById('caption');
+  cap.innerHTML='定理 13.1：切線 ⊥ 半徑<span class="sub">若 PQ 於 T 為切線，則 PQ ⊥ OT。</span>';
+
+  const cmp=ORlen>R+0.5?'OR > OT':ORlen<R-0.5?'OR < OT':'OR = OT';
+  const panel=document.getElementById('panel');
+  panel.innerHTML=`
+    <h2>定理 13.1</h2>
+    <div class="concl green">
+      若 <span class="m" data-tex="PQ"></span> 是圓於 <span class="m" data-tex="T"></span> 的切線，<br>
+      則 <span class="m" data-tex="PQ \\perp OT"></span>
+      <span class="reason">[切線⊥半徑]</span>
+    </div>
+    <h2>證明探究</h2>
+    <p>在切線上取異於 <span class="m" data-tex="T"></span> 的點 <span class="m" data-tex="R"></span>，觀察 <span class="m" data-tex="OR"></span> 與半徑的長短。</p>
+    <div class="read">
+      <span class="m" data-tex="OT"></span>（半徑）<span class="v m" data-tex="${R}"></span>
+      <span class="m" data-tex="OR"></span><span class="v m" data-tex="${ORlen.toFixed(1)}"></span>
+      <span>比較</span><span class="v">${cmp}</span>
+    </div>
+    <div class="ok">對任何 <span class="m" data-tex="R \\ne T"></span>，皆有 <span class="m" data-tex="OR > OT"></span></div>
+    <table class="proof">
+      <tr><td><span class="m" data-tex="R"></span> 在圓外</td><td><span class="reason">(切線上異於切點)</span></td></tr>
+      <tr><td><span class="m" data-tex="\\therefore OR > OT"></span></td><td><span class="reason">(半徑最短)</span></td></tr>
+      <tr><td><span class="m" data-tex="OT"></span> 是 <span class="m" data-tex="O"></span> 到 <span class="m" data-tex="PQ"></span> 的最短距離</td><td></td></tr>
+      <tr><td><span class="m" data-tex="\\therefore OT \\perp PQ"></span></td><td><span class="reason">(點到直線最短線段⊥該線)</span></td></tr>
+    </table>
+    <div class="slider-row"><span>點 <span class="m" data-tex="R"></span></span><input type="range" id="rngR" min="-320" max="320" value="${Math.round(state.Rpos)}"><span class="val" id="valR">${Math.round(state.Rpos)}</span></div>
+    <label class="chk"><input type="checkbox" id="chkOR" ${state.showOR?'checked':''}>顯示 <span class="m" data-tex="OR"></span></label>
+    <p class="note">拖動紫色點 <span class="m" data-tex="R"></span>，看 <span class="m" data-tex="OR"></span> 如何變化——總比半徑長。</p>
+  `;
+  renderTex(panel);
+  document.getElementById('rngR').oninput=e=>{
+    let v=+e.target.value;
+    if(Math.abs(v)<12) v=v>=0?12:-12; // keep R ≠ T
+    state.Rpos=v;
+    document.getElementById('valR').textContent=Math.round(state.Rpos);
+    redraw();
+  };
+  document.getElementById('chkOR').onchange=e=>{state.showOR=e.target.checked;redraw();};
+  document.getElementById('controls').innerHTML=`<button class="sm" id="btnResetThm">↺ 重設</button>`;
+  document.getElementById('btnResetThm').onclick=()=>{state.Rpos=200;state.showOR=true;redraw();};
+  document.getElementById('kbdHint').textContent='拖動紫色點 R 沿切線左右移動，觀察 OR 長度';
+}
+
+/* ========== MODE ③ CONVERSE ========== */
+function drawConv(){
+  clearSvg();
+  // Show OT radius vertical, PQ horizontal through T — given ⊥, conclude tangent
+  // Also allow breaking perpendicularity to show it fails
+  const Ty=OY+R, Tx=OX;
+  // angle of line from perpendicular: 0 means ⊥, nonzero tilts the line
+  const tilt=state.angle; // reuse angle as tilt from horizontal
+  const a=tilt*Math.PI/180;
+  const dx=Math.cos(a), dy=Math.sin(a);
+  const L=420;
+  const p1={x:Tx-dx*L,y:Ty-dy*L}, p2={x:Tx+dx*L,y:Ty+dy*L};
+
+  // Does the tilted line intersect the circle only at T?
+  // Distance from O to line: line through T with normal (-dy, dx) or (dy,-dx)
+  // Line: (X-T)·n = 0 with n = (-dy, dx) unit normal
+  const nx=-dy, ny=dx;
+  const dist=Math.abs((OX-Tx)*nx+(OY-Ty)*ny);
+  const c=caseOf(dist);
+  const isPerp=Math.abs(tilt)<1.2;
+
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:R,fill:'#e8f6ea',stroke:'#3d9a4a','stroke-width':3}));
+  svg.appendChild(el('circle',{cx:OX,cy:OY,r:5,fill:'#1f2937'}));
+  svg.appendChild(el('text',{x:OX-22,y:OY-12,class:'lbl',textContent:'O'}));
+
+  // OT
+  svg.appendChild(el('line',{x1:OX,y1:OY,x2:Tx,y2:Ty,stroke:'#1d6fd8','stroke-width':3}));
+
+  // right angle only when perpendicular
+  if(isPerp){
+    svg.appendChild(el('polyline',{points:`${Tx-18},${Ty} ${Tx-18},${Ty-18} ${Tx},${Ty-18}`,fill:'none',stroke:'#1d6fd8','stroke-width':2.5}));
+  }
+
+  // line
+  svg.appendChild(el('line',{x1:p1.x,y1:p1.y,x2:p2.x,y2:p2.y,stroke:'#e07a1a','stroke-width':4,class:'handle',id:'lineConv'}));
+  svg.appendChild(el('text',{x:p1.x+20,y:p1.y-14,class:'lbl',fill:'#e07a1a',textContent:'P'}));
+  svg.appendChild(el('text',{x:p2.x-20,y:p2.y-14,class:'lbl',fill:'#e07a1a',textContent:'Q'}));
+
+  // T
+  svg.appendChild(el('circle',{cx:Tx,cy:Ty,r:8,fill:isPerp?'#1d6fd8':'#e07a1a',stroke:'#fff','stroke-width':2}));
+  svg.appendChild(el('text',{x:Tx+22,y:Ty+28,class:'lbl',fill:'#1d6fd8',textContent:'T'}));
+
+  // other intersections if any
+  if(c===1){
+    const h=Math.sqrt(Math.max(0,R*R-dist*dist));
+    // foot from O
+    const fx=OX-nx*((OX-Tx)*nx+(OY-Ty)*ny);
+    const fy=OY-ny*((OX-Tx)*nx+(OY-Ty)*ny);
+    // Actually signed: foot = O - ((O-T)·n)*n
+    const signed=(OX-Tx)*nx+(OY-Ty)*ny;
+    const foot={x:OX-nx*signed,y:OY-ny*signed};
+    [-h,h].forEach(tt=>{
+      const px=foot.x+dx*tt, py=foot.y+dy*tt;
+      if(Math.hypot(px-Tx,py-Ty)>6){
+        svg.appendChild(el('circle',{cx:px,cy:py,r:7,fill:'#e07a1a',stroke:'#fff','stroke-width':2}));
+      }
+    });
+  }
+
+  if(isPerp){
+    svg.appendChild(el('text',{x:220,y:Ty+40,class:'lbl-cjk',fill:'#1d6fd8',textContent:'切線'}));
+  }
+
+  const cap=document.getElementById('caption');
+  cap.innerHTML=isPerp
+    ? '定理 13.2：逆定理成立<span class="sub">OT 為半徑且 PQ ⊥ OT ⇒ PQ 是 T 處的切線。</span>'
+    : '傾斜後：不再垂直 → 可能變成割線<span class="sub">拖動／調角度，看看 ⊥ 條件的重要性。</span>';
+
+  const panel=document.getElementById('panel');
+  panel.innerHTML=`
+    <h2>定理 13.2（逆定理）</h2>
+    <div class="concl green">
+      設 <span class="m" data-tex="OT"></span> 為半徑，<span class="m" data-tex="PTQ"></span> 為直線。<br>
+      若 <span class="m" data-tex="PQ \\perp OT"></span>，<br>
+      則 <span class="m" data-tex="PQ"></span> 是圓於 <span class="m" data-tex="T"></span> 的切線
+      <span class="reason">[切線⊥半徑的逆定理]</span>
+    </div>
+    <div class="${isPerp?'ok':'warn'}">
+      ${isPerp
+        ? '現況：PQ ⊥ OT → 只交於 T → <b>是切線</b>'
+        : '現況：PQ 與 OT 不垂直 → 交點數 = '+ (c===1?2:c===2?1:0) +' → <b>不是</b>（或不再保證是）切線'}
+    </div>
+    <div class="read">
+      <span>直線傾角</span><span class="v">${Math.round(tilt)}°</span>
+      <span><span class="m" data-tex="OT \\perp PQ"></span>？</span><span class="v">${isPerp?'是':'否'}</span>
+      <span>交點數</span><span class="v m" data-tex="${c===1?2:c===2?1:0}"></span>
+    </div>
+    <div class="presets" id="convPresets">
+      <button class="sm primary" data-tilt="0">⊥（切線）</button>
+      <button class="sm" data-tilt="18">傾斜 18°</button>
+      <button class="sm" data-tilt="-25">傾斜 −25°</button>
+    </div>
+    <div class="slider-row"><span>傾角</span><input type="range" id="rngTilt" min="-40" max="40" value="${Math.round(tilt)}"><span class="val" id="valTilt">${Math.round(tilt)}°</span></div>
+    <p class="note">逆定理告訴我們：只要半徑垂直於過端點的直線，該直線就必定是切線。</p>
+  `;
+  renderTex(panel);
+  document.getElementById('convPresets').onclick=e=>{
+    const b=e.target.closest('button[data-tilt]'); if(!b) return;
+    state.angle=+b.dataset.tilt; redraw();
+  };
+  document.getElementById('rngTilt').oninput=e=>{
+    state.angle=+e.target.value;
+    if(Math.abs(state.angle)<1.2) state.angle=0;
+    document.getElementById('valTilt').textContent=Math.round(state.angle)+'°';
+    redraw();
+  };
+  document.getElementById('controls').innerHTML=`<button class="sm" id="btnResetConv">↺ 重設為 ⊥</button>`;
+  document.getElementById('btnResetConv').onclick=()=>{state.angle=0;redraw();};
+  document.getElementById('kbdHint').textContent='調傾角：只有垂直時才保證是切線';
+}
+
+/* ========== REDRAW / TABS / DRAG ========== */
+function redraw(){
+  if(state.mode==='def') drawDef();
+  else if(state.mode==='thm') drawThm();
+  else drawConv();
+}
+
+document.getElementById('flags').onclick=e=>{
+  const f=e.target.closest('.flag'); if(!f) return;
+  document.querySelectorAll('.flag').forEach(x=>x.classList.remove('on'));
+  f.classList.add('on');
+  state.mode=f.dataset.mode;
+  if(state.mode==='def'){state.dist=R;state.angle=0;}
+  if(state.mode==='thm'){state.Rpos=200;state.angle=0;}
+  if(state.mode==='conv'){state.angle=0;}
+  redraw();
+};
+
+function svgPoint(evt){
+  const pt=svg.createSVGPoint();
+  pt.x=evt.clientX; pt.y=evt.clientY;
+  const ctm=svg.getScreenCTM().inverse();
+  return pt.matrixTransform(ctm);
+}
+
+svg.addEventListener('pointerdown',e=>{
+  const t=e.target;
+  if(state.mode==='def' && (t.id==='linePQ'||t.id==='footHandle'||t.closest&&false)){
+    state.drag={kind:'dist'};
+    svg.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  } else if(state.mode==='thm' && t.id==='ptR'){
+    state.drag={kind:'R'};
+    svg.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  } else if(state.mode==='conv' && t.id==='lineConv'){
+    state.drag={kind:'tilt'};
+    svg.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  } else if(state.mode==='def'){
+    // allow dragging anywhere near the line
+    const p=svgPoint(e);
+    const g=lineGeom(state.dist,state.angle);
+    const signed=(p.x-OX)*g.nx+(p.y-OY)*g.ny;
+    const along=(p.x-g.fx)*g.dx+(p.y-g.fy)*g.dy;
+    if(Math.abs(signed-state.dist)<30 && Math.abs(along)<500){
+      state.drag={kind:'dist'};
+      svg.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+  }
+});
+
+svg.addEventListener('pointermove',e=>{
+  if(!state.drag) return;
+  const p=svgPoint(e);
+  if(state.drag.kind==='dist'){
+    const a=state.angle*Math.PI/180;
+    const nx=-Math.sin(a), ny=Math.cos(a);
+    let d=(p.x-OX)*nx+(p.y-OY)*ny;
+    // keep mostly positive (line on one side) but allow a bit negative
+    d=Math.max(0,Math.min(280,d));
+    state.dist=snapDist(d);
+    redraw();
+  } else if(state.drag.kind==='R'){
+    let v=p.x-OX;
+    if(Math.abs(v)<12) v=v>=0?12:-12;
+    state.Rpos=Math.max(-320,Math.min(320,v));
+    redraw();
+  } else if(state.drag.kind==='tilt'){
+    // angle of vector from T to pointer, relative to horizontal
+    const Ty=OY+R, Tx=OX;
+    let ang=Math.atan2(p.y-Ty,p.x-Tx)*180/Math.PI;
+    // normalize to -40..40 around horizontal
+    if(ang>90) ang-=180;
+    if(ang<-90) ang+=180;
+    ang=Math.max(-40,Math.min(40,ang));
+    if(Math.abs(ang)<2) ang=0;
+    state.angle=ang;
+    redraw();
+  }
+});
+
+svg.addEventListener('pointerup',()=>{state.drag=null;});
+svg.addEventListener('pointercancel',()=>{state.drag=null;});
+
+const _q=new URLSearchParams(location.search).get('mode');
+if(_q==='thm'||_q==='conv'||_q==='def'){
+  state.mode=_q;
+  document.querySelectorAll('.flag').forEach(x=>{x.classList.toggle('on',x.dataset.mode===_q);});
+  if(_q==='thm'){state.Rpos=200;state.angle=0;}
+  if(_q==='conv'){state.angle=0;}
+  if(_q==='def'){state.dist=R;state.angle=0;}
+}
+redraw();
+})();
+</script>
+</body>
+</html>
