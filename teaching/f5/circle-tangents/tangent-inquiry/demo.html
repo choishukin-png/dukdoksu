@@ -15,8 +15,8 @@
   --math:'Cambria Math','Times New Roman','STIX Two Text','Latin Modern Roman','Noto Serif','DejaVu Serif',serif;
 }
 *{box-sizing:border-box}
-html,body{margin:0}
-body{font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
+html{margin:0;height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body{margin:0;min-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto;font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
 header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 20px;background:#fff;border-bottom:4px solid var(--blue)}
 h1{font-size:28px;margin:0;letter-spacing:1px}
 h1 small{font-size:18px;color:var(--muted);font-weight:normal;margin-left:10px}
@@ -28,15 +28,16 @@ button.primary:hover{background:#155bb5}
 button.sm{font-size:17px;padding:6px 12px;min-height:42px}
 main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:14px 18px;align-items:start}
 @media (max-width:1100px), (orientation:portrait){ main{grid-template-columns:1fr} }
-.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px;overflow:visible}
 .stagehead{display:flex;flex-direction:column;gap:8px;min-height:72px}
 .flags{display:flex;gap:6px;flex-wrap:wrap}
 .flag{background:#a9c4ea;color:#fff;padding:6px 28px 6px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);font-weight:bold;font-size:18px;cursor:pointer;user-select:none}
 .flag.on{background:var(--blue)}
 .caption{font-size:24px;font-weight:bold;line-height:1.35}
 .caption .sub{display:block;font-size:18px;font-weight:normal;color:var(--muted);margin-top:2px}
-svg#stage{width:100%;height:auto;max-height:calc(100vh - 260px);min-height:340px;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+svg#stage{width:100%;height:auto;max-height:min(520px,calc(100dvh - 240px));min-height:280px;display:block;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding-top:8px}
+.panel{overflow:visible;max-height:none;-webkit-overflow-scrolling:auto}
 .panel h2{font-size:22px;margin:4px 0 10px;color:var(--blue)}
 .panel p{margin:6px 0;line-height:1.5}
 .hidden{display:none !important}
@@ -68,7 +69,7 @@ input[type=range]{width:100%;height:28px;accent-color:var(--blue)}
 .term{color:var(--blue);font-weight:bold}
 .lbl{font-family:var(--math);font-style:italic;font-weight:bold;font-size:32px;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;pointer-events:none}
 .lbl-cjk{font-family:var(--cjk);font-style:normal;font-weight:bold;font-size:22px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
-.handle{cursor:grab}
+.handle{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
 .handle:active{cursor:grabbing}
 .case-badge{display:inline-block;padding:4px 12px;border-radius:8px;font-weight:bold;font-size:18px;color:#fff;margin-right:6px}
 .case-badge.c1{background:var(--orange)}
@@ -215,10 +216,14 @@ function drawDef(){
     svg.appendChild(el('line',{x1:OX,y1:OY,x2:g.fx,y2:g.fy,stroke:'#1d6fd8','stroke-width':2,'stroke-dasharray':c===2?'':'6 5'}));
   }
 
-  // line PQ
+  // line PQ (wide invisible hit target + visible stroke)
   svg.appendChild(el('line',{
     x1:g.p1.x,y1:g.p1.y,x2:g.p2.x,y2:g.p2.y,
-    stroke:'#e07a1a','stroke-width':4,class:'handle',id:'linePQ'
+    stroke:'transparent','stroke-width':36,class:'handle',id:'linePQHit','pointer-events':'stroke'
+  }));
+  svg.appendChild(el('line',{
+    x1:g.p1.x,y1:g.p1.y,x2:g.p2.x,y2:g.p2.y,
+    stroke:'#e07a1a','stroke-width':4,class:'handle',id:'linePQ','pointer-events':'stroke'
   }));
 
   // drag handle on foot (perpendicular control)
@@ -449,8 +454,9 @@ function drawConv(){
     svg.appendChild(el('polyline',{points:`${Tx-18},${Ty} ${Tx-18},${Ty-18} ${Tx},${Ty-18}`,fill:'none',stroke:'#1d6fd8','stroke-width':2.5}));
   }
 
-  // line
-  svg.appendChild(el('line',{x1:p1.x,y1:p1.y,x2:p2.x,y2:p2.y,stroke:'#e07a1a','stroke-width':4,class:'handle',id:'lineConv'}));
+  // line (wide hit + visible)
+  svg.appendChild(el('line',{x1:p1.x,y1:p1.y,x2:p2.x,y2:p2.y,stroke:'transparent','stroke-width':36,class:'handle',id:'lineConvHit','pointer-events':'stroke'}));
+  svg.appendChild(el('line',{x1:p1.x,y1:p1.y,x2:p2.x,y2:p2.y,stroke:'#e07a1a','stroke-width':4,class:'handle',id:'lineConv','pointer-events':'stroke'}));
   svg.appendChild(el('text',{x:p1.x+20,y:p1.y-14,class:'lbl',fill:'#e07a1a',textContent:'P'}));
   svg.appendChild(el('text',{x:p2.x-20,y:p2.y-14,class:'lbl',fill:'#e07a1a',textContent:'Q'}));
 
@@ -552,42 +558,38 @@ function svgPoint(evt){
   return pt.matrixTransform(ctm);
 }
 
-svg.addEventListener('pointerdown',e=>{
-  const t=e.target;
-  if(state.mode==='def' && (t.id==='linePQ'||t.id==='footHandle'||t.closest&&false)){
-    state.drag={kind:'dist'};
-    svg.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  } else if(state.mode==='thm' && t.id==='ptR'){
-    state.drag={kind:'R'};
-    svg.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  } else if(state.mode==='conv' && t.id==='lineConv'){
-    state.drag={kind:'tilt'};
-    svg.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  } else if(state.mode==='def'){
-    // allow dragging anywhere near the line
-    const p=svgPoint(e);
-    const g=lineGeom(state.dist,state.angle);
-    const signed=(p.x-OX)*g.nx+(p.y-OY)*g.ny;
-    const along=(p.x-g.fx)*g.dx+(p.y-g.fy)*g.dy;
-    if(Math.abs(signed-state.dist)<30 && Math.abs(along)<500){
-      state.drag={kind:'dist'};
-      svg.setPointerCapture(e.pointerId);
-      e.preventDefault();
-    }
+function handleKindFromTarget(t){
+  if(!t || t===svg) return null;
+  const id=t.id||'';
+  if(state.mode==='def' && (id==='linePQ'||id==='linePQHit'||id==='footHandle')) return 'dist';
+  if(state.mode==='thm' && id==='ptR') return 'R';
+  if(state.mode==='conv' && (id==='lineConv'||id==='lineConvHit')) return 'tilt';
+  return null; // empty SVG / labels: leave touch for page scroll (iPad)
+}
+
+function endDrag(e){
+  if(state.drag && e && typeof e.pointerId==='number'){
+    try{ if(svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId); }catch(_){}
   }
+  state.drag=null;
+}
+
+svg.addEventListener('pointerdown',e=>{
+  const kind=handleKindFromTarget(e.target);
+  if(!kind) return; // allow page scroll on non-handle touches
+  state.drag={kind:kind, pointerId:e.pointerId};
+  try{ svg.setPointerCapture(e.pointerId); }catch(_){}
+  e.preventDefault();
 });
 
 svg.addEventListener('pointermove',e=>{
   if(!state.drag) return;
+  e.preventDefault();
   const p=svgPoint(e);
   if(state.drag.kind==='dist'){
     const a=state.angle*Math.PI/180;
     const nx=-Math.sin(a), ny=Math.cos(a);
     let d=(p.x-OX)*nx+(p.y-OY)*ny;
-    // keep mostly positive (line on one side) but allow a bit negative
     d=Math.max(0,Math.min(280,d));
     state.dist=snapDist(d);
     redraw();
@@ -597,10 +599,8 @@ svg.addEventListener('pointermove',e=>{
     state.Rpos=Math.max(-320,Math.min(320,v));
     redraw();
   } else if(state.drag.kind==='tilt'){
-    // angle of vector from T to pointer, relative to horizontal
     const Ty=OY+R, Tx=OX;
     let ang=Math.atan2(p.y-Ty,p.x-Tx)*180/Math.PI;
-    // normalize to -40..40 around horizontal
     if(ang>90) ang-=180;
     if(ang<-90) ang+=180;
     ang=Math.max(-40,Math.min(40,ang));
@@ -608,10 +608,11 @@ svg.addEventListener('pointermove',e=>{
     state.angle=ang;
     redraw();
   }
-});
+}, {passive:false});
 
-svg.addEventListener('pointerup',()=>{state.drag=null;});
-svg.addEventListener('pointercancel',()=>{state.drag=null;});
+svg.addEventListener('pointerup',endDrag);
+svg.addEventListener('pointercancel',endDrag);
+svg.addEventListener('lostpointercapture',()=>{state.drag=null;});
 
 const _q=new URLSearchParams(location.search).get('mode');
 if(_q==='thm'||_q==='conv'||_q==='def'){
