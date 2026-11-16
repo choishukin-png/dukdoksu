@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>三角形面積最大 — DSE 2022 卷 12</title>
+<style>
+:root{
+  --green:#c3e6a8; --green-d:#2f5d1f;
+  --purple:#7a3fa8; --purple-f:rgba(140,80,200,.30);
+  --blue:#1d6fd8; --blue-f:rgba(40,130,235,.22);
+  --ink:#1f2937; --muted:#5b6575;
+  --orange:#e07a1a; --circ:#3d9a4a;
+  --cjk:'Microsoft JhengHei','PingFang TC','Noto Sans TC','Noto Sans CJK TC','Heiti TC',sans-serif;
+  --math:'Cambria Math','Times New Roman','STIX Two Text','Latin Modern Roman','Noto Serif','DejaVu Serif',serif;
+}
+*{box-sizing:border-box}
+html{margin:0;height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body{margin:0;min-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto;font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 20px;background:#fff;border-bottom:4px solid var(--blue)}
+h1{font-size:28px;margin:0;letter-spacing:1px}
+h1 small{font-size:18px;color:var(--muted);font-weight:normal;margin-left:10px}
+button{font-family:inherit;font-size:20px;border:2px solid var(--blue);background:#fff;color:var(--blue);border-radius:12px;padding:9px 16px;cursor:pointer;min-height:48px;touch-action:manipulation;transition:background .15s}
+button:hover{background:#e8f1fd}
+button:disabled{opacity:.4;cursor:default;background:#fff}
+button.primary{background:var(--blue);color:#fff}
+button.primary:hover{background:#155bb5}
+button.sm{font-size:17px;padding:6px 12px;min-height:42px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:14px 18px;align-items:start}
+@media (max-width:1100px), (orientation:portrait){ main{grid-template-columns:1fr} }
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px;overflow:visible}
+.stagehead{display:flex;flex-direction:column;gap:8px;min-height:72px}
+.flags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{background:#a9c4ea;color:#fff;padding:6px 28px 6px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);font-weight:bold;font-size:18px;cursor:pointer;user-select:none}
+.flag.on{background:var(--blue)}
+.caption{font-size:24px;font-weight:bold;line-height:1.35}
+.caption .sub{display:block;font-size:18px;font-weight:normal;color:var(--muted);margin-top:2px}
+svg#stage{width:100%;height:auto;max-height:min(560px,calc(100dvh - 240px));min-height:280px;display:block;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding-top:8px}
+.panel{overflow:visible;max-height:none;-webkit-overflow-scrolling:auto}
+.panel h2{font-size:22px;margin:4px 0 10px;color:var(--blue)}
+.panel p{margin:6px 0;line-height:1.5}
+.hidden{display:none !important}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m .mi{font-style:italic;padding:0 .02em}
+.m .mo{padding:0 .26em}
+.m .mn{font-style:normal}
+.m .mt{font-family:var(--cjk);font-style:normal;font-size:.88em}
+.m .sp{display:inline-block;width:.6em}
+.m .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:0 .14em;line-height:1.05;font-size:.92em}
+.m .frac .num{border-bottom:1.6px solid currentColor;padding:0 .14em 1px;text-align:center}
+.m .frac .den{padding:1px .14em 0;text-align:center}
+.m .sqrt{display:inline-flex;align-items:stretch;vertical-align:middle;padding:0 .06em}
+.m .sqrt .rad{font-style:normal;font-size:1.15em;line-height:1;padding-right:1px}
+.m .sqrt .radic{border-top:1.6px solid currentColor;padding:0 .14em 1px;line-height:1.15}
+.m sup{font-size:.72em;line-height:0}
+.m sub{font-size:.72em}
+.reason{font-family:var(--cjk);color:#444;margin-left:.5em;font-size:.92em;white-space:nowrap}
+.concl{border:3px solid var(--blue);border-radius:14px;padding:10px 12px;background:#f2f7ff;text-align:center;font-size:22px;margin:8px 0;line-height:1.45}
+.concl.green{border-color:var(--green-d);background:#f0f8ea}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:20px;align-items:baseline;margin:8px 0}
+.read .v{font-family:var(--math);font-weight:bold;text-align:right}
+.ok{margin-top:10px;padding:10px 12px;border-radius:12px;background:#e6f6e6;color:#1d6b2a;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7cc58a}
+.warn{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff4e8;color:#8a4b00;font-weight:bold;font-size:20px;text-align:center;border:2px solid #e07a1a}
+.info{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eaf3ff;color:#155bb5;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7ab0e8}
+.note{font-size:16px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kbd{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+label.chk{display:flex;align-items:center;gap:8px;font-size:18px;margin:8px 0;cursor:pointer}
+label.chk input{width:22px;height:22px}
+input[type=range]{width:100%;height:28px;accent-color:var(--blue)}
+.slider-row{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;margin:8px 0;font-size:17px}
+.slider-row.wide{grid-template-columns:110px 1fr 70px}
+.slider-row .val{font-family:var(--math);font-weight:bold;text-align:right}
+.proof{font-size:18px;line-height:1.85;margin:6px 0 0;width:100%;border-collapse:collapse}
+.proof td{padding:2px 4px;vertical-align:baseline}
+.proof .reason{font-size:16px;margin-left:.3em}
+.term{color:var(--blue);font-weight:bold}
+.lbl{font-family:var(--math);font-style:italic;font-weight:bold;font-size:26px;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;pointer-events:none}
+.lbl-cjk{font-family:var(--cjk);font-style:normal;font-weight:bold;font-size:18px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.tick{font-family:var(--math);font-size:13px;fill:#5b6575;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.handle{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.handle:active{cursor:grabbing}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>三角形面積最大<small>DSE 2022 卷 12 · 坐標幾何</small></h1>
+</header>
+<main>
+  <section class="card">
+    <div class="stagehead">
+      <div class="flags" id="flags">
+        <div class="flag on" data-mode="ex">① 探究</div>
+        <div class="flag" data-mode="demo">② 逐步示範</div>
+      </div>
+      <div class="caption" id="caption"></div>
+    </div>
+    <svg id="stage" viewBox="0 0 1000 640" aria-label="三角形面積最大探究舞台"></svg>
+    <div class="controls" id="controls"></div>
+    <div class="kbd" id="kbdHint"></div>
+  </section>
+  <aside class="card panel" id="panel"></aside>
+</main>
+<script>
+'use strict';
+/* ===== tiny offline TeX subset ===== */
+const TEXSYM={
+  circ:'°', therefore:'∴', because:'∵', times:'×', cdot:'·',
+  perp:'⊥', parallel:'∥', mid:'∣', ne:'≠', neq:'≠', approx:'≈',
+  le:'≤', ge:'≥', leq:'≤', geq:'≥', lt:'<', gt:'>',
+  angle:'∠', triangle:'△', Gamma:'Γ', ell:'ℓ', pi:'π',
+  infty:'∞', pm:'±', mp:'∓', sim:'∼',
+  quad:'<span class="sp"></span>'
+};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function tex(src){
+  src=String(src); let i=0,out='';
+  function group(){
+    if(i>=src.length) return '';
+    if(src[i]==='{'){let depth=1,j=i+1;while(j<src.length&&depth){if(src[j]==='{')depth++;else if(src[j]==='}')depth--;j++;}const g=src.slice(i+1,j-1);i=j;return g;}
+    if(src[i]==='\\'){const m=/^\\[a-zA-Z]+/.exec(src.slice(i)); if(m){i+=m[0].length; return m[0];}}
+    return src[i++];
+  }
+  while(i<src.length){
+    const ch=src[i];
+    if(ch==='\\'){
+      const m=/^\\([a-zA-Z]+)/.exec(src.slice(i));
+      if(!m){
+        if(i+1<src.length){
+          const nx=src[i+1]; i+=2;
+          if(nx===','||nx===';'||nx===' '||nx===':') out+='<span class="sp"></span>';
+          else out+='<span class="mn">'+esc(nx)+'</span>';
+        } else i++;
+        continue;
+      }
+      i+=m[0].length;
+      const cmd=m[1];
+      if(cmd==='text'){out+='<span class="mt">'+esc(group())+'</span>';}
+      else if(cmd==='frac'||cmd==='dfrac'||cmd==='tfrac'){
+        const a=group(), b=group();
+        out+='<span class="frac"><span class="num">'+tex(a)+'</span><span class="den">'+tex(b)+'</span></span>';
+      }
+      else if(cmd==='sqrt'){
+        out+='<span class="sqrt"><span class="rad">√</span><span class="radic">'+tex(group())+'</span></span>';
+      }
+      else if(cmd==='circ'){out+='<span class="mn">°</span>';}
+      else if(cmd==='perp'){out+='<span class="mo">⊥</span>';}
+      else if(cmd==='angle'){out+='<span class="mn">∠</span>';}
+      else if(cmd==='triangle'){out+='<span class="mn">△</span>';}
+      else if(cmd==='Gamma'){out+='<i class="mi">Γ</i>';}
+      else if(cmd==='ell'){out+='<i class="mi">ℓ</i>';}
+      else if(cmd==='pi'){out+='<i class="mi">π</i>';}
+      else if(cmd==='left'||cmd==='right'||cmd==='displaystyle'||cmd==='textstyle'||cmd==='bigl'||cmd==='bigr'){
+        if(src[i]==='.' ){i++;}
+        else if(src[i]==='('||src[i]===')'||src[i]==='['||src[i]===']'||src[i]==='|'||src[i]==='{'||src[i]==='}'){out+='<span class="mn">'+esc(src[i])+'</span>';i++;}
+      }
+      else if(cmd==='therefore'||cmd==='because'){out+='<span class="mn">'+TEXSYM[cmd]+'</span><span class="sp"></span>';}
+      else out+='<span class="mn">'+(TEXSYM[cmd]||cmd)+'</span>';
+    } else if(ch==='^'){i++;const g=group();out+=(g==='\\circ'||g==='circ')?'<span class="mn">°</span>':'<sup>'+tex(g)+'</sup>';}
+    else if(ch==='_'){i++;out+='<sub>'+tex(group())+'</sub>';}
+    else if(/[A-Za-z]/.test(ch)){out+='<i class="mi">'+ch+'</i>';i++;}
+    else if(/[0-9.]/.test(ch)){let j=i;while(j<src.length&&/[0-9.]/.test(src[j]))j++;out+='<span class="mn">'+src.slice(i,j)+'</span>';i=j;}
+    else if('=+-<>'.indexOf(ch)>=0){out+='<span class="mo">'+(ch==='-'?'−':esc(ch))+'</span>';i++;}
+    else if(ch===' '){i++;}
+    else {out+='<span class="mn">'+esc(ch)+'</span>';i++;}
+  }
+  return out;
+}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(e=>{e.innerHTML=tex(e.getAttribute('data-tex'));});}
+function M(src){return '<span class="m">'+tex(src)+'</span>';}
+
+/* ===== SVG helpers ===== */
+const svg=document.getElementById('stage');
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,kids){
+  const n=document.createElementNS(NS,tag);
+  if(attrs) for(const k in attrs){
+    if(k==='textContent') n.textContent=attrs[k];
+    else if(k==='class'||k==='className') n.setAttribute('class',attrs[k]);
+    else if(attrs[k]!==undefined&&attrs[k]!==null) n.setAttribute(k,attrs[k]);
+  }
+  if(kids) kids.forEach(c=>n.appendChild(c));
+  return n;
+}
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function svgPoint(evt){
+  const pt=svg.createSVGPoint();
+  pt.x=evt.clientX; pt.y=evt.clientY;
+  const ctm=svg.getScreenCTM();
+  if(!ctm) return {x:0,y:0};
+  return pt.matrixTransform(ctm.inverse());
+}
+
+/* ===== numbers / geometry ===== */
+function fmt(x,d){
+  if(d===undefined) d=1;
+  if(!isFinite(x)) return '—';
+  const n=Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+  let s=n.toFixed(d);
+  if(d>0) s=s.replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1');
+  if(s==='-0') s='0';
+  return s;
+}
+function fmtPt(p,d){return '('+fmt(p.x,d===undefined?1:d)+', '+fmt(p.y,d===undefined?1:d)+')';}
+function almost(a,b,eps){return Math.abs(a-b)<(eps===undefined?1e-6:eps);}
+function hypot(a,b){
+  if(typeof a==='object') return Math.hypot(a.x-b.x,a.y-b.y);
+  return Math.hypot(a,b);
+}
+function mid(a,b){return {x:(a.x+b.x)/2,y:(a.y+b.y)/2};}
+function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+function mul(a,k){return {x:a.x*k,y:a.y*k};}
+function dot(a,b){return a.x*b.x+a.y*b.y;}
+function cross(a,b){return a.x*b.y-a.y*b.x;}
+function unit(v){const L=Math.hypot(v.x,v.y)||1;return {x:v.x/L,y:v.y/L};}
+function slope(a,b){return (b.y-a.y)/(b.x-a.x);}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t};}
+function projectToLine(p,a,b){
+  const ab=sub(b,a); const t=dot(sub(p,a),ab)/(dot(ab,ab)||1);
+  return add(a,mul(ab,t));
+}
+function projectToSeg(p,a,b){
+  const ab=sub(b,a); const t=clamp(dot(sub(p,a),ab)/(dot(ab,ab)||1),0,1);
+  return add(a,mul(ab,t));
+}
+function projectToCircle(p,c,r){
+  const v=sub(p,c); const L=Math.hypot(v.x,v.y)||1;
+  return add(c,mul(v,r/L));
+}
+function reflect(p,m){return {x:2*m.x-p.x,y:2*m.y-p.y};}
+function distToLineABC(p,A,B,C){ // Ax+By+C=0
+  return Math.abs(A*p.x+B*p.y+C)/Math.hypot(A,B);
+}
+function lineIntersect(A1,B1,C1,A2,B2,C2){
+  const d=A1*B2-A2*B1; if(Math.abs(d)<1e-12) return null;
+  return {x:(B1*C2-B2*C1)/d, y:(C1*A2-C2*A1)/d};
+}
+function angDeg(a,v,b){ // angle at v, from a to b, 0..180
+  const u=sub(a,v), w=sub(b,v);
+  const c=clamp(dot(u,w)/(Math.hypot(u.x,u.y)*Math.hypot(w.x,w.y)||1),-1,1);
+  return Math.acos(c)*180/Math.PI;
+}
+
+/* ===== coordinate plane (equal aspect, y up) ===== */
+function Plane(spec){
+  const W=spec.W||1000, H=spec.H||640;
+  const pad=Object.assign({l:52,r:36,t:28,b:40}, spec.pad||{});
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  let xmin=spec.xmin, xmax=spec.xmax, ymin=spec.ymin, ymax=spec.ymax;
+  const cx=(xmin+xmax)/2, cy=(ymin+ymax)/2;
+  const sx0=iw/(xmax-xmin), sy0=ih/(ymax-ymin);
+  const sc=Math.min(sx0,sy0);
+  const hw=iw/sc/2, hh=ih/sc/2;
+  xmin=cx-hw; xmax=cx+hw; ymin=cy-hh; ymax=cy+hh;
+  const sx=x=>pad.l+(x-xmin)/(xmax-xmin)*iw;
+  const sy=y=>pad.t+(ymax-y)/(ymax-ymin)*ih;
+  const xFrom=px=>xmin+(px-pad.l)/iw*(xmax-xmin);
+  const yFrom=py=>ymax-(py-pad.t)/ih*(ymax-ymin);
+  const P=x=>sx(x), Q=y=>sy(y);
+  function pt(p){return {x:sx(p.x),y:sy(p.y)};}
+  function toMath(p){return {x:xFrom(p.x),y:yFrom(p.y)};}
+  const unit=sc; // svg units per math unit
+  function niceStep(range,target){
+    const raw=range/(target||8);
+    const pow=Math.pow(10,Math.floor(Math.log10(raw)||0));
+    const n=raw/pow;
+    return (n<=1?1:n<=2?2:n<=5?5:10)*pow;
+  }
+  function clipLine(a,b){
+    // Liang-Barsky in math coords against [xmin,xmax]x[ymin,ymax] slightly expanded
+    const x0=a.x,y0=a.y,dx=b.x-a.x,dy=b.y-a.y;
+    let t0=0,t1=1;
+    function clip(p,q){
+      if(Math.abs(p)<1e-14){return q>=0;}
+      const r=q/p;
+      if(p<0){if(r>t1)return false; if(r>t0)t0=r;}
+      else{if(r<t0)return false; if(r<t1)t1=r;}
+      return true;
+    }
+    const m=0.02*(xmax-xmin);
+    if(!clip(-dx,x0-(xmin-m))) return null;
+    if(!clip(dx,(xmax+m)-x0)) return null;
+    if(!clip(-dy,y0-(ymin-m))) return null;
+    if(!clip(dy,(ymax+m)-y0)) return null;
+    return [{x:x0+t0*dx,y:y0+t0*dy},{x:x0+t1*dx,y:y0+t1*dy}];
+  }
+  function windowLine(p, dir){
+    const L=Math.hypot(xmax-xmin,ymax-ymin)*2;
+    const u=unitVec(dir);
+    return clipLine(add(p,mul(u,-L)), add(p,mul(u,L)));
+  }
+  function unitVec(v){const L=Math.hypot(v.x,v.y)||1;return {x:v.x/L,y:v.y/L};}
+  function drawGrid(root){
+    const g=el('g',{class:'grid'});
+    const step=spec.step||niceStep(Math.max(xmax-xmin,ymax-ymin),10);
+    const x0=Math.ceil((xmin-1e-9)/step)*step;
+    const y0=Math.ceil((ymin-1e-9)/step)*step;
+    for(let x=x0;x<=xmax+1e-9;x+=step){
+      g.appendChild(el('line',{x1:sx(x),y1:sy(ymin),x2:sx(x),y2:sy(ymax),stroke:almost(x,0,step/20)?'#9aa7b8':'#e6ebf2','stroke-width':almost(x,0,step/20)?1.6:1}));
+    }
+    for(let y=y0;y<=ymax+1e-9;y+=step){
+      g.appendChild(el('line',{x1:sx(xmin),y1:sy(y),x2:sx(xmax),y2:sy(y),stroke:almost(y,0,step/20)?'#9aa7b8':'#e6ebf2','stroke-width':almost(y,0,step/20)?1.6:1}));
+    }
+    // axes arrows if origin range includes 0
+    if(ymin<0&&ymax>0){
+      g.appendChild(el('line',{x1:sx(xmin),y1:sy(0),x2:sx(xmax),y2:sy(0),stroke:'#334155','stroke-width':2}));
+      const ax=sx(xmax), ay=sy(0);
+      g.appendChild(el('polygon',{points:`${ax},${ay} ${ax-12},${ay-5} ${ax-12},${ay+5}`,fill:'#334155'}));
+      g.appendChild(el('text',{x:ax-16,y:ay+22,class:'tick',textContent:'x'}));
+    }
+    if(xmin<0&&xmax>0){
+      g.appendChild(el('line',{x1:sx(0),y1:sy(ymin),x2:sx(0),y2:sy(ymax),stroke:'#334155','stroke-width':2}));
+      const ax=sx(0), ay=sy(ymax);
+      g.appendChild(el('polygon',{points:`${ax},${ay} ${ax-5},${ay+12} ${ax+5},${ay+12}`,fill:'#334155'}));
+      g.appendChild(el('text',{x:ax+12,y:ay+16,class:'tick',textContent:'y'}));
+    }
+    // ticks
+    const skip0=true;
+    for(let x=x0;x<=xmax+1e-9;x+=step){
+      if(skip0&&almost(x,0,step/20)) continue;
+      if(ymin<=0&&ymax>=0){
+        g.appendChild(el('line',{x1:sx(x),y1:sy(0)-5,x2:sx(x),y2:sy(0)+5,stroke:'#334155','stroke-width':1.4}));
+        g.appendChild(el('text',{x:sx(x),y:sy(0)+18,class:'tick','text-anchor':'middle',textContent:fmt(x,step<1?2:0)}));
+      }
+    }
+    for(let y=y0;y<=ymax+1e-9;y+=step){
+      if(skip0&&almost(y,0,step/20)) continue;
+      if(xmin<=0&&xmax>=0){
+        g.appendChild(el('line',{x1:sx(0)-5,y1:sy(y),x2:sx(0)+5,y2:sy(y),stroke:'#334155','stroke-width':1.4}));
+        g.appendChild(el('text',{x:sx(0)-8,y:sy(y)+4,class:'tick','text-anchor':'end',textContent:fmt(y,step<1?2:0)}));
+      }
+    }
+    if(xmin<=0&&xmax>=0&&ymin<=0&&ymax>=0){
+      g.appendChild(el('text',{x:sx(0)-12,y:sy(0)+20,class:'lbl',style:'font-size:22px',textContent:'O'}));
+    }
+    root.appendChild(g);
+    return g;
+  }
+  function lineEl(a,b,attrs){
+    const c=clipLine(a,b); if(!c) return el('g');
+    const A=pt(c[0]), B=pt(c[1]);
+    return el('line',Object.assign({x1:A.x,y1:A.y,x2:B.x,y2:B.y},attrs));
+  }
+  function segEl(a,b,attrs){
+    const A=pt(a), B=pt(b);
+    return el('line',Object.assign({x1:A.x,y1:A.y,x2:B.x,y2:B.y},attrs));
+  }
+  function circleEl(c,r,attrs){
+    const C=pt(c);
+    return el('circle',Object.assign({cx:C.x,cy:C.y,r:r*unit},attrs));
+  }
+  function polyEl(pts,attrs){
+    const s=pts.map(p=>{const q=pt(p);return q.x+','+q.y;}).join(' ');
+    return el('polygon',Object.assign({points:s},attrs));
+  }
+  function polylineEl(pts,attrs){
+    const s=pts.map(p=>{const q=pt(p);return q.x+','+q.y;}).join(' ');
+    return el('polyline',Object.assign({points:s,fill:'none'},attrs));
+  }
+  function label(p,text,opts){
+    opts=opts||{};
+    const q=pt(p);
+    const dx=opts.dx||0, dy=opts.dy||0;
+    return el('text',Object.assign({x:q.x+dx,y:q.y+dy,class:opts.class||'lbl',fill:opts.fill||'#1f2937','text-anchor':opts.anchor||'start',textContent:text}, opts.attrs||{}));
+  }
+  function handle(p, id, color){
+    const q=pt(p);
+    const g=el('g',{class:'handle','data-handle':id,id:'h-'+id});
+    g.appendChild(el('circle',{cx:q.x,cy:q.y,r:22,fill:'transparent',stroke:'none'}));
+    g.appendChild(el('circle',{cx:q.x,cy:q.y,r:10,fill:color||'#7a3fa8',stroke:'#fff','stroke-width':'2.5'}));
+    return g;
+  }
+  function dot(p, color, r){
+    const q=pt(p);
+    return el('circle',{cx:q.x,cy:q.y,r:r||6,fill:color||'#1f2937',stroke:'#fff','stroke-width':2});
+  }
+  function rightAngle(v, a, b, size){
+    const s=(size||0.45);
+    // size in math units if small numbers, but better in svg px converted
+    const su= (typeof size==='number'?size:12)/unit;
+    const u1=unitVec(sub(a,v)), u2=unitVec(sub(b,v));
+    const p1=add(v,mul(u1,su)), p2=add(p1,mul(u2,su)), p3=add(v,mul(u2,su));
+    return polylineEl([p1,p2,p3],{stroke:'#1d6fd8','stroke-width':2.2,fill:'none'});
+  }
+  function angleArc(v, a, b, radiusPx, color){
+    const r=(radiusPx||28)/unit;
+    const u1=unitVec(sub(a,v)), u2=unitVec(sub(b,v));
+    const a1=Math.atan2(u1.y,u1.x), a2=Math.atan2(u2.y,u2.x);
+    let d=a2-a1;
+    while(d>Math.PI) d-=2*Math.PI;
+    while(d<-Math.PI) d+=2*Math.PI;
+    const sweep=d>0?0:1; // SVG y is flipped so sweep is inverted? We'll compute in svg space
+    const p1=pt(add(v,mul(u1,r))), p2=pt(add(v,mul(u2,r))), c=pt(v);
+    const rpx=radiusPx||28;
+    // determine sweep in svg coords
+    const s1=Math.atan2(p1.y-c.y,p1.x-c.x), s2=Math.atan2(p2.y-c.y,p2.x-c.x);
+    let ds=s2-s1; while(ds>Math.PI)ds-=2*Math.PI; while(ds<-Math.PI)ds+=2*Math.PI;
+    const large=0;
+    const sw=ds>0?1:0;
+    const dpath=`M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${rpx} ${rpx} 0 ${large} ${sw} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+    return el('path',{d:dpath,fill:'none',stroke:color||'#e07a1a','stroke-width':2.4});
+  }
+  return {
+    W,H,xmin,xmax,ymin,ymax,sx,sy,xFrom,yFrom,pt,toMath,unit,step:spec.step||niceStep(Math.max(xmax-xmin,ymax-ymin),10),
+    drawGrid,lineEl,segEl,circleEl,polyEl,polylineEl,label,handle,dot,rightAngle,angleArc,clipLine,windowLine,
+    niceStep
+  };
+}
+
+/* ===== drag (only .handle captures; stage itself allows pan-y) ===== */
+const Drag={
+  current:null,
+  /* onMove(id, mathPt, svgPt) set by each page after plane is known */
+  move:null,
+  getPlane:null,
+  bind(){
+    function kindFrom(t){
+      while(t&&t!==svg){
+        const cls=t.getAttribute&&t.getAttribute('class')||'';
+        if(cls.split(/\s+/).indexOf('handle')>=0){
+          return t.getAttribute('data-handle')||t.id||'handle';
+        }
+        t=t.parentNode;
+      }
+      return null;
+    }
+    function end(e){
+      if(Drag.current && e && typeof e.pointerId==='number'){
+        try{ if(svg.hasPointerCapture&&svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId);}catch(_){}
+      }
+      Drag.current=null;
+    }
+    svg.addEventListener('pointerdown',e=>{
+      const k=kindFrom(e.target);
+      if(!k) return;
+      Drag.current={id:k, pointerId:e.pointerId};
+      try{svg.setPointerCapture(e.pointerId);}catch(_){}
+      e.preventDefault();
+    });
+    svg.addEventListener('pointermove',e=>{
+      if(!Drag.current) return;
+      e.preventDefault();
+      const sp=svgPoint(e);
+      const plane=Drag.getPlane?Drag.getPlane():null;
+      const mp=plane?plane.toMath(sp):sp;
+      if(Drag.move) Drag.move(Drag.current.id, mp, sp, e);
+    },{passive:false});
+    svg.addEventListener('pointerup',end);
+    svg.addEventListener('pointercancel',end);
+    svg.addEventListener('lostpointercapture',()=>{Drag.current=null;});
+  }
+};
+
+/* ===== UI helpers ===== */
+function setCaption(html){document.getElementById('caption').innerHTML=html;}
+function setPanel(html){
+  const p=document.getElementById('panel');
+  p.innerHTML=html;
+  renderTex(p);
+}
+function setControls(html){document.getElementById('controls').innerHTML=html;}
+function setHint(t){const n=document.getElementById('kbdHint'); if(n) n.textContent=t||'';}
+function bindFlags(onChange){
+  const box=document.getElementById('flags');
+  box.addEventListener('click',e=>{
+    const f=e.target.closest('.flag'); if(!f) return;
+    box.querySelectorAll('.flag').forEach(x=>x.classList.remove('on'));
+    f.classList.add('on');
+    onChange(f.dataset.mode, f);
+  });
+}
+function setFlag(mode){
+  document.querySelectorAll('#flags .flag').forEach(x=>x.classList.toggle('on', x.dataset.mode===mode));
+}
+
+/* demo playback */
+function makeDemo(getSteps, hooks){
+  const D={i:0, playing:false, token:0};
+  D.steps=()=>getSteps();
+  D.go=function(n){
+    const arr=D.steps();
+    D.i=clamp(n,0,arr.length-1);
+    if(hooks.onStep) hooks.onStep(D.i, arr[D.i]);
+    hooks.redraw();
+  };
+  D.reset=function(){
+    D.token++; D.playing=false; D.i=0;
+    if(hooks.onReset) hooks.onReset();
+    D.go(0);
+  };
+  D.play=async function(){
+    if(D.playing){D.token++; D.playing=false; hooks.redraw(); return;}
+    D.playing=true; const my=++D.token;
+    const arr=D.steps();
+    if(D.i>=arr.length-1) D.go(0);
+    hooks.redraw();
+    while(D.i<arr.length-1){
+      await new Promise(r=>setTimeout(r, D.i===0?700:1400));
+      if(my!==D.token) return;
+      D.go(D.i+1);
+    }
+    D.playing=false; hooks.redraw();
+  };
+  D.controls=function(){
+    const n=D.steps().length;
+    return `<button id="btnPrev">◀ 上一步</button>
+      <button id="btnNext" class="primary">下一步 ▶</button>
+      <button id="btnPlay">${D.playing?'❚❚ 暫停':'▶ 播放'}</button>
+      <button id="btnReset">↺ 重設</button>`;
+  };
+  D.bindControls=function(){
+    const n=D.steps().length;
+    const prev=document.getElementById('btnPrev');
+    const next=document.getElementById('btnNext');
+    if(prev){prev.disabled=D.i===0; prev.onclick=()=>D.go(D.i-1);}
+    if(next){next.disabled=D.i>=n-1; next.onclick=()=>D.go(D.i+1);}
+    const play=document.getElementById('btnPlay'); if(play) play.onclick=()=>D.play();
+    const rst=document.getElementById('btnReset'); if(rst) rst.onclick=()=>D.reset();
+  };
+  D.stepFlags=function(){
+    const arr=D.steps();
+    return `<div class="flags" id="stepFlags" style="margin-top:4px">${arr.map((s,i)=>`<div class="flag${i===D.i?' on':''}" data-step="${i}">${s.flag||('步驟 '+(i+1))}</div>`).join('')}</div>`;
+  };
+  return D;
+}
+
+document.addEventListener('keydown',e=>{
+  if(typeof onDemoKey==='function') onDemoKey(e);
+});
+
+function consumeQuery(){
+  const q=new URLSearchParams(location.search);
+  const m=q.get('mode');
+  if(m){
+    const f=document.querySelector('#flags .flag[data-mode="'+m+'"]');
+    if(f) f.click();
+  }
+  return q;
+}
+
+(function(){
+const PUR='#7a3fa8', BLU='#1d6fd8', ORN='#e07a1a', GRN='#3d9a4a', INK='#1f2937';
+const G={x:77,y:64}, H={x:65,y:48}, R=99, GH=20;
+const TH1=Math.atan2(3/5,-4/5), TH2=Math.atan2(-3/5,4/5);
+const state={mode:'ex', theta:0.4, panelKey:''};
+const demo=makeDemo(()=>DEMO_STEPS,{redraw:redraw,onStep(){state.panelKey='';},onReset(){state.panelKey='';}});
+
+function getPlane(){return Plane({xmin:-28,xmax:185,ymin:-42,ymax:172,W:1000,H:640,step:20});}
+Drag.getPlane=getPlane;
+
+function Pof(th){return {x:G.x+R*Math.cos(th), y:G.y+R*Math.sin(th)};}
+function geom(){
+  const P=Pof(state.theta);
+  const GP={x:P.x-G.x,y:P.y-G.y};
+  const GHv={x:H.x-G.x,y:H.y-G.y};
+  const ang=angDeg(H,G,P);
+  const hp=hypot(H,P);
+  const area=0.5*R*GH*Math.sin(ang*Math.PI/180);
+  const peri=GH+R+hp;
+  const atMax=Math.abs(ang-90)<2.8;
+  return {P,ang,hp,area,peri,atMax};
+}
+
+const DEMO_STEPS=[
+  {flag:'① 圓心',caption:'先求圓心 G 與 GH',sub:'由一般式讀出圓心，再用兩點距離公式。'},
+  {flag:'② 垂直',caption:'面積最大時的幾何關係',sub:'△GHP 的面積由夾角的正弦決定。'},
+  {flag:'③ 周界',caption:'求最大面積時的周界',sub:'此時 △GHP 是直角三角形，可用畢氏定理。'}
+];
+
+function demoPanel(i){
+  if(i===0) return `<h2>逐步示範 (a)</h2>
+    <p>圓 ${M('C:\\ x^2+y^2-154x-128y+224=0')}。</p>
+    <table class="proof">
+      <tr><td>${M('G=\\left(\\dfrac{154}{2},\\dfrac{128}{2}\\right)=(77,64)')}</td><td><span class="reason">(圓的方程)</span></td></tr>
+      <tr><td>${M('GH=\\sqrt{(77-65)^2+(64-48)^2}')}</td><td><span class="reason">(兩點距離公式)</span></td></tr>
+      <tr><td>${M('=\\sqrt{12^2+16^2}=20')}</td><td></td></tr>
+    </table>
+    <div class="concl">${M('GH=20')}</div>`;
+  if(i===1) return `<h2>逐步示範 (b)(i)</h2>
+    <p>${M('P')} 在 ${M('C')} 上，故 ${M('GP')} 為半徑，是定值；${M('GH')} 亦是定值。</p>
+    <table class="proof">
+      <tr><td>${M('\\text{面積}=\\dfrac{1}{2}\\cdot GP\\cdot GH\\cdot \\sin\\angle HGP')}</td><td></td></tr>
+      <tr><td>當 ${M('\\sin\\angle HGP=1')}，即 ${M('\\angle HGP=90^\\circ')} 時，面積最大</td><td></td></tr>
+    </table>
+    <div class="concl green">${M('GH \\perp GP')}</div>`;
+  return `<h2>逐步示範 (b)(ii)</h2>
+    <table class="proof">
+      <tr><td>半徑 ${M('=\\sqrt{77^2+64^2-224}=99')}</td><td><span class="reason">(圓的方程)</span></td></tr>
+      <tr><td>${M('HP^2=GH^2+GP^2=20^2+99^2')}</td><td><span class="reason">(畢氏定理)</span></td></tr>
+      <tr><td>${M('HP=101')}</td><td></td></tr>
+      <tr><td>周界 ${M('=20+99+101=220')}</td><td></td></tr>
+    </table>
+    <div class="concl green">周界 ${M('=220')}</div>`;
+}
+
+function drawFig(pl,g,opts){
+  opts=opts||{};
+  svg.appendChild(pl.circleEl(G,R,{fill:'rgba(61,154,74,.08)',stroke:GRN,'stroke-width':2.8}));
+  svg.appendChild(pl.segEl(G,H,{stroke:ORN,'stroke-width':3}));
+  svg.appendChild(pl.polyEl([G,H,g.P],{fill:g.atMax?'rgba(61,154,74,.22)':'rgba(40,130,235,.16)',stroke:g.atMax?GRN:BLU,'stroke-width':2.4}));
+  if(g.atMax) svg.appendChild(pl.rightAngle(G,H,g.P,18));
+  svg.appendChild(pl.dot(G,INK,7));
+  svg.appendChild(pl.dot(H,ORN,7));
+  svg.appendChild(pl.label(G,'G',{dx:10,dy:-8}));
+  svg.appendChild(pl.label(H,'H',{dx:-22,dy:20,fill:ORN}));
+  if(opts.handle){
+    svg.appendChild(pl.handle(g.P,'P',PUR));
+    svg.appendChild(pl.label(g.P,'P',{dx:10,dy:-8,fill:PUR}));
+  } else {
+    svg.appendChild(pl.dot(g.P,PUR,7));
+    svg.appendChild(pl.label(g.P,'P',{dx:10,dy:-8,fill:PUR}));
+  }
+}
+
+function drawDemo(){
+  const pl=getPlane();
+  const old=state.theta;
+  state.theta = demo.i===0 ? 0.6 : TH1;
+  const g=geom();
+  clearSvg(); pl.drawGrid(svg);
+  if(demo.i===0){
+    svg.appendChild(pl.circleEl(G,R,{fill:'rgba(61,154,74,.08)',stroke:GRN,'stroke-width':2.8}));
+    svg.appendChild(pl.segEl(G,H,{stroke:ORN,'stroke-width':3}));
+    svg.appendChild(pl.dot(G,INK,7)); svg.appendChild(pl.label(G,'G',{dx:10,dy:-8}));
+    svg.appendChild(pl.dot(H,ORN,7)); svg.appendChild(pl.label(H,'H',{dx:-22,dy:20,fill:ORN}));
+  } else {
+    drawFig(pl,g,{handle:false});
+  }
+  state.theta=old;
+  const st=DEMO_STEPS[demo.i];
+  setCaption(st.caption+'<span class="sub">'+st.sub+'</span>');
+}
+
+function panelEx(){
+  return `<h2>探究：何時 △GHP 面積最大？</h2>
+    <p>圓心 ${M('G')}，點 ${M('H=(65,48)')}。沿圓拖動 ${M('P')}，觀察面積與 ${M('\\angle HGP')}。</p>
+    <div class="read">
+      <span>${M('G')}</span><span class="v">(77, 64)</span>
+      <span>${M('GH')}</span><span class="v" id="rdGH">20</span>
+      <span>${M('GP')}（半徑）</span><span class="v" id="rdGP">99</span>
+      <span>${M('HP')}</span><span class="v" id="rdHP"></span>
+      <span>${M('\\angle HGP')}</span><span class="v" id="rdAng"></span>
+      <span>${M('\\triangle GHP')} 面積</span><span class="v" id="rdArea"></span>
+      <span>周界</span><span class="v" id="rdPeri"></span>
+    </div>
+    <div class="ok hidden" id="okBox">面積最大：${M('GH \\perp GP')}，周界 ${M('=220')}</div>
+    <div class="presets">
+      <button class="sm primary" id="btnMax1">移到極大位置 1</button>
+      <button class="sm primary" id="btnMax2">移到極大位置 2</button>
+    </div>
+    <p class="note">兩個極大位置都要試一試。面積公式是 ${M('\\dfrac{1}{2}\\cdot GP\\cdot GH\\cdot\\sin\\angle HGP')}。</p>`;
+}
+
+function updateReadings(){
+  const g=geom();
+  const set=(id,t)=>{const n=document.getElementById(id); if(n) n.textContent=t;};
+  set('rdHP',fmt(g.hp,2)); set('rdAng',fmt(g.ang,1)+'°');
+  set('rdArea',fmt(g.area,1)); set('rdPeri',fmt(g.peri,1));
+  const ok=document.getElementById('okBox'); if(ok) ok.classList.toggle('hidden', !g.atMax);
+}
+
+function bindPanel(){
+  const b1=document.getElementById('btnMax1'); if(b1) b1.onclick=()=>{state.theta=TH1; redraw();};
+  const b2=document.getElementById('btnMax2'); if(b2) b2.onclick=()=>{state.theta=TH2; redraw();};
+  const rst=document.getElementById('btnReset');
+  if(rst) rst.onclick=()=>{state.theta=0.4; redraw();};
+  demo.bindControls();
+}
+
+function redraw(){
+  if(state.mode==='demo'){
+    drawDemo();
+    const key='demo-'+demo.i;
+    if(state.panelKey!==key){state.panelKey=key; setPanel(demoPanel(demo.i));}
+    setControls(demo.controls()); bindPanel();
+    setHint('鍵盤：← 上一步　→ 下一步　空白鍵 播放／暫停');
+    return;
+  }
+  const pl=getPlane(), g=geom();
+  clearSvg(); pl.drawGrid(svg);
+  drawFig(pl,g,{handle:true});
+  setCaption('沿圓拖動 P，尋找 △GHP 面積的最大值<span class="sub">面積最大時，GH 與 GP 有甚麼關係？</span>');
+  if(state.panelKey!=='ex'){state.panelKey='ex'; setPanel(panelEx());}
+  setControls('<button class="sm" id="btnReset">↺ 重設</button>');
+  bindPanel(); updateReadings();
+  setHint('拖動紫色點 P（限制在圓 C 上）；兩個極大位置都可以到達');
+}
+
+Drag.move=function(id,mp){
+  if(state.mode==='ex' && id==='P'){
+    state.theta=Math.atan2(mp.y-G.y, mp.x-G.x);
+    redraw();
+  }
+};
+
+bindFlags(mode=>{state.mode=mode;state.panelKey=''; if(mode==='demo') demo.go(0); else redraw();});
+window.onDemoKey=function(e){
+  if(state.mode!=='demo') return;
+  if(e.key==='ArrowRight'){e.preventDefault();demo.go(demo.i+1);}
+  else if(e.key==='ArrowLeft'){e.preventDefault();demo.go(demo.i-1);}
+  else if(e.key===' '){e.preventDefault();demo.play();}
+};
+Drag.bind();
+const __q=consumeQuery();
+redraw();
+if(__q.get('snap')){const b=document.getElementById(__q.get('snap')); if(b) b.click();}
+})();
+
+</script>
+</body>
+</html>

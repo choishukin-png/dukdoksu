@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>平行線軌跡與夾角 — DSE 2020 卷 14</title>
+<style>
+:root{
+  --green:#c3e6a8; --green-d:#2f5d1f;
+  --purple:#7a3fa8; --purple-f:rgba(140,80,200,.30);
+  --blue:#1d6fd8; --blue-f:rgba(40,130,235,.22);
+  --ink:#1f2937; --muted:#5b6575;
+  --orange:#e07a1a; --circ:#3d9a4a;
+  --cjk:'Microsoft JhengHei','PingFang TC','Noto Sans TC','Noto Sans CJK TC','Heiti TC',sans-serif;
+  --math:'Cambria Math','Times New Roman','STIX Two Text','Latin Modern Roman','Noto Serif','DejaVu Serif',serif;
+}
+*{box-sizing:border-box}
+html{margin:0;height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body{margin:0;min-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto;font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 20px;background:#fff;border-bottom:4px solid var(--blue)}
+h1{font-size:28px;margin:0;letter-spacing:1px}
+h1 small{font-size:18px;color:var(--muted);font-weight:normal;margin-left:10px}
+button{font-family:inherit;font-size:20px;border:2px solid var(--blue);background:#fff;color:var(--blue);border-radius:12px;padding:9px 16px;cursor:pointer;min-height:48px;touch-action:manipulation;transition:background .15s}
+button:hover{background:#e8f1fd}
+button:disabled{opacity:.4;cursor:default;background:#fff}
+button.primary{background:var(--blue);color:#fff}
+button.primary:hover{background:#155bb5}
+button.sm{font-size:17px;padding:6px 12px;min-height:42px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:14px 18px;align-items:start}
+@media (max-width:1100px), (orientation:portrait){ main{grid-template-columns:1fr} }
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px;overflow:visible}
+.stagehead{display:flex;flex-direction:column;gap:8px;min-height:72px}
+.flags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{background:#a9c4ea;color:#fff;padding:6px 28px 6px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);font-weight:bold;font-size:18px;cursor:pointer;user-select:none}
+.flag.on{background:var(--blue)}
+.caption{font-size:24px;font-weight:bold;line-height:1.35}
+.caption .sub{display:block;font-size:18px;font-weight:normal;color:var(--muted);margin-top:2px}
+svg#stage{width:100%;height:auto;max-height:min(560px,calc(100dvh - 240px));min-height:280px;display:block;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding-top:8px}
+.panel{overflow:visible;max-height:none;-webkit-overflow-scrolling:auto}
+.panel h2{font-size:22px;margin:4px 0 10px;color:var(--blue)}
+.panel p{margin:6px 0;line-height:1.5}
+.hidden{display:none !important}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m .mi{font-style:italic;padding:0 .02em}
+.m .mo{padding:0 .26em}
+.m .mn{font-style:normal}
+.m .mt{font-family:var(--cjk);font-style:normal;font-size:.88em}
+.m .sp{display:inline-block;width:.6em}
+.m .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:0 .14em;line-height:1.05;font-size:.92em}
+.m .frac .num{border-bottom:1.6px solid currentColor;padding:0 .14em 1px;text-align:center}
+.m .frac .den{padding:1px .14em 0;text-align:center}
+.m .sqrt{display:inline-flex;align-items:stretch;vertical-align:middle;padding:0 .06em}
+.m .sqrt .rad{font-style:normal;font-size:1.15em;line-height:1;padding-right:1px}
+.m .sqrt .radic{border-top:1.6px solid currentColor;padding:0 .14em 1px;line-height:1.15}
+.m sup{font-size:.72em;line-height:0}
+.m sub{font-size:.72em}
+.reason{font-family:var(--cjk);color:#444;margin-left:.5em;font-size:.92em;white-space:nowrap}
+.concl{border:3px solid var(--blue);border-radius:14px;padding:10px 12px;background:#f2f7ff;text-align:center;font-size:22px;margin:8px 0;line-height:1.45}
+.concl.green{border-color:var(--green-d);background:#f0f8ea}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:20px;align-items:baseline;margin:8px 0}
+.read .v{font-family:var(--math);font-weight:bold;text-align:right}
+.ok{margin-top:10px;padding:10px 12px;border-radius:12px;background:#e6f6e6;color:#1d6b2a;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7cc58a}
+.warn{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff4e8;color:#8a4b00;font-weight:bold;font-size:20px;text-align:center;border:2px solid #e07a1a}
+.info{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eaf3ff;color:#155bb5;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7ab0e8}
+.note{font-size:16px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kbd{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+label.chk{display:flex;align-items:center;gap:8px;font-size:18px;margin:8px 0;cursor:pointer}
+label.chk input{width:22px;height:22px}
+input[type=range]{width:100%;height:28px;accent-color:var(--blue)}
+.slider-row{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;margin:8px 0;font-size:17px}
+.slider-row.wide{grid-template-columns:110px 1fr 70px}
+.slider-row .val{font-family:var(--math);font-weight:bold;text-align:right}
+.proof{font-size:18px;line-height:1.85;margin:6px 0 0;width:100%;border-collapse:collapse}
+.proof td{padding:2px 4px;vertical-align:baseline}
+.proof .reason{font-size:16px;margin-left:.3em}
+.term{color:var(--blue);font-weight:bold}
+.lbl{font-family:var(--math);font-style:italic;font-weight:bold;font-size:26px;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round;pointer-events:none}
+.lbl-cjk{font-family:var(--cjk);font-style:normal;font-weight:bold;font-size:18px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.tick{font-family:var(--math);font-size:13px;fill:#5b6575;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.handle{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.handle:active{cursor:grabbing}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>平行線軌跡與夾角<small>DSE 2020 卷 14 · 坐標幾何</small></h1>
+</header>
+<main>
+  <section class="card">
+    <div class="stagehead">
+      <div class="flags" id="flags">
+        <div class="flag on" data-mode="ea">① 探究 (a)</div>
+        <div class="flag" data-mode="eb">② 探究 (b)</div>
+        <div class="flag" data-mode="demo">③ 逐步示範</div>
+      </div>
+      <div class="caption" id="caption"></div>
+    </div>
+    <svg id="stage" viewBox="0 0 1000 640" aria-label="平行線軌跡與夾角探究舞台"></svg>
+    <div class="controls" id="controls"></div>
+    <div class="kbd" id="kbdHint"></div>
+  </section>
+  <aside class="card panel" id="panel"></aside>
+</main>
+<script>
+'use strict';
+/* ===== tiny offline TeX subset ===== */
+const TEXSYM={
+  circ:'°', therefore:'∴', because:'∵', times:'×', cdot:'·',
+  perp:'⊥', parallel:'∥', mid:'∣', ne:'≠', neq:'≠', approx:'≈',
+  le:'≤', ge:'≥', leq:'≤', geq:'≥', lt:'<', gt:'>',
+  angle:'∠', triangle:'△', Gamma:'Γ', ell:'ℓ', pi:'π',
+  infty:'∞', pm:'±', mp:'∓', sim:'∼',
+  quad:'<span class="sp"></span>'
+};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function tex(src){
+  src=String(src); let i=0,out='';
+  function group(){
+    if(i>=src.length) return '';
+    if(src[i]==='{'){let depth=1,j=i+1;while(j<src.length&&depth){if(src[j]==='{')depth++;else if(src[j]==='}')depth--;j++;}const g=src.slice(i+1,j-1);i=j;return g;}
+    if(src[i]==='\\'){const m=/^\\[a-zA-Z]+/.exec(src.slice(i)); if(m){i+=m[0].length; return m[0];}}
+    return src[i++];
+  }
+  while(i<src.length){
+    const ch=src[i];
+    if(ch==='\\'){
+      const m=/^\\([a-zA-Z]+)/.exec(src.slice(i));
+      if(!m){
+        if(i+1<src.length){
+          const nx=src[i+1]; i+=2;
+          if(nx===','||nx===';'||nx===' '||nx===':') out+='<span class="sp"></span>';
+          else out+='<span class="mn">'+esc(nx)+'</span>';
+        } else i++;
+        continue;
+      }
+      i+=m[0].length;
+      const cmd=m[1];
+      if(cmd==='text'){out+='<span class="mt">'+esc(group())+'</span>';}
+      else if(cmd==='frac'||cmd==='dfrac'||cmd==='tfrac'){
+        const a=group(), b=group();
+        out+='<span class="frac"><span class="num">'+tex(a)+'</span><span class="den">'+tex(b)+'</span></span>';
+      }
+      else if(cmd==='sqrt'){
+        out+='<span class="sqrt"><span class="rad">√</span><span class="radic">'+tex(group())+'</span></span>';
+      }
+      else if(cmd==='circ'){out+='<span class="mn">°</span>';}
+      else if(cmd==='perp'){out+='<span class="mo">⊥</span>';}
+      else if(cmd==='angle'){out+='<span class="mn">∠</span>';}
+      else if(cmd==='triangle'){out+='<span class="mn">△</span>';}
+      else if(cmd==='Gamma'){out+='<i class="mi">Γ</i>';}
+      else if(cmd==='ell'){out+='<i class="mi">ℓ</i>';}
+      else if(cmd==='pi'){out+='<i class="mi">π</i>';}
+      else if(cmd==='left'||cmd==='right'||cmd==='displaystyle'||cmd==='textstyle'||cmd==='bigl'||cmd==='bigr'){
+        if(src[i]==='.' ){i++;}
+        else if(src[i]==='('||src[i]===')'||src[i]==='['||src[i]===']'||src[i]==='|'||src[i]==='{'||src[i]==='}'){out+='<span class="mn">'+esc(src[i])+'</span>';i++;}
+      }
+      else if(cmd==='therefore'||cmd==='because'){out+='<span class="mn">'+TEXSYM[cmd]+'</span><span class="sp"></span>';}
+      else out+='<span class="mn">'+(TEXSYM[cmd]||cmd)+'</span>';
+    } else if(ch==='^'){i++;const g=group();out+=(g==='\\circ'||g==='circ')?'<span class="mn">°</span>':'<sup>'+tex(g)+'</sup>';}
+    else if(ch==='_'){i++;out+='<sub>'+tex(group())+'</sub>';}
+    else if(/[A-Za-z]/.test(ch)){out+='<i class="mi">'+ch+'</i>';i++;}
+    else if(/[0-9.]/.test(ch)){let j=i;while(j<src.length&&/[0-9.]/.test(src[j]))j++;out+='<span class="mn">'+src.slice(i,j)+'</span>';i=j;}
+    else if('=+-<>'.indexOf(ch)>=0){out+='<span class="mo">'+(ch==='-'?'−':esc(ch))+'</span>';i++;}
+    else if(ch===' '){i++;}
+    else {out+='<span class="mn">'+esc(ch)+'</span>';i++;}
+  }
+  return out;
+}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(e=>{e.innerHTML=tex(e.getAttribute('data-tex'));});}
+function M(src){return '<span class="m">'+tex(src)+'</span>';}
+
+/* ===== SVG helpers ===== */
+const svg=document.getElementById('stage');
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,kids){
+  const n=document.createElementNS(NS,tag);
+  if(attrs) for(const k in attrs){
+    if(k==='textContent') n.textContent=attrs[k];
+    else if(k==='class'||k==='className') n.setAttribute('class',attrs[k]);
+    else if(attrs[k]!==undefined&&attrs[k]!==null) n.setAttribute(k,attrs[k]);
+  }
+  if(kids) kids.forEach(c=>n.appendChild(c));
+  return n;
+}
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function svgPoint(evt){
+  const pt=svg.createSVGPoint();
+  pt.x=evt.clientX; pt.y=evt.clientY;
+  const ctm=svg.getScreenCTM();
+  if(!ctm) return {x:0,y:0};
+  return pt.matrixTransform(ctm.inverse());
+}
+
+/* ===== numbers / geometry ===== */
+function fmt(x,d){
+  if(d===undefined) d=1;
+  if(!isFinite(x)) return '—';
+  const n=Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+  let s=n.toFixed(d);
+  if(d>0) s=s.replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1');
+  if(s==='-0') s='0';
+  return s;
+}
+function fmtPt(p,d){return '('+fmt(p.x,d===undefined?1:d)+', '+fmt(p.y,d===undefined?1:d)+')';}
+function almost(a,b,eps){return Math.abs(a-b)<(eps===undefined?1e-6:eps);}
+function hypot(a,b){
+  if(typeof a==='object') return Math.hypot(a.x-b.x,a.y-b.y);
+  return Math.hypot(a,b);
+}
+function mid(a,b){return {x:(a.x+b.x)/2,y:(a.y+b.y)/2};}
+function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+function mul(a,k){return {x:a.x*k,y:a.y*k};}
+function dot(a,b){return a.x*b.x+a.y*b.y;}
+function cross(a,b){return a.x*b.y-a.y*b.x;}
+function unit(v){const L=Math.hypot(v.x,v.y)||1;return {x:v.x/L,y:v.y/L};}
+function slope(a,b){return (b.y-a.y)/(b.x-a.x);}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t};}
+function projectToLine(p,a,b){
+  const ab=sub(b,a); const t=dot(sub(p,a),ab)/(dot(ab,ab)||1);
+  return add(a,mul(ab,t));
+}
+function projectToSeg(p,a,b){
+  const ab=sub(b,a); const t=clamp(dot(sub(p,a),ab)/(dot(ab,ab)||1),0,1);
+  return add(a,mul(ab,t));
+}
+function projectToCircle(p,c,r){
+  const v=sub(p,c); const L=Math.hypot(v.x,v.y)||1;
+  return add(c,mul(v,r/L));
+}
+function reflect(p,m){return {x:2*m.x-p.x,y:2*m.y-p.y};}
+function distToLineABC(p,A,B,C){ // Ax+By+C=0
+  return Math.abs(A*p.x+B*p.y+C)/Math.hypot(A,B);
+}
+function lineIntersect(A1,B1,C1,A2,B2,C2){
+  const d=A1*B2-A2*B1; if(Math.abs(d)<1e-12) return null;
+  return {x:(B1*C2-B2*C1)/d, y:(C1*A2-C2*A1)/d};
+}
+function angDeg(a,v,b){ // angle at v, from a to b, 0..180
+  const u=sub(a,v), w=sub(b,v);
+  const c=clamp(dot(u,w)/(Math.hypot(u.x,u.y)*Math.hypot(w.x,w.y)||1),-1,1);
+  return Math.acos(c)*180/Math.PI;
+}
+
+/* ===== coordinate plane (equal aspect, y up) ===== */
+function Plane(spec){
+  const W=spec.W||1000, H=spec.H||640;
+  const pad=Object.assign({l:52,r:36,t:28,b:40}, spec.pad||{});
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  let xmin=spec.xmin, xmax=spec.xmax, ymin=spec.ymin, ymax=spec.ymax;
+  const cx=(xmin+xmax)/2, cy=(ymin+ymax)/2;
+  const sx0=iw/(xmax-xmin), sy0=ih/(ymax-ymin);
+  const sc=Math.min(sx0,sy0);
+  const hw=iw/sc/2, hh=ih/sc/2;
+  xmin=cx-hw; xmax=cx+hw; ymin=cy-hh; ymax=cy+hh;
+  const sx=x=>pad.l+(x-xmin)/(xmax-xmin)*iw;
+  const sy=y=>pad.t+(ymax-y)/(ymax-ymin)*ih;
+  const xFrom=px=>xmin+(px-pad.l)/iw*(xmax-xmin);
+  const yFrom=py=>ymax-(py-pad.t)/ih*(ymax-ymin);
+  const P=x=>sx(x), Q=y=>sy(y);
+  function pt(p){return {x:sx(p.x),y:sy(p.y)};}
+  function toMath(p){return {x:xFrom(p.x),y:yFrom(p.y)};}
+  const unit=sc; // svg units per math unit
+  function niceStep(range,target){
+    const raw=range/(target||8);
+    const pow=Math.pow(10,Math.floor(Math.log10(raw)||0));
+    const n=raw/pow;
+    return (n<=1?1:n<=2?2:n<=5?5:10)*pow;
+  }
+  function clipLine(a,b){
+    // Liang-Barsky in math coords against [xmin,xmax]x[ymin,ymax] slightly expanded
+    const x0=a.x,y0=a.y,dx=b.x-a.x,dy=b.y-a.y;
+    let t0=0,t1=1;
+    function clip(p,q){
+      if(Math.abs(p)<1e-14){return q>=0;}
+      const r=q/p;
+      if(p<0){if(r>t1)return false; if(r>t0)t0=r;}
+      else{if(r<t0)return false; if(r<t1)t1=r;}
+      return true;
+    }
+    const m=0.02*(xmax-xmin);
+    if(!clip(-dx,x0-(xmin-m))) return null;
+    if(!clip(dx,(xmax+m)-x0)) return null;
+    if(!clip(-dy,y0-(ymin-m))) return null;
+    if(!clip(dy,(ymax+m)-y0)) return null;
+    return [{x:x0+t0*dx,y:y0+t0*dy},{x:x0+t1*dx,y:y0+t1*dy}];
+  }
+  function windowLine(p, dir){
+    const L=Math.hypot(xmax-xmin,ymax-ymin)*2;
+    const u=unitVec(dir);
+    return clipLine(add(p,mul(u,-L)), add(p,mul(u,L)));
+  }
+  function unitVec(v){const L=Math.hypot(v.x,v.y)||1;return {x:v.x/L,y:v.y/L};}
+  function drawGrid(root){
+    const g=el('g',{class:'grid'});
+    const step=spec.step||niceStep(Math.max(xmax-xmin,ymax-ymin),10);
+    const x0=Math.ceil((xmin-1e-9)/step)*step;
+    const y0=Math.ceil((ymin-1e-9)/step)*step;
+    for(let x=x0;x<=xmax+1e-9;x+=step){
+      g.appendChild(el('line',{x1:sx(x),y1:sy(ymin),x2:sx(x),y2:sy(ymax),stroke:almost(x,0,step/20)?'#9aa7b8':'#e6ebf2','stroke-width':almost(x,0,step/20)?1.6:1}));
+    }
+    for(let y=y0;y<=ymax+1e-9;y+=step){
+      g.appendChild(el('line',{x1:sx(xmin),y1:sy(y),x2:sx(xmax),y2:sy(y),stroke:almost(y,0,step/20)?'#9aa7b8':'#e6ebf2','stroke-width':almost(y,0,step/20)?1.6:1}));
+    }
+    // axes arrows if origin range includes 0
+    if(ymin<0&&ymax>0){
+      g.appendChild(el('line',{x1:sx(xmin),y1:sy(0),x2:sx(xmax),y2:sy(0),stroke:'#334155','stroke-width':2}));
+      const ax=sx(xmax), ay=sy(0);
+      g.appendChild(el('polygon',{points:`${ax},${ay} ${ax-12},${ay-5} ${ax-12},${ay+5}`,fill:'#334155'}));
+      g.appendChild(el('text',{x:ax-16,y:ay+22,class:'tick',textContent:'x'}));
+    }
+    if(xmin<0&&xmax>0){
+      g.appendChild(el('line',{x1:sx(0),y1:sy(ymin),x2:sx(0),y2:sy(ymax),stroke:'#334155','stroke-width':2}));
+      const ax=sx(0), ay=sy(ymax);
+      g.appendChild(el('polygon',{points:`${ax},${ay} ${ax-5},${ay+12} ${ax+5},${ay+12}`,fill:'#334155'}));
+      g.appendChild(el('text',{x:ax+12,y:ay+16,class:'tick',textContent:'y'}));
+    }
+    // ticks
+    const skip0=true;
+    for(let x=x0;x<=xmax+1e-9;x+=step){
+      if(skip0&&almost(x,0,step/20)) continue;
+      if(ymin<=0&&ymax>=0){
+        g.appendChild(el('line',{x1:sx(x),y1:sy(0)-5,x2:sx(x),y2:sy(0)+5,stroke:'#334155','stroke-width':1.4}));
+        g.appendChild(el('text',{x:sx(x),y:sy(0)+18,class:'tick','text-anchor':'middle',textContent:fmt(x,step<1?2:0)}));
+      }
+    }
+    for(let y=y0;y<=ymax+1e-9;y+=step){
+      if(skip0&&almost(y,0,step/20)) continue;
+      if(xmin<=0&&xmax>=0){
+        g.appendChild(el('line',{x1:sx(0)-5,y1:sy(y),x2:sx(0)+5,y2:sy(y),stroke:'#334155','stroke-width':1.4}));
+        g.appendChild(el('text',{x:sx(0)-8,y:sy(y)+4,class:'tick','text-anchor':'end',textContent:fmt(y,step<1?2:0)}));
+      }
+    }
+    if(xmin<=0&&xmax>=0&&ymin<=0&&ymax>=0){
+      g.appendChild(el('text',{x:sx(0)-12,y:sy(0)+20,class:'lbl',style:'font-size:22px',textContent:'O'}));
+    }
+    root.appendChild(g);
+    return g;
+  }
+  function lineEl(a,b,attrs){
+    const c=clipLine(a,b); if(!c) return el('g');
+    const A=pt(c[0]), B=pt(c[1]);
+    return el('line',Object.assign({x1:A.x,y1:A.y,x2:B.x,y2:B.y},attrs));
+  }
+  function segEl(a,b,attrs){
+    const A=pt(a), B=pt(b);
+    return el('line',Object.assign({x1:A.x,y1:A.y,x2:B.x,y2:B.y},attrs));
+  }
+  function circleEl(c,r,attrs){
+    const C=pt(c);
+    return el('circle',Object.assign({cx:C.x,cy:C.y,r:r*unit},attrs));
+  }
+  function polyEl(pts,attrs){
+    const s=pts.map(p=>{const q=pt(p);return q.x+','+q.y;}).join(' ');
+    return el('polygon',Object.assign({points:s},attrs));
+  }
+  function polylineEl(pts,attrs){
+    const s=pts.map(p=>{const q=pt(p);return q.x+','+q.y;}).join(' ');
+    return el('polyline',Object.assign({points:s,fill:'none'},attrs));
+  }
+  function label(p,text,opts){
+    opts=opts||{};
+    const q=pt(p);
+    const dx=opts.dx||0, dy=opts.dy||0;
+    return el('text',Object.assign({x:q.x+dx,y:q.y+dy,class:opts.class||'lbl',fill:opts.fill||'#1f2937','text-anchor':opts.anchor||'start',textContent:text}, opts.attrs||{}));
+  }
+  function handle(p, id, color){
+    const q=pt(p);
+    const g=el('g',{class:'handle','data-handle':id,id:'h-'+id});
+    g.appendChild(el('circle',{cx:q.x,cy:q.y,r:22,fill:'transparent',stroke:'none'}));
+    g.appendChild(el('circle',{cx:q.x,cy:q.y,r:10,fill:color||'#7a3fa8',stroke:'#fff','stroke-width':'2.5'}));
+    return g;
+  }
+  function dot(p, color, r){
+    const q=pt(p);
+    return el('circle',{cx:q.x,cy:q.y,r:r||6,fill:color||'#1f2937',stroke:'#fff','stroke-width':2});
+  }
+  function rightAngle(v, a, b, size){
+    const s=(size||0.45);
+    // size in math units if small numbers, but better in svg px converted
+    const su= (typeof size==='number'?size:12)/unit;
+    const u1=unitVec(sub(a,v)), u2=unitVec(sub(b,v));
+    const p1=add(v,mul(u1,su)), p2=add(p1,mul(u2,su)), p3=add(v,mul(u2,su));
+    return polylineEl([p1,p2,p3],{stroke:'#1d6fd8','stroke-width':2.2,fill:'none'});
+  }
+  function angleArc(v, a, b, radiusPx, color){
+    const r=(radiusPx||28)/unit;
+    const u1=unitVec(sub(a,v)), u2=unitVec(sub(b,v));
+    const a1=Math.atan2(u1.y,u1.x), a2=Math.atan2(u2.y,u2.x);
+    let d=a2-a1;
+    while(d>Math.PI) d-=2*Math.PI;
+    while(d<-Math.PI) d+=2*Math.PI;
+    const sweep=d>0?0:1; // SVG y is flipped so sweep is inverted? We'll compute in svg space
+    const p1=pt(add(v,mul(u1,r))), p2=pt(add(v,mul(u2,r))), c=pt(v);
+    const rpx=radiusPx||28;
+    // determine sweep in svg coords
+    const s1=Math.atan2(p1.y-c.y,p1.x-c.x), s2=Math.atan2(p2.y-c.y,p2.x-c.x);
+    let ds=s2-s1; while(ds>Math.PI)ds-=2*Math.PI; while(ds<-Math.PI)ds+=2*Math.PI;
+    const large=0;
+    const sw=ds>0?1:0;
+    const dpath=`M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${rpx} ${rpx} 0 ${large} ${sw} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+    return el('path',{d:dpath,fill:'none',stroke:color||'#e07a1a','stroke-width':2.4});
+  }
+  return {
+    W,H,xmin,xmax,ymin,ymax,sx,sy,xFrom,yFrom,pt,toMath,unit,step:spec.step||niceStep(Math.max(xmax-xmin,ymax-ymin),10),
+    drawGrid,lineEl,segEl,circleEl,polyEl,polylineEl,label,handle,dot,rightAngle,angleArc,clipLine,windowLine,
+    niceStep
+  };
+}
+
+/* ===== drag (only .handle captures; stage itself allows pan-y) ===== */
+const Drag={
+  current:null,
+  /* onMove(id, mathPt, svgPt) set by each page after plane is known */
+  move:null,
+  getPlane:null,
+  bind(){
+    function kindFrom(t){
+      while(t&&t!==svg){
+        const cls=t.getAttribute&&t.getAttribute('class')||'';
+        if(cls.split(/\s+/).indexOf('handle')>=0){
+          return t.getAttribute('data-handle')||t.id||'handle';
+        }
+        t=t.parentNode;
+      }
+      return null;
+    }
+    function end(e){
+      if(Drag.current && e && typeof e.pointerId==='number'){
+        try{ if(svg.hasPointerCapture&&svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId);}catch(_){}
+      }
+      Drag.current=null;
+    }
+    svg.addEventListener('pointerdown',e=>{
+      const k=kindFrom(e.target);
+      if(!k) return;
+      Drag.current={id:k, pointerId:e.pointerId};
+      try{svg.setPointerCapture(e.pointerId);}catch(_){}
+      e.preventDefault();
+    });
+    svg.addEventListener('pointermove',e=>{
+      if(!Drag.current) return;
+      e.preventDefault();
+      const sp=svgPoint(e);
+      const plane=Drag.getPlane?Drag.getPlane():null;
+      const mp=plane?plane.toMath(sp):sp;
+      if(Drag.move) Drag.move(Drag.current.id, mp, sp, e);
+    },{passive:false});
+    svg.addEventListener('pointerup',end);
+    svg.addEventListener('pointercancel',end);
+    svg.addEventListener('lostpointercapture',()=>{Drag.current=null;});
+  }
+};
+
+/* ===== UI helpers ===== */
+function setCaption(html){document.getElementById('caption').innerHTML=html;}
+function setPanel(html){
+  const p=document.getElementById('panel');
+  p.innerHTML=html;
+  renderTex(p);
+}
+function setControls(html){document.getElementById('controls').innerHTML=html;}
+function setHint(t){const n=document.getElementById('kbdHint'); if(n) n.textContent=t||'';}
+function bindFlags(onChange){
+  const box=document.getElementById('flags');
+  box.addEventListener('click',e=>{
+    const f=e.target.closest('.flag'); if(!f) return;
+    box.querySelectorAll('.flag').forEach(x=>x.classList.remove('on'));
+    f.classList.add('on');
+    onChange(f.dataset.mode, f);
+  });
+}
+function setFlag(mode){
+  document.querySelectorAll('#flags .flag').forEach(x=>x.classList.toggle('on', x.dataset.mode===mode));
+}
+
+/* demo playback */
+function makeDemo(getSteps, hooks){
+  const D={i:0, playing:false, token:0};
+  D.steps=()=>getSteps();
+  D.go=function(n){
+    const arr=D.steps();
+    D.i=clamp(n,0,arr.length-1);
+    if(hooks.onStep) hooks.onStep(D.i, arr[D.i]);
+    hooks.redraw();
+  };
+  D.reset=function(){
+    D.token++; D.playing=false; D.i=0;
+    if(hooks.onReset) hooks.onReset();
+    D.go(0);
+  };
+  D.play=async function(){
+    if(D.playing){D.token++; D.playing=false; hooks.redraw(); return;}
+    D.playing=true; const my=++D.token;
+    const arr=D.steps();
+    if(D.i>=arr.length-1) D.go(0);
+    hooks.redraw();
+    while(D.i<arr.length-1){
+      await new Promise(r=>setTimeout(r, D.i===0?700:1400));
+      if(my!==D.token) return;
+      D.go(D.i+1);
+    }
+    D.playing=false; hooks.redraw();
+  };
+  D.controls=function(){
+    const n=D.steps().length;
+    return `<button id="btnPrev">◀ 上一步</button>
+      <button id="btnNext" class="primary">下一步 ▶</button>
+      <button id="btnPlay">${D.playing?'❚❚ 暫停':'▶ 播放'}</button>
+      <button id="btnReset">↺ 重設</button>`;
+  };
+  D.bindControls=function(){
+    const n=D.steps().length;
+    const prev=document.getElementById('btnPrev');
+    const next=document.getElementById('btnNext');
+    if(prev){prev.disabled=D.i===0; prev.onclick=()=>D.go(D.i-1);}
+    if(next){next.disabled=D.i>=n-1; next.onclick=()=>D.go(D.i+1);}
+    const play=document.getElementById('btnPlay'); if(play) play.onclick=()=>D.play();
+    const rst=document.getElementById('btnReset'); if(rst) rst.onclick=()=>D.reset();
+  };
+  D.stepFlags=function(){
+    const arr=D.steps();
+    return `<div class="flags" id="stepFlags" style="margin-top:4px">${arr.map((s,i)=>`<div class="flag${i===D.i?' on':''}" data-step="${i}">${s.flag||('步驟 '+(i+1))}</div>`).join('')}</div>`;
+  };
+  return D;
+}
+
+document.addEventListener('keydown',e=>{
+  if(typeof onDemoKey==='function') onDemoKey(e);
+});
+
+function consumeQuery(){
+  const q=new URLSearchParams(location.search);
+  const m=q.get('mode');
+  if(m){
+    const f=document.querySelector('#flags .flag[data-mode="'+m+'"]');
+    if(f) f.click();
+  }
+  return q;
+}
+
+(function(){
+const PUR='#7a3fa8', BLU='#1d6fd8', ORN='#e07a1a', GRN='#3d9a4a', INK='#1f2937';
+const A={x:-10,y:0}, B={x:30,y:0}, G={x:10,y:-15}, R=25;
+const H={x:1.2,y:8.4};
+const L={A:3,B:-4,C:-90}; // 3x-4y-90=0
+const state={
+  mode:'ea',
+  Gx:4, // explore (a): drag G along y=-15
+  ellC: -20, // 3x-4y + ellC = 0  (L has C=-90). Midline constant = (-90+(-ellC wait))
+  // I'll store k for ℓ: 3x-4y = k. L has k=90. Midline k=(90+kℓ)/2
+  k: 0,
+  P:{x:0,y:8},
+  trail:[],
+  showH:false,
+  panelKey:''
+};
+const demo=makeDemo(()=>DEMO_STEPS,{redraw:redraw,onStep(){state.panelKey='';},onReset(){state.panelKey='';}});
+
+function planeA(){return Plane({xmin:-20,xmax:40,ymin:-44,ymax:16,W:1000,H:640,step:5});}
+function planeB(){return Plane({xmin:-28,xmax:42,ymin:-44,ymax:30,W:1000,H:640,step:5});}
+function getPlane(){return state.mode==='ea'?planeA():planeB();}
+Drag.getPlane=getPlane;
+
+function ellABC(){return {A:3,B:-4,C:-state.k};} // 3x-4y-k=0
+function midK(){return (90+state.k)/2;}
+function midABC(){return {A:3,B:-4,C:-midK()};}
+
+function Gcur(){return {x:state.Gx,y:-15};}
+
+const DEMO_STEPS=[
+  {flag:'① 圓 C',caption:'求圓 C 的方程',sub:'先用 GA = GB 找出圓心的 x 坐標。'},
+  {flag:'② 平行',caption:'Γ 與 L 的幾何關係',sub:'到兩條平行線距離相等的點，其軌跡是甚麼？'},
+  {flag:'③ 方程',caption:'求 Γ 的方程',sub:'Γ 平行於 L，且通過 A。'},
+  {flag:'④ 夾角',caption:'是否同意 ∠GAH < 70°？',sub:'必須寫出理由。'}
+];
+
+function demoPanel(i){
+  if(i===0) return `<h2>逐步示範 (a)</h2>
+    <p>${M('A=(-10,0)')}，${M('B=(30,0)')}，${M('G')} 的 y 坐標為 ${M('-15')}。</p>
+    <table class="proof">
+      <tr><td>${M('\\text{G 的 }x\\text{ 坐標}=\\dfrac{-10+30}{2}=10')}</td><td><span class="reason">(GA=GB，故在 AB 的垂直平分線上)</span></td></tr>
+      <tr><td>${M('G=(10,-15)')}</td><td></td></tr>
+      <tr><td>半徑 ${M('=\\sqrt{(-10-10)^2+(0+15)^2}=25')}</td><td><span class="reason">(兩點距離公式)</span></td></tr>
+    </table>
+    <div class="concl">${M('(x-10)^2+(y+15)^2=25^2')}<br><span class="note">或 ${M('x^2+y^2-20x+30y-300=0')}</span></div>`;
+  if(i===1) return `<h2>逐步示範 (b)(i)</h2>
+    <p>${M('L')} 通過 ${M('B,G')}，${M('\\ell \\parallel L')}。${M('\\Gamma')} 是到兩線垂直距離相等的點的軌跡。</p>
+    <p>兩線平行時，只有中間那條平行線上的點，到兩線的距離才相等。</p>
+    <div class="concl green">${M('\\Gamma \\parallel L')}</div>`;
+  if(i===2) return `<h2>逐步示範 (b)(ii)</h2>
+    <table class="proof">
+      <tr><td>${M('L')} 的斜率 ${M('=\\dfrac{0-(-15)}{30-10}=\\dfrac{3}{4}')}</td><td></td></tr>
+      <tr><td>${M('\\Gamma')} 的斜率 ${M('=\\dfrac{3}{4}')}</td><td><span class="reason">(藉 (b)(i))</span></td></tr>
+      <tr><td>${M('y-0=\\dfrac{3}{4}(x-(-10))')}</td><td><span class="reason">(Γ 通過 A)</span></td></tr>
+      <tr><td>${M('3x-4y+30=0')}</td><td></td></tr>
+    </table>
+    <div class="concl">${M('3x-4y+30=0')}</div>`;
+  return `<h2>逐步示範 (b)(iii)</h2>
+    <table class="proof">
+      <tr><td>${M('\\tan\\angle ABG=\\dfrac{3}{4}')}</td><td></td></tr>
+      <tr><td>${M('\\angle ABG\\approx 36.87^\\circ>35^\\circ')}</td><td></td></tr>
+      <tr><td>${M('\\angle BAG=\\angle ABG')}</td><td><span class="reason">(GA=GB，等腰三角形底角)</span></td></tr>
+      <tr><td>${M('\\angle BAH=\\angle ABG')}</td><td><span class="reason">(Γ∥L，AB 為截線，內錯角)</span></td></tr>
+      <tr><td>${M('\\angle GAH=2\\angle ABG>70^\\circ')}</td><td></td></tr>
+    </table>
+    <div class="concl green">不同意該宣稱<br><span class="note">${M('\\angle GAH\\approx 73.74^\\circ>70^\\circ')}（必須顯示理由）</span></div>`;
+}
+
+function drawLineABC(pl, A,B,C, attrs){
+  let p,dir;
+  if(Math.abs(B)>=Math.abs(A)){ p={x:0,y:-C/B}; dir={x:B,y:-A}; }
+  else { p={x:-C/A,y:0}; dir={x:B,y:-A}; }
+  const seg=pl.windowLine(p,dir);
+  if(seg) svg.appendChild(pl.segEl(seg[0],seg[1],attrs));
+  return seg;
+}
+
+function drawDemo(){
+  const pl=planeB();
+  clearSvg(); pl.drawGrid(svg);
+  const i=demo.i;
+  svg.appendChild(pl.circleEl(G,R,{fill:'rgba(61,154,74,.08)',stroke:GRN,'stroke-width':2.6}));
+  svg.appendChild(pl.dot(A,INK,7)); svg.appendChild(pl.label(A,'A',{dx:-18,dy:20}));
+  svg.appendChild(pl.dot(B,INK,7)); svg.appendChild(pl.label(B,'B',{dx:8,dy:20}));
+  svg.appendChild(pl.dot(G,INK,7)); svg.appendChild(pl.label(G,'G',{dx:8,dy:22}));
+  if(i>=1){
+    drawLineABC(pl,3,-4,-90,{stroke:ORN,'stroke-width':2.6});
+    svg.appendChild(pl.label({x:32,y:2},'L',{fill:ORN,dx:0,dy:0}));
+  }
+  if(i>=2){
+    drawLineABC(pl,3,-4,30,{stroke:PUR,'stroke-width':2.6});
+    svg.appendChild(pl.label({x:-8,y:4},'Γ',{fill:PUR}));
+  }
+  if(i>=3){
+    svg.appendChild(pl.dot(H,PUR,7)); svg.appendChild(pl.label(H,'H',{dx:10,dy:-8,fill:PUR}));
+    svg.appendChild(pl.segEl(G,A,{stroke:BLU,'stroke-width':2.2}));
+    svg.appendChild(pl.segEl(A,H,{stroke:BLU,'stroke-width':2.2}));
+    svg.appendChild(pl.segEl(A,B,{stroke:'#94a3b8','stroke-width':1.6}));
+    svg.appendChild(pl.angleArc(A,G,H,36,ORN));
+  }
+  const st=DEMO_STEPS[i];
+  setCaption(st.caption+'<span class="sub">'+st.sub+'</span>');
+}
+
+function maybeTrail(){
+  const dL=distToLineABC(state.P,3,-4,-90);
+  const dE=distToLineABC(state.P,3,-4,-state.k);
+  if(Math.abs(dL-dE)<0.25){
+    const last=state.trail[state.trail.length-1];
+    if(!last||hypot(state.P,last)>0.25){
+      if(state.trail.length>400) state.trail.shift();
+      state.trail.push({x:state.P.x,y:state.P.y});
+    }
+  }
+}
+
+function panelEA(){
+  return `<h2>探究 (a)：圓心在哪裏？</h2>
+    <p>${M('A=(-10,0)')}，${M('B=(30,0)')}。已知 ${M('G')} 的 y 坐標為 ${M('-15')}。沿 ${M('y=-15')} 拖動 ${M('G')}，比較 ${M('GA')} 與 ${M('GB')}。</p>
+    <div class="read">
+      <span>${M('G')}</span><span class="v" id="rdG"></span>
+      <span>${M('GA')}</span><span class="v" id="rdGA"></span>
+      <span>${M('GB')}</span><span class="v" id="rdGB"></span>
+    </div>
+    <div class="ok hidden" id="okBox">而家 ${M('GA=GB')}：${M('G=(10,-15)')}，半徑 ${M('=25')}</div>
+    <div class="presets"><button class="sm primary" id="btnSnapG">移到正確圓心</button></div>
+    <p class="note">為甚麼圓心的 x 坐標必定是 10？</p>`;
+}
+function panelEB(){
+  return `<h2>探究 (b)：平行線的等距軌跡</h2>
+    <p>${M('L')} 通過 ${M('B,G')}。平移平行線 ${M('\\ell')}，拖動 ${M('P')}，比較到兩線的垂直距離。痕跡就是 ${M('\\Gamma')}。</p>
+    <div class="slider-row wide"><span>${M('\\ell')} 平移</span><input type="range" id="rngK" min="-200" max="160" value="${Math.round(state.k)}"><span class="val" id="valK">${fmt(state.k,0)}</span></div>
+    <div class="read">
+      <span>${M('P')} 到 ${M('L')}</span><span class="v" id="rdL"></span>
+      <span>${M('P')} 到 ${M('\\ell')}</span><span class="v" id="rdE"></span>
+      <span>${M('\\angle GAH')}</span><span class="v" id="rdAng"></span>
+    </div>
+    <div class="ok hidden" id="okBox"></div>
+    <div class="presets">
+      <button class="sm primary" id="btnThroughA">令 Γ 過 A</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="chkH" ${state.showH?'checked':''}>顯示另一交點 ${M('H')} 與 ${M('\\angle GAH')}</label>
+    <div class="presets"><button class="sm" id="btnClear">清除痕跡</button></div>
+    <p class="note">有人宣稱 ${M('\\angle GAH<70^\\circ')}。你是否同意？把 ${M('\\Gamma')} 移到過 ${M('A')} 再量角。</p>`;
+}
+
+function gammaThroughA(){return almost(midK(),-30,0.4);}
+
+function updateReadings(){
+  const set=(id,t)=>{const n=document.getElementById(id); if(n) n.textContent=t;};
+  if(state.mode==='ea'){
+    const g=Gcur();
+    set('rdG',fmtPt(g,1)); set('rdGA',fmt(hypot(g,A),2)); set('rdGB',fmt(hypot(g,B),2));
+    const ok=document.getElementById('okBox'); if(ok) ok.classList.toggle('hidden', Math.abs(state.Gx-10)>=0.15);
+  } else if(state.mode==='eb'){
+    const dL=distToLineABC(state.P,3,-4,-90);
+    const dE=distToLineABC(state.P,3,-4,-state.k);
+    set('rdL',fmt(dL,2)); set('rdE',fmt(dE,2));
+    const vm=document.getElementById('valK'); if(vm) vm.textContent=fmt(state.k,0);
+    const ang=angDeg(G,A,H);
+    set('rdAng', (state.showH && gammaThroughA()) ? (fmt(ang,2)+'°') : '—');
+    const ok=document.getElementById('okBox');
+    if(ok){
+      if(state.showH && gammaThroughA()){
+        ok.classList.remove('hidden');
+        ok.innerHTML='不同意該宣稱：'+M('\\angle GAH\\approx 73.74^\\circ>70^\\circ');
+        renderTex(ok);
+      } else ok.classList.add('hidden');
+    }
+  }
+}
+
+function bindPanel(){
+  const rng=document.getElementById('rngK');
+  if(rng) rng.oninput=e=>{state.k=+e.target.value; redraw();};
+  const sg=document.getElementById('btnSnapG'); if(sg) sg.onclick=()=>{state.Gx=10; redraw();};
+  const ta=document.getElementById('btnThroughA'); if(ta) ta.onclick=()=>{state.k=-150; redraw();};
+  const ch=document.getElementById('chkH'); if(ch) ch.onchange=e=>{state.showH=e.target.checked; redraw();};
+  const cl=document.getElementById('btnClear'); if(cl) cl.onclick=()=>{state.trail=[]; redraw();};
+  const rst=document.getElementById('btnReset');
+  if(rst) rst.onclick=()=>{
+    if(state.mode==='ea'){state.Gx=4;}
+    else {state.k=0; state.P={x:0,y:8}; state.trail=[]; state.showH=false; state.panelKey='';}
+    redraw();
+  };
+  demo.bindControls();
+}
+
+function redraw(){
+  if(state.mode==='demo'){
+    drawDemo();
+    const key='demo-'+demo.i;
+    if(state.panelKey!==key){state.panelKey=key; setPanel(demoPanel(demo.i));}
+    setControls(demo.controls()); bindPanel();
+    setHint('鍵盤：← 上一步　→ 下一步　空白鍵 播放／暫停');
+    return;
+  }
+  if(state.mode==='ea'){
+    const pl=planeA(), g=Gcur();
+    clearSvg(); pl.drawGrid(svg);
+    svg.appendChild(pl.segEl({x:pl.xmin,y:-15},{x:pl.xmax,y:-15},{stroke:'#94a3b8','stroke-width':1.6,'stroke-dasharray':'6 5'}));
+    svg.appendChild(pl.segEl(g,A,{stroke:'#94a3b8','stroke-width':1.6,'stroke-dasharray':'5 4'}));
+    svg.appendChild(pl.segEl(g,B,{stroke:'#94a3b8','stroke-width':1.6,'stroke-dasharray':'5 4'}));
+    if(Math.abs(state.Gx-10)<0.15){
+      svg.appendChild(pl.circleEl(G,R,{fill:'rgba(61,154,74,.10)',stroke:GRN,'stroke-width':2.6}));
+    }
+    svg.appendChild(pl.dot(A,INK,7)); svg.appendChild(pl.label(A,'A',{dx:-18,dy:20}));
+    svg.appendChild(pl.dot(B,INK,7)); svg.appendChild(pl.label(B,'B',{dx:8,dy:20}));
+    svg.appendChild(pl.handle(g,'G',PUR)); svg.appendChild(pl.label(g,'G',{dx:8,dy:22,fill:PUR}));
+    setCaption('沿 y = −15 拖動 G，使 GA = GB<span class="sub">這時半徑是多少？圓的方程又如何？</span>');
+    if(state.panelKey!=='ea'){state.panelKey='ea'; setPanel(panelEA());}
+    setControls('<button class="sm" id="btnReset">↺ 重設</button>');
+    bindPanel(); updateReadings();
+    setHint('拖動紫色點 G（限制在 y = −15）');
+  } else {
+    maybeTrail();
+    const pl=planeB();
+    clearSvg(); pl.drawGrid(svg);
+    svg.appendChild(pl.circleEl(G,R,{fill:'rgba(61,154,74,.08)',stroke:GRN,'stroke-width':2.6}));
+    drawLineABC(pl,3,-4,-90,{stroke:ORN,'stroke-width':2.8});
+    svg.appendChild(pl.label({x:32,y:2},'L',{fill:ORN}));
+    drawLineABC(pl,3,-4,-state.k,{stroke:BLU,'stroke-width':2.6,'stroke-dasharray':'7 5'});
+    // label ell
+    svg.appendChild(pl.label({x:28,y:(3*28-state.k)/4},'ℓ',{fill:BLU,dx:8,dy:-8}));
+    // midline
+    drawLineABC(pl,3,-4,-midK(),{stroke:PUR,'stroke-width':2.2,'stroke-dasharray':'8 6'});
+    svg.appendChild(pl.label({x:-6,y:(3*(-6)-midK())/4},'中線',{class:'lbl-cjk',fill:PUR,dx:0,dy:-10}));
+    state.trail.forEach(p=>{
+      const q=pl.pt(p);
+      svg.appendChild(el('circle',{cx:q.x,cy:q.y,r:4,fill:'rgba(122,63,168,.40)',stroke:'none','pointer-events':'none'}));
+    });
+    if(state.showH && gammaThroughA()){
+      svg.appendChild(pl.dot(H,PUR,7)); svg.appendChild(pl.label(H,'H',{dx:10,dy:-8,fill:PUR}));
+      svg.appendChild(pl.segEl(G,A,{stroke:BLU,'stroke-width':2}));
+      svg.appendChild(pl.segEl(A,H,{stroke:BLU,'stroke-width':2}));
+      svg.appendChild(pl.angleArc(A,G,H,36,ORN));
+    }
+    svg.appendChild(pl.dot(A,INK,7)); svg.appendChild(pl.label(A,'A',{dx:-18,dy:20}));
+    svg.appendChild(pl.dot(B,INK,7)); svg.appendChild(pl.label(B,'B',{dx:8,dy:20}));
+    svg.appendChild(pl.dot(G,INK,7)); svg.appendChild(pl.label(G,'G',{dx:8,dy:22}));
+    svg.appendChild(pl.handle(state.P,'P',PUR));
+    svg.appendChild(pl.label(state.P,'P',{dx:8,dy:-8,fill:PUR}));
+    setCaption('平移 ℓ，拖動 P，觀察等距點的軌跡<span class="sub">軌跡與 L 平行嗎？令它通過 A 後再看 ∠GAH。</span>');
+    if(state.panelKey!=='eb'){state.panelKey='eb'; setPanel(panelEB());}
+    setControls('<button class="sm" id="btnReset">↺ 重設</button>');
+    bindPanel(); updateReadings();
+    setHint('拖動紫色點 P，或用滑桿平移 ℓ');
+  }
+}
+
+Drag.move=function(id,mp){
+  if(state.mode==='ea' && id==='G'){
+    state.Gx=clamp(mp.x,-8,28);
+    redraw();
+  } else if(state.mode==='eb' && id==='P'){
+    const pl=planeB();
+    state.P={x:clamp(mp.x,pl.xmin+0.5,pl.xmax-0.5),y:clamp(mp.y,pl.ymin+0.5,pl.ymax-0.5)};
+    redraw();
+  }
+};
+
+bindFlags(mode=>{state.mode=mode;state.panelKey=''; if(mode==='demo') demo.go(0); else redraw();});
+window.onDemoKey=function(e){
+  if(state.mode!=='demo') return;
+  if(e.key==='ArrowRight'){e.preventDefault();demo.go(demo.i+1);}
+  else if(e.key==='ArrowLeft'){e.preventDefault();demo.go(demo.i-1);}
+  else if(e.key===' '){e.preventDefault();demo.play();}
+};
+Drag.bind();
+const __q=consumeQuery();
+redraw();
+if(__q.get('snap')){const b=document.getElementById(__q.get('snap')); if(b) b.click();}
+})();
+
+</script>
+</body>
+</html>
