@@ -1,0 +1,1251 @@
+<!--
+  課題：標準分探究
+  級別：中五數學 · 第14章 離差的量度
+  日期：2026-11-17
+  單一自包含離線 HTML，無外連 CDN。
+-->
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>標準分探究 — 中五 第14章 離差的量度</title>
+<style>
+:root{
+  --green:#c3e6a8; --green-d:#2f5d1f;
+  --purple:#7a3fa8; --purple-f:rgba(140,80,200,.30);
+  --blue:#1d6fd8; --blue-f:rgba(40,130,235,.22);
+  --ink:#1f2937; --muted:#5b6575;
+  --orange:#e07a1a; --circ:#3d9a4a;
+  --cjk:'Microsoft JhengHei','PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Sans CJK HK','Heiti TC',sans-serif;
+  --math:'Cambria Math','Times New Roman','STIX Two Text','Latin Modern Roman','Noto Serif','DejaVu Serif',serif;
+}
+*{box-sizing:border-box}
+html{margin:0;height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body{margin:0;min-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:auto;font-family:var(--cjk);color:var(--ink);background:#eef3f9;font-size:20px;-webkit-text-size-adjust:100%}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 20px;background:#fff;border-bottom:4px solid var(--blue)}
+h1{font-size:28px;margin:0;letter-spacing:1px}
+h1 small{font-size:18px;color:var(--muted);font-weight:normal;margin-left:10px}
+.modes{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:inherit;font-size:20px;border:2px solid var(--blue);background:#fff;color:var(--blue);border-radius:12px;padding:9px 16px;cursor:pointer;min-height:48px;touch-action:manipulation;transition:background .15s}
+button:hover{background:#e8f1fd}
+button:disabled{opacity:.4;cursor:default;background:#fff}
+button.primary{background:var(--blue);color:#fff}
+button.primary:hover{background:#155bb5}
+button.sm{font-size:17px;padding:6px 12px;min-height:42px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;padding:14px 18px;align-items:start}
+@media (max-width:1100px), (orientation:portrait){ main{grid-template-columns:1fr} }
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(30,60,110,.10);padding:12px 14px;overflow:visible}
+.stagehead{display:flex;flex-direction:column;gap:8px;min-height:72px}
+.flags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{background:#a9c4ea;color:#fff;padding:6px 28px 6px 14px;clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);font-weight:bold;font-size:18px;cursor:pointer;user-select:none}
+.flag.on{background:var(--blue)}
+.caption{font-size:24px;font-weight:bold;line-height:1.35}
+.caption .sub{display:block;font-size:18px;font-weight:normal;color:var(--muted);margin-top:2px}
+svg#stage{width:100%;height:auto;max-height:min(560px,calc(100dvh - 240px));min-height:280px;display:block;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;padding-top:8px}
+.panel{overflow:visible;max-height:none;-webkit-overflow-scrolling:auto}
+.panel h2{font-size:22px;margin:4px 0 10px;color:var(--blue)}
+.panel h3{font-size:18px;margin:12px 0 6px;color:var(--purple)}
+.panel p{margin:6px 0;line-height:1.5}
+.panel ul,.panel ol{margin:6px 0 8px 1.3em;padding:0;line-height:1.55}
+.panel li{margin:3px 0}
+.hidden{display:none !important}
+.m{font-family:var(--math);font-size:1.12em;white-space:nowrap}
+.m .mi{font-style:italic;padding:0 .02em}
+.m .mo{padding:0 .26em}
+.m .mn{font-style:normal}
+.m .mt{font-family:var(--cjk);font-style:normal;font-size:.88em}
+.m .sp{display:inline-block;width:.6em}
+.m .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:0 .14em;line-height:1.05;font-size:.92em}
+.m .frac .num{border-bottom:1.6px solid currentColor;padding:0 .14em 1px;text-align:center}
+.m .frac .den{padding:1px .14em 0;text-align:center}
+.m .sqrt{display:inline-flex;align-items:stretch;vertical-align:middle;padding:0 .06em}
+.m .sqrt .rad{font-style:normal;font-size:1.15em;line-height:1;padding-right:1px}
+.m .sqrt .radic{border-top:1.6px solid currentColor;padding:0 .14em 1px;line-height:1.15}
+.m .bar{display:inline-block;border-top:1.6px solid currentColor;line-height:1;padding:0 .05em;margin-top:.12em}
+.m sup{font-size:.72em;line-height:0}
+.m sub{font-size:.72em}
+.reason{font-family:var(--cjk);color:#444;margin-left:.5em;font-size:.92em;white-space:nowrap}
+.concl{border:3px solid var(--blue);border-radius:14px;padding:10px 12px;background:#f2f7ff;text-align:center;font-size:22px;margin:8px 0;line-height:1.45}
+.concl.green{border-color:var(--green-d);background:#f0f8ea}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:20px;align-items:baseline;margin:8px 0}
+.read .v{font-family:var(--math);font-weight:bold;text-align:right}
+.ok{margin-top:10px;padding:10px 12px;border-radius:12px;background:#e6f6e6;color:#1d6b2a;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7cc58a}
+.warn{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff4e8;color:#8a4b00;font-weight:bold;font-size:20px;text-align:center;border:2px solid #e07a1a}
+.info{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eaf3ff;color:#155bb5;font-weight:bold;font-size:20px;text-align:center;border:2px solid #7ab0e8}
+.note{font-size:16px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.kbd{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+label.chk{display:flex;align-items:center;gap:8px;font-size:18px;margin:8px 0;cursor:pointer}
+label.chk input{width:22px;height:22px}
+input[type=range]{width:100%;height:28px;accent-color:var(--blue)}
+.slider-row{display:grid;grid-template-columns:90px 1fr 56px;gap:8px;align-items:center;margin:8px 0;font-size:17px}
+.slider-row .val{font-family:var(--math);font-weight:bold;text-align:right}
+.eq{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0;padding:4px 0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:16px;color:var(--muted);margin:8px 0;line-height:1.5}
+.legend .item{white-space:nowrap}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin:0 4px 0 2px;vertical-align:middle}
+.subj{font-weight:bold;margin-top:10px;margin-bottom:2px}
+.subj.math{color:var(--blue)}
+.subj.eng{color:var(--purple)}
+.term{color:var(--blue);font-weight:bold}
+.lbl{font-family:var(--math);font-style:italic;font-weight:bold;font-size:22px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.lbl-cjk{font-family:var(--cjk);font-style:normal;font-weight:bold;font-size:18px;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+.nlbl{font-family:var(--math);font-style:normal;font-weight:bold;font-size:16px;paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+.handle{cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.handle:active{cursor:grabbing}
+</style>
+</head>
+<body>
+<header>
+  <h1>標準分探究<small>中五數學 · 第14章 離差的量度</small></h1>
+  <div class="modes">
+    <button type="button" id="btnModeExplore" class="primary">探究模式</button>
+    <button type="button" id="btnModeDemo">逐步示範</button>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="stagehead">
+      <div class="flags" id="flags"></div>
+      <div class="caption" id="caption"></div>
+    </div>
+    <svg id="stage" viewBox="0 0 1000 640" aria-label="標準分探究舞台"></svg>
+    <div class="controls" id="controls"></div>
+    <div class="kbd" id="kbdHint"></div>
+  </section>
+  <aside class="card panel" id="panel"></aside>
+</main>
+
+<script>
+(function(){
+'use strict';
+
+/* ===== tiny offline TeX subset（以 DSE 坐標題 renderer 為底，補希臘字母與 \bar） ===== */
+const TEXSYM={
+  circ:'°', therefore:'∴', because:'∵', times:'×', cdot:'·',
+  perp:'⊥', parallel:'∥', mid:'∣', ne:'≠', neq:'≠', approx:'≈',
+  le:'≤', ge:'≥', leq:'≤', geq:'≥', lt:'<', gt:'>',
+  angle:'∠', triangle:'△', Gamma:'Γ', ell:'ℓ', pi:'π',
+  infty:'∞', pm:'±', mp:'∓', sim:'∼',
+  mu:'μ', sigma:'σ', alpha:'α', beta:'β', gamma:'γ', theta:'θ',
+  quad:'<span class="sp"></span>'
+};
+const TEX_MI={mu:'μ',sigma:'σ',alpha:'α',beta:'β',gamma:'γ',theta:'θ',pi:'π',ell:'ℓ'};
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
+function tex(src){
+  src=String(src); let i=0,out='';
+  function group(){
+    if(i>=src.length) return '';
+    if(src[i]==='{'){let depth=1,j=i+1;while(j<src.length&&depth){if(src[j]==='{')depth++;else if(src[j]==='}')depth--;j++;}const g=src.slice(i+1,j-1);i=j;return g;}
+    if(src[i]==='\\'){const m=/^\\[a-zA-Z]+/.exec(src.slice(i)); if(m){i+=m[0].length; return m[0];}}
+    return src[i++];
+  }
+  while(i<src.length){
+    const ch=src[i];
+    if(ch==='\\'){
+      const m=/^\\([a-zA-Z]+)/.exec(src.slice(i));
+      if(!m){
+        if(i+1<src.length){
+          const nx=src[i+1]; i+=2;
+          if(nx===','||nx===';'||nx===' '||nx===':') out+='<span class="sp"></span>';
+          else out+='<span class="mn">'+esc(nx)+'</span>';
+        } else i++;
+        continue;
+      }
+      i+=m[0].length;
+      const cmd=m[1];
+      if(cmd==='text'){out+='<span class="mt">'+esc(group())+'</span>';}
+      else if(cmd==='frac'||cmd==='dfrac'||cmd==='tfrac'){
+        const a=group(), b=group();
+        out+='<span class="frac"><span class="num">'+tex(a)+'</span><span class="den">'+tex(b)+'</span></span>';
+      }
+      else if(cmd==='sqrt'){
+        out+='<span class="sqrt"><span class="rad">√</span><span class="radic">'+tex(group())+'</span></span>';
+      }
+      else if(cmd==='bar'||cmd==='overline'){
+        out+='<span class="bar">'+tex(group())+'</span>';
+      }
+      else if(TEX_MI[cmd]){out+='<i class="mi">'+TEX_MI[cmd]+'</i>';}
+      else if(cmd==='circ'){out+='<span class="mn">°</span>';}
+      else if(cmd==='perp'){out+='<span class="mo">⊥</span>';}
+      else if(cmd==='angle'){out+='<span class="mn">∠</span>';}
+      else if(cmd==='triangle'){out+='<span class="mn">△</span>';}
+      else if(cmd==='Gamma'){out+='<i class="mi">Γ</i>';}
+      else if(cmd==='left'||cmd==='right'||cmd==='displaystyle'||cmd==='textstyle'||cmd==='bigl'||cmd==='bigr'){
+        if(src[i]==='.'){i++;}
+        else if(src[i]==='('||src[i]===')'||src[i]==='['||src[i]===']'||src[i]==='|'||src[i]==='{'||src[i]==='}'){out+='<span class="mn">'+esc(src[i])+'</span>';i++;}
+      }
+      else if(cmd==='therefore'||cmd==='because'){out+='<span class="mn">'+TEXSYM[cmd]+'</span><span class="sp"></span>';}
+      else out+='<span class="mn">'+(TEXSYM[cmd]||cmd)+'</span>';
+    } else if(ch==='^'){i++;const g=group();out+=(g==='\\circ'||g==='circ')?'<span class="mn">°</span>':'<sup>'+tex(g)+'</sup>';}
+    else if(ch==='_'){i++;out+='<sub>'+tex(group())+'</sub>';}
+    else if(/[A-Za-z]/.test(ch)){out+='<i class="mi">'+ch+'</i>';i++;}
+    else if(/[0-9.]/.test(ch)){let j=i;while(j<src.length&&/[0-9.]/.test(src[j]))j++;out+='<span class="mn">'+src.slice(i,j)+'</span>';i=j;}
+    else if('=+-<>'.indexOf(ch)>=0){out+='<span class="mo">'+(ch==='-'?'−':esc(ch))+'</span>';i++;}
+    else if(ch===' '){i++;}
+    else {out+='<span class="mn">'+esc(ch)+'</span>';i++;}
+  }
+  return out;
+}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(e=>{e.innerHTML=tex(e.getAttribute('data-tex'));});}
+function M(src){return '<span class="m" data-tex="'+escAttr(src)+'"></span>';}
+
+/* ===== SVG helpers ===== */
+const svg=document.getElementById('stage');
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,kids){
+  const n=document.createElementNS(NS,tag);
+  if(attrs) for(const k in attrs){
+    if(k==='textContent') n.textContent=attrs[k];
+    else if(k==='class'||k==='className') n.setAttribute('class',attrs[k]);
+    else if(k==='innerHTML') n.innerHTML=attrs[k];
+    else if(attrs[k]!==undefined&&attrs[k]!==null) n.setAttribute(k,attrs[k]);
+  }
+  if(kids) kids.forEach(c=>n.appendChild(c));
+  return n;
+}
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function svgPoint(evt){
+  const pt=svg.createSVGPoint();
+  pt.x=evt.clientX; pt.y=evt.clientY;
+  const ctm=svg.getScreenCTM();
+  if(!ctm) return {x:0,y:0};
+  return pt.matrixTransform(ctm.inverse());
+}
+
+/* ===== numbers ===== */
+function almost(a,b,eps){return Math.abs(a-b)<(eps===undefined?1e-6:eps);}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function zScore(x,mu,sig){return (x-mu)/sig;}
+function fromZ(z,mu,sig){return mu+z*sig;}
+
+function fmtNum(x,maxDec){
+  if(maxDec===undefined) maxDec=2;
+  if(!isFinite(x)) return '—';
+  const grid=1e-8;
+  if(Math.abs(x)<grid) return '0';
+  if(Math.abs(x-Math.round(x))<grid) return String(Math.round(x));
+  for(let d=1;d<=maxDec;d++){
+    const n=Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+    if(Math.abs(x-n)<grid){
+      let s=n.toFixed(d);
+      if(/^[-]?0\.0+$/.test(s)) return '0';
+      return s;
+    }
+  }
+  const n=Math.round(x*Math.pow(10,maxDec))/Math.pow(10,maxDec);
+  if(Math.abs(n)<grid) return '0';
+  let s=n.toFixed(maxDec);
+  s=s.replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1');
+  if(s==='-0') s='0';
+  return s;
+}
+function fmtTex(x,maxDec){return fmtNum(x,maxDec);}
+function fmtUI(x,maxDec){return fmtNum(x,maxDec).replace(/-/g,'−');}
+function isExactDisp(x,maxDec){
+  if(!isFinite(x)) return false;
+  if(Math.abs(x-Math.round(x))<1e-8) return true;
+  const d=maxDec===undefined?2:maxDec;
+  const n=Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+  return Math.abs(x-n)<1e-8;
+}
+function snapZ(z){
+  for(let k=-8;k<=8;k++){
+    const t=k/2;
+    if(Math.abs(z-t)<0.04) return t;
+  }
+  return z;
+}
+function zColor(z){
+  if(almost(z,0,1e-6)) return '#6b7280';
+  return z>0?'#1d6fd8':'#e07a1a';
+}
+function zSignWord(z){
+  if(almost(z,0,1e-6)) return '等於平均數';
+  const mag=fmtUI(Math.abs(z));
+  return (z>0?'高於':'低於')+'平均數 '+mag+' 個標準差';
+}
+
+function texZCalc(x,mu,sig){
+  const num=x-mu;
+  const z=num/sig;
+  let s='z=\\dfrac{x-\\mu}{\\sigma}=\\dfrac{'+fmtTex(x)+'-'+fmtTex(mu)+'}{'+fmtTex(sig)+'}';
+  s+='=\\dfrac{'+fmtTex(num)+'}{'+fmtTex(sig)+'}';
+  if(isExactDisp(z,2)) s+='='+fmtTex(z);
+  else s+='\\approx '+fmtTex(z,2);
+  return s;
+}
+function texXCalc(z,mu,sig){
+  const x=fromZ(z,mu,sig);
+  let s='x=\\mu+z\\sigma='+fmtTex(mu)+(z<0?'':'+')+fmtTex(z)+'\\times '+fmtTex(sig);
+  if(isExactDisp(x,2)) s+='='+fmtTex(x);
+  else s+='\\approx '+fmtTex(x,2);
+  return s;
+}
+
+/* ===== demo helper ===== */
+function makeDemo(getSteps, hooks){
+  const D={i:0, playing:false, token:0};
+  D.steps=()=>getSteps();
+  D.go=function(n){
+    const arr=D.steps();
+    D.i=clamp(n,0,arr.length-1);
+    if(hooks.onStep) hooks.onStep(D.i, arr[D.i]);
+    hooks.redraw();
+  };
+  D.reset=function(){
+    D.token++; D.playing=false; D.i=0;
+    if(hooks.onReset) hooks.onReset();
+    D.go(0);
+  };
+  D.play=async function(){
+    if(D.playing){D.token++; D.playing=false; hooks.redraw(); return;}
+    D.playing=true; const my=++D.token;
+    const arr=D.steps();
+    if(D.i>=arr.length-1) D.go(0);
+    hooks.redraw();
+    while(D.i<arr.length-1){
+      await new Promise(r=>setTimeout(r, D.i===0?700:1400));
+      if(my!==D.token) return;
+      D.go(D.i+1);
+    }
+    D.playing=false; hooks.redraw();
+  };
+  D.controls=function(){
+    return '<button type="button" id="btnPrev">◀ 上一步</button>'
+      +'<button type="button" id="btnNext" class="primary">下一步 ▶</button>'
+      +'<button type="button" id="btnPlay">'+(D.playing?'❚❚ 暫停':'▶ 播放')+'</button>'
+      +'<button type="button" id="btnReset">↺ 重設</button>';
+  };
+  D.bindControls=function(){
+    const n=D.steps().length;
+    const prev=document.getElementById('btnPrev');
+    const next=document.getElementById('btnNext');
+    if(prev){prev.disabled=D.i===0; prev.onclick=()=>D.go(D.i-1);}
+    if(next){next.disabled=D.i>=n-1; next.onclick=()=>D.go(D.i+1);}
+    const play=document.getElementById('btnPlay'); if(play) play.onclick=()=>D.play();
+    const rst=document.getElementById('btnReset'); if(rst) rst.onclick=()=>D.reset();
+  };
+  return D;
+}
+
+/* ===== state ===== */
+const DEF={
+  meaning:{mu:70,sig:8,x:62},
+  compare:{
+    m:{name:'數學科',mu:60,sig:4,x:66},   // z=1.5，原始分較低
+    e:{name:'英文科',mu:76,sig:16,x:88}   // z=0.75，原始分較高
+  },
+  typical:{
+    m:{name:'數學科',mu:64,sig:4,x:72},   // z=2
+    e:{name:'英文科',mu:70,sig:10,x:85}   // z=1.5
+  },
+  restoreA:{mu:70,sig:8,z:-1},
+  restoreB:{x1:57,z1:-2,x2:81,z2:2}
+};
+
+const state={
+  view:'explore',
+  page:'meaning',
+  restoreTab:'A',
+  mu:DEF.meaning.mu, sig:DEF.meaning.sig, x:DEF.meaning.x,
+  m:{mu:DEF.compare.m.mu,sig:DEF.compare.m.sig,x:DEF.compare.m.x},
+  e:{mu:DEF.compare.e.mu,sig:DEF.compare.e.sig,x:DEF.compare.e.x},
+  a:{mu:DEF.restoreA.mu,sig:DEF.restoreA.sig,z:DEF.restoreA.z},
+  b:{x1:DEF.restoreB.x1,z1:DEF.restoreB.z1,x2:DEF.restoreB.x2,z2:DEF.restoreB.z2},
+  drag:null,
+  chromeKey:''
+};
+
+const demo=makeDemo(()=>DEMO_STEPS,{redraw:redraw,onStep:function(){},onReset:function(){}});
+
+const DEMO_STEPS=[
+  {flag:'① 為甚麼',kind:'why',
+    caption:'為甚麼需要標準分？',
+    sub:'只看原始分數，難以比較不同科目的相對表現。',
+    m:{mu:64,sig:4,x:72}, e:{mu:70,sig:10,x:85}},
+  {flag:'② 定義',kind:'def',
+    caption:'標準分的定義與符號意義',
+    sub:'把「與平均數的差距」表示成標準差的數目。',
+    mu:70,sig:8,x:70},
+  {flag:'③ 求 z',kind:'exaZ',
+    caption:'例 A：已知得分，求標準分',
+    sub:'測驗平均數 72 分，標準差 8 分，志軒得 60 分。',
+    mu:72,sig:8,x:60,name:'志軒'},
+  {flag:'④ 求 x',kind:'exaX',
+    caption:'例 A 續：已知標準分，求得分',
+    sub:'同一測驗中，雅婷的標準分為 1.5。',
+    mu:72,sig:8,z:1.5,x:84,name:'雅婷',ghost:{x:60,z:-1.5,name:'志軒'}},
+  {flag:'⑤ 比較兩科',kind:'cmp',
+    caption:'例 B：比較兩科的相對表現',
+    sub:'應比較標準分，而不是只看原始分數。',
+    m:{mu:64,sig:4,x:72}, e:{mu:70,sig:10,x:85}},
+  {flag:'⑥ 求 μ、σ',kind:'sys',
+    caption:'例 C：由兩個標準分求平均數與標準差',
+    sub:'甲得 57 分、z = −2；乙得 81 分、z = 2。',
+    b:{x1:57,z1:-2,x2:81,z2:2}},
+  {flag:'⑦ 總結',kind:'sum',
+    caption:'總結：定義、符號意義、比較時用標準分',
+    sub:'標準分較大者，相對表現較佳。',
+    m:{mu:64,sig:4,x:72}, e:{mu:70,sig:10,x:85}}
+];
+
+/* ===== axis drawing ===== */
+function addDefs(){
+  const defs=el('defs');
+  const mk=el('marker',{id:'arrowHead',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'8',markerHeight:'8',orient:'auto-start-reverse'});
+  mk.appendChild(el('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#334155'}));
+  defs.appendChild(mk);
+  const mk2=el('marker',{id:'arrowHeadC',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'8',markerHeight:'8',orient:'auto-start-reverse'});
+  mk2.appendChild(el('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'context-stroke'}));
+  defs.appendChild(mk2);
+  svg.appendChild(defs);
+}
+
+function makeScale(mu,sig,xList){
+  let zAbs=3.4;
+  (xList||[]).forEach(function(v){
+    if(isFinite(v)) zAbs=Math.max(zAbs, Math.abs((v-mu)/sig)+0.55);
+  });
+  zAbs=Math.min(zAbs, 6);
+  const zmin=-zAbs, zmax=zAbs;
+  const x0=90, x1=960;
+  function Xz(z){return x0+(z-zmin)/(zmax-zmin)*(x1-x0);}
+  function Xs(s){return Xz((s-mu)/sig);}
+  function zFrom(px){return zmin+(px-x0)/(x1-x0)*(zmax-zmin);}
+  return {mu:mu,sig:sig,zmin:zmin,zmax:zmax,x0:x0,x1:x1,Xz:Xz,Xs:Xs,zFrom:zFrom};
+}
+
+function drawBell(sc, yLine, amp){
+  const pts=[];
+  const n=80;
+  for(let i=0;i<=n;i++){
+    const z=sc.zmin+(sc.zmax-sc.zmin)*i/n;
+    const px=sc.Xz(z);
+    const py=yLine-amp*Math.exp(-0.5*z*z);
+    pts.push(px+','+py);
+  }
+  const d='M '+sc.Xz(sc.zmin)+' '+yLine+' L '+pts.join(' ')+' L '+sc.Xz(sc.zmax)+' '+yLine+' Z';
+  svg.appendChild(el('path',{d:d,fill:'rgba(29,111,216,0.10)',stroke:'none'}));
+}
+
+function drawAxis(y, sc, opts){
+  opts=opts||{};
+  const col=opts.color||'#334155';
+  svg.appendChild(el('line',{
+    x1:sc.x0-16,y1:y,x2:sc.x1+16,y2:y,
+    stroke:col,'stroke-width':2.4,'marker-end':'url(#arrowHead)','marker-start':'url(#arrowHead)'
+  }));
+  if(opts.axisTitle){
+    svg.appendChild(el('text',{x:18,y:y+6,class:'lbl-cjk',fill:col,'text-anchor':'start',textContent:opts.axisTitle}));
+  }
+}
+
+function drawTicksRaw(y, sc, opts){
+  opts=opts||{};
+  const ks=[-3,-2,-1,0,1,2,3];
+  ks.forEach(function(k){
+    if(k<sc.zmin-1e-9||k>sc.zmax+1e-9) return;
+    const px=sc.Xz(k);
+    const major=k===0;
+    svg.appendChild(el('line',{x1:px,y1:y- (major?12:8),x2:px,y2:y+(major?12:8),stroke:'#334155','stroke-width':major?2.4:1.6}));
+    const score=sc.mu+k*sc.sig;
+    let sym;
+    if(k===0) sym='μ';
+    else if(k>0) sym='μ+'+ (k===1?'':'') + (k===1?'σ':(k+'σ'));
+    else sym='μ'+ (k===-1?'−σ':('−'+(-k)+'σ'));
+    if(k===1) sym='μ+σ';
+    if(k===-1) sym='μ−σ';
+    if(k===2) sym='μ+2σ';
+    if(k===-2) sym='μ−2σ';
+    if(k===3) sym='μ+3σ';
+    if(k===-3) sym='μ−3σ';
+    const hideAt=opts.hideScoreAt;
+    const hideArr=hideAt==null?[]:(Array.isArray(hideAt)?hideAt:[hideAt]);
+    const skipScore=hideArr.some(function(v){return almost(score,v,1e-6);});
+    if(!skipScore){
+      svg.appendChild(el('text',{x:px,y:y-16,class:'nlbl',fill:major?'#7a3fa8':'#334155','text-anchor':'middle',textContent:sym}));
+      svg.appendChild(el('text',{x:px,y:y+28,class:'nlbl',fill:major?'#7a3fa8':'#4b5563','text-anchor':'middle',textContent:fmtUI(score)}));
+    }
+  });
+}
+
+function drawTicksZ(y, sc, zNow){
+  for(let k=-3;k<=3;k++){
+    if(k<sc.zmin-1e-9||k>sc.zmax+1e-9) continue;
+    const px=sc.Xz(k);
+    svg.appendChild(el('line',{x1:px,y1:y-8,x2:px,y2:y+8,stroke:'#334155','stroke-width':k===0?2.4:1.6}));
+    const hide=zNow!==undefined && zNow!==null && almost(k,zNow,0.04);
+    if(!hide){
+      svg.appendChild(el('text',{x:px,y:y+26,class:'nlbl',fill:'#4b5563','text-anchor':'middle',textContent:fmtUI(k)}));
+    }
+  }
+}
+
+function drawGuide(x,y1,y2,color){
+  svg.appendChild(el('line',{x1:x,y1:y1,x2:x,y2:y2,stroke:color||'#94a3b8','stroke-width':1.4,'stroke-dasharray':'5 5'}));
+}
+
+function drawHandle(px,y,color,id,label,labelY){
+  svg.appendChild(el('circle',{cx:px,cy:y,r:22,fill:'transparent',class:'handle',id:id+'Hit'}));
+  svg.appendChild(el('line',{x1:px,y1:y-18,x2:px,y2:y+18,stroke:color,'stroke-width':3,class:'handle',id:id+'Stem'}));
+  svg.appendChild(el('circle',{cx:px,cy:y,r:13,fill:color,stroke:'#fff','stroke-width':3,class:'handle',id:id}));
+  if(label){
+    const cls=/[一-鿿]/.test(label)?'lbl-cjk':'lbl';
+    svg.appendChild(el('text',{x:px,y:labelY===undefined?y-28:labelY,class:cls,fill:color,'text-anchor':'middle',textContent:label}));
+  }
+}
+
+function drawArrowSpan(x1,x2,y,color,label){
+  if(Math.abs(x2-x1)<2) return;
+  const a=Math.min(x1,x2), b=Math.max(x1,x2);
+  svg.appendChild(el('line',{x1:x1,y1:y,x2:x2,y2:y,stroke:color,'stroke-width':3.2,'marker-end':'url(#arrowHeadC)'}));
+  if(label){
+    svg.appendChild(el('text',{x:(x1+x2)/2,y:y-10,class:'lbl-cjk',fill:color,'text-anchor':'middle',textContent:label}));
+  }
+}
+
+/* ===== chrome / panel ===== */
+function setModeButtons(){
+  const ex=document.getElementById('btnModeExplore');
+  const dm=document.getElementById('btnModeDemo');
+  if(ex) ex.classList.toggle('primary', state.view==='explore');
+  if(dm) dm.classList.toggle('primary', state.view==='demo');
+}
+
+function buildFlags(){
+  const box=document.getElementById('flags');
+  if(state.view==='explore'){
+    box.innerHTML=
+      '<div class="flag'+(state.page==='meaning'?' on':'')+'" data-page="meaning">① 標準分的意義</div>'+
+      '<div class="flag'+(state.page==='compare'?' on':'')+'" data-page="compare">② 比較兩科表現</div>'+
+      '<div class="flag'+(state.page==='restore'?' on':'')+'" data-page="restore">③ 還原／求平均數與標準差</div>';
+  } else {
+    const arr=DEMO_STEPS;
+    box.innerHTML=arr.map(function(s,i){
+      return '<div class="flag'+(i===demo.i?' on':'')+'" data-step="'+i+'">'+(s.flag||('步驟 '+(i+1)))+'</div>';
+    }).join('');
+  }
+}
+
+function sliderRow(id,label,min,max,step,val){
+  return '<div class="slider-row"><span>'+label+'</span>'
+    +'<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'">'
+    +'<span class="val" id="'+id+'Val">'+fmtUI(parseFloat(val))+'</span></div>';
+}
+
+function pointsBlock(){
+  return '<p class="note">必讀要點：</p>'
+    +'<ul>'
+    +'<li>標準分 '+M('z')+' 計算該原始數據 '+M('x')+' 高於或低於平均數多少個標準差。</li>'
+    +'<li>'+M('z')+' 沒有單位。</li>'
+    +'<li>'+M('z')+' 可以為正數、零或負數：'
+    +'<ul>'
+    +'<li>若 '+M('z\\gt 0')+'，則 '+M('x')+' 高於平均數；</li>'
+    +'<li>若 '+M('z=0')+'，則 '+M('x')+' 等於平均數；</li>'
+    +'<li>若 '+M('z\\lt 0')+'，則 '+M('x')+' 低於平均數。</li>'
+    +'</ul></li>'
+    +'<li>總括：標準分是把「與平均數的差距」表示成標準差的數目，用來比較同一組（或不同組但已標準化）數據的相對位置。</li>'
+    +'<li>比較不同測驗／科目的相對表現時，應比較標準分，而不是只看原始分數。標準分較大者，相對表現較佳。</li>'
+    +'</ul>';
+}
+
+function legendHtml(){
+  return '<div class="legend">'
+    +'<span class="item"><span class="dot" style="background:#1d6fd8"></span>'+M('z\\gt 0')+' 高於平均數</span>'
+    +'<span class="item"><span class="dot" style="background:#6b7280"></span>'+M('z=0')+' 等於平均數</span>'
+    +'<span class="item"><span class="dot" style="background:#e07a1a"></span>'+M('z\\lt 0')+' 低於平均數</span>'
+    +'<span class="item">顏色只作輔助，請同時閱讀文字說明。</span>'
+    +'</div>';
+}
+
+function bindSlider(id, setter){
+  const elr=document.getElementById(id);
+  if(!elr) return;
+  elr.addEventListener('input',function(){
+    setter(parseFloat(elr.value));
+    redraw({keepChrome:true});
+  });
+}
+
+function jumpZ(z){
+  state.page='meaning';
+  state.view='explore';
+  state.x=fromZ(z,state.mu,state.sig);
+  setViewChrome(false);
+  redraw();
+}
+function applyTypicalCompare(){
+  state.page='compare';
+  state.view='explore';
+  state.m={mu:DEF.typical.m.mu,sig:DEF.typical.m.sig,x:DEF.typical.m.x};
+  state.e={mu:DEF.typical.e.mu,sig:DEF.typical.e.sig,x:DEF.typical.e.x};
+  setViewChrome(false);
+  redraw();
+}
+function resetCurrent(){
+  if(state.page==='meaning'){
+    state.mu=DEF.meaning.mu; state.sig=DEF.meaning.sig; state.x=DEF.meaning.x;
+  } else if(state.page==='compare'){
+    state.m={mu:DEF.compare.m.mu,sig:DEF.compare.m.sig,x:DEF.compare.m.x};
+    state.e={mu:DEF.compare.e.mu,sig:DEF.compare.e.sig,x:DEF.compare.e.x};
+  } else if(state.restoreTab==='A'){
+    state.a={mu:DEF.restoreA.mu,sig:DEF.restoreA.sig,z:DEF.restoreA.z};
+  } else {
+    state.b={x1:DEF.restoreB.x1,z1:DEF.restoreB.z1,x2:DEF.restoreB.x2,z2:DEF.restoreB.z2};
+  }
+  redraw();
+}
+
+function buildExploreChrome(){
+  let cap='', sub='', controls='', panel='';
+  if(state.page==='meaning'){
+    const z=zScore(state.x,state.mu,state.sig);
+    cap='標準分的意義';
+    sub='拖動得分手柄，觀察 '+ 'z' +' 如何量度「高於或低於平均數多少個標準差」。';
+    controls=
+      '<button type="button" class="sm" id="btnZ0">'+ 'z = 0' +'</button>'
+      +'<button type="button" class="sm" id="btnZ1">z = 1</button>'
+      +'<button type="button" class="sm" id="btnZ2">z = 2</button>'
+      +'<button type="button" class="sm" id="btnZm15">z = −1.5</button>'
+      +'<button type="button" class="sm" id="btnResetEx">↺ 重設</button>';
+    panel='<h2>標準分的意義</h2>'
+      +'<p>在一組平均數為 '+M('\\mu')+' 及標準差為 '+M('\\sigma')+'（'+M('\\sigma\\gt 0')+'）的原始數據中，一已知原始數據 '+M('x')+' 的標準分 '+M('z')+' 定義為</p>'
+      +'<p class="eq" style="text-align:center">'+M('z=\\dfrac{x-\\mu}{\\sigma}')+'</p>'
+      +'<div class="read" id="liveRead"></div>'
+      +'<div class="eq" id="liveEq"></div>'
+      +'<p id="liveSay"></p>'
+      +'<div id="liveBox"></div>'
+      +legendHtml()
+      +sliderRow('slMu',M('\\mu')+' 平均數',0,100,1,state.mu)
+      +sliderRow('slSig',M('\\sigma')+' 標準差',2,20,0.5,state.sig)
+      +sliderRow('slX',M('x')+' 得分',0,100,1,state.x)
+      +'<div class="presets">'
+      +'<button type="button" class="sm" id="btnZ0p">移到 z = 0</button>'
+      +'<button type="button" class="sm" id="btnZ1p">移到 z = 1</button>'
+      +'<button type="button" class="sm" id="btnZ2p">移到 z = 2</button>'
+      +'<button type="button" class="sm" id="btnZm15p">移到 z = −1.5</button>'
+      +'</div>'
+      +pointsBlock();
+  } else if(state.page==='compare'){
+    cap='比較兩科的相對表現';
+    sub='上下兩條原始分數數線的刻度可以不同；請在共用的 z 軸上比較。';
+    controls=
+      '<button type="button" class="sm primary" id="btnCompare">典型比較</button>'
+      +'<button type="button" class="sm" id="btnResetEx">↺ 重設</button>';
+    panel='<h2>比較兩科表現</h2>'
+      +'<p>比較不同測驗／科目的相對表現時，應比較標準分，而不是只看原始分數。標準分較大者，相對表現較佳。</p>'
+      +'<div id="liveBox"></div>'
+      +'<div class="read" id="liveRead"></div>'
+      +'<div class="eq" id="liveEq"></div>'
+      +'<p id="liveSay"></p>'
+      +'<div class="subj math">數學科</div>'
+      +sliderRow('slMmu','平均數',0,100,1,state.m.mu)
+      +sliderRow('slMsig','標準差',2,20,0.5,state.m.sig)
+      +sliderRow('slMx','得分',0,100,1,state.m.x)
+      +'<div class="subj eng">英文科</div>'
+      +sliderRow('slEmu','平均數',0,100,1,state.e.mu)
+      +sliderRow('slEsig','標準差',2,20,0.5,state.e.sig)
+      +sliderRow('slEx','得分',0,100,1,state.e.x)
+      +'<div class="presets"><button type="button" class="sm primary" id="btnCompareP">套用典型比較</button></div>'
+      +'<p class="note">典型比較：數學科得分 72、平均數 64、標準差 4；英文科得分 85、平均數 70、標準差 10。雖然英文科原始分數較高，但數學科標準分較大。</p>'
+      +pointsBlock();
+  } else {
+    cap='由標準分還原／求平均數與標準差';
+    sub=state.restoreTab==='A'
+      ?'已知 '+ 'z、μ、σ' +'，即時求 '+ 'x = μ + zσ' +'。'
+      :'已知兩個 '+ '(x, z)' +'，聯立求平均數與標準差。';
+    controls=
+      '<button type="button" class="sm'+(state.restoreTab==='A'?' primary':'')+'" id="btnTabA">(A) 由標準分求 x</button>'
+      +'<button type="button" class="sm'+(state.restoreTab==='B'?' primary':'')+'" id="btnTabB">(B) 求 μ 及 σ</button>'
+      +'<button type="button" class="sm" id="btnResetEx">↺ 重設</button>';
+    if(state.restoreTab==='A'){
+      panel='<h2>由標準分還原得分</h2>'
+        +'<p>由定義變形可得</p>'
+        +'<p class="eq" style="text-align:center">'+M('x=\\mu+z\\sigma')+'</p>'
+        +'<div class="read" id="liveRead"></div>'
+        +'<div class="eq" id="liveEq"></div>'
+        +'<p id="liveSay"></p>'
+        +'<div id="liveBox"></div>'
+        +legendHtml()
+        +sliderRow('slAmu',M('\\mu')+' 平均數',0,100,1,state.a.mu)
+        +sliderRow('slAsig',M('\\sigma')+' 標準差',2,20,0.5,state.a.sig)
+        +sliderRow('slAz',M('z')+' 標準分',-3,3,0.1,state.a.z)
+        +pointsBlock();
+    } else {
+      panel='<h2>由兩個標準分求平均數與標準差</h2>'
+        +'<p>設學生甲、乙的得分與標準分分別為 '+M('(x_1,z_1)')+'、'+M('(x_2,z_2)')+'，則</p>'
+        +'<p class="eq" style="text-align:center">'+M('x_1=\\mu+z_1\\sigma,\\quad x_2=\\mu+z_2\\sigma')+'</p>'
+        +'<p>從而（當 '+M('z_1\\neq z_2')+'）</p>'
+        +'<p class="eq" style="text-align:center">'+M('\\sigma=\\dfrac{x_2-x_1}{z_2-z_1},\\quad \\mu=x_1-z_1\\sigma')+'</p>'
+        +'<div id="liveBox"></div>'
+        +'<div class="read" id="liveRead"></div>'
+        +'<div class="eq" id="liveEq"></div>'
+        +'<p id="liveSay"></p>'
+        +'<div class="subj math">學生甲</div>'
+        +sliderRow('slBx1','得分 x₁',0,100,1,state.b.x1)
+        +sliderRow('slBz1','標準分 z₁',-3,3,0.5,state.b.z1)
+        +'<div class="subj eng">學生乙</div>'
+        +sliderRow('slBx2','得分 x₂',0,100,1,state.b.x2)
+        +sliderRow('slBz2','標準分 z₂',-3,3,0.5,state.b.z2)
+        +'<div class="presets"><button type="button" class="sm primary" id="btnRestoreEx">載入甲乙例子</button></div>'
+        +'<p class="note">自編例子：甲 57 分、'+M('z=-2')+'；乙 81 分、'+M('z=2')+'，可得 '+M('\\mu=69')+'，'+M('\\sigma=6')+'。</p>'
+        +pointsBlock();
+    }
+  }
+  document.getElementById('caption').innerHTML=cap+'<span class="sub">'+sub+'</span>';
+  document.getElementById('controls').innerHTML=controls;
+  document.getElementById('panel').innerHTML=panel;
+  document.getElementById('kbdHint').textContent='可拖動手柄改變得分或標準分；頁面可上下捲動。';
+  renderTex(document.getElementById('caption'));
+  renderTex(document.getElementById('panel'));
+  renderTex(document.getElementById('controls'));
+
+  const zBtn=function(id,z){const b=document.getElementById(id); if(b) b.onclick=function(){ jumpZ(z); };};
+  zBtn('btnZ0',0); zBtn('btnZ1',1); zBtn('btnZ2',2); zBtn('btnZm15',-1.5);
+  zBtn('btnZ0p',0); zBtn('btnZ1p',1); zBtn('btnZ2p',2); zBtn('btnZm15p',-1.5);
+  const cmp=document.getElementById('btnCompare'); if(cmp) cmp.onclick=applyTypicalCompare;
+  const cmpP=document.getElementById('btnCompareP'); if(cmpP) cmpP.onclick=applyTypicalCompare;
+  const rst=document.getElementById('btnResetEx'); if(rst) rst.onclick=resetCurrent;
+  const tA=document.getElementById('btnTabA'); if(tA) tA.onclick=function(){state.restoreTab='A'; redraw();};
+  const tB=document.getElementById('btnTabB'); if(tB) tB.onclick=function(){state.restoreTab='B'; redraw();};
+  const exB=document.getElementById('btnRestoreEx'); if(exB) exB.onclick=function(){
+    state.b={x1:DEF.restoreB.x1,z1:DEF.restoreB.z1,x2:DEF.restoreB.x2,z2:DEF.restoreB.z2};
+    redraw();
+  };
+
+  bindSlider('slMu',function(v){state.mu=v;});
+  bindSlider('slSig',function(v){state.sig=Math.max(2,v);});
+  bindSlider('slX',function(v){state.x=v;});
+  bindSlider('slMmu',function(v){state.m.mu=v;});
+  bindSlider('slMsig',function(v){state.m.sig=Math.max(2,v);});
+  bindSlider('slMx',function(v){state.m.x=v;});
+  bindSlider('slEmu',function(v){state.e.mu=v;});
+  bindSlider('slEsig',function(v){state.e.sig=Math.max(2,v);});
+  bindSlider('slEx',function(v){state.e.x=v;});
+  bindSlider('slAmu',function(v){state.a.mu=v;});
+  bindSlider('slAsig',function(v){state.a.sig=Math.max(2,v);});
+  bindSlider('slAz',function(v){state.a.z=v;});
+  bindSlider('slBx1',function(v){state.b.x1=v;});
+  bindSlider('slBz1',function(v){state.b.z1=v;});
+  bindSlider('slBx2',function(v){state.b.x2=v;});
+  bindSlider('slBz2',function(v){state.b.z2=v;});
+}
+
+function updateSliderVal(id,v){
+  const s=document.getElementById(id);
+  const lab=document.getElementById(id+'Val');
+  if(s && document.activeElement!==s) s.value=String(v);
+  if(lab) lab.textContent=fmtUI(v);
+}
+
+function setLive(readHtml, eqHtml, sayHtml, boxHtml){
+  const r=document.getElementById('liveRead'); if(r) r.innerHTML=readHtml||'';
+  const e=document.getElementById('liveEq'); if(e) e.innerHTML=eqHtml||'';
+  const s=document.getElementById('liveSay'); if(s) s.innerHTML=sayHtml||'';
+  const b=document.getElementById('liveBox'); if(b) b.innerHTML=boxHtml||'';
+  renderTex(r); renderTex(e); renderTex(s); renderTex(b);
+}
+
+function integerZBox(z){
+  if(!almost(z, Math.round(z), 1e-6)) return '';
+  const k=Math.round(z);
+  let msg;
+  if(k===0) msg='當 '+M('z=0')+' 時，該原始數據等於平均數。';
+  else if(k>0) msg='當 '+M('z='+k)+' 時，該原始數據高於平均數 '+k+' 個標準差。';
+  else msg='當 '+M('z='+k)+' 時，該原始數據低於平均數 '+(-k)+' 個標準差。';
+  return '<div class="ok">'+msg+'</div>';
+}
+
+function compareConclusion(z1,z2,rawM,rawE){
+  const dz=z1-z2;
+  let box, say;
+  if(Math.abs(dz)<0.05){
+    box='<div class="ok">兩科的相對表現相同。</div>';
+    say='兩個標準分相等（或相差不足 0.05），相對表現相同。';
+  } else if(dz>=0.05){
+    box='<div class="ok">相對於其他考生，數學科的表現較佳，因為其標準分較大。</div>';
+    say='∵ '+M('z_{\\text{數}}\\gt z_{\\text{英}}')+'，∴ 數學科的相對表現較佳。'
+      +(rawE>rawM?' 注意：英文科的原始分數較高，但不能只比較原始分數。':'');
+  } else {
+    box='<div class="ok">相對於其他考生，英文科的表現較佳，因為其標準分較大。</div>';
+    say='∵ '+M('z_{\\text{英}}\\gt z_{\\text{數}}')+'，∴ 英文科的相對表現較佳。'
+      +(rawM>rawE?' 注意：數學科的原始分數較高，但不能只比較原始分數。':'');
+  }
+  return {box:box,say:say};
+}
+
+/* ===== drawing pages ===== */
+function drawMeaning(mu,sig,x,opts){
+  opts=opts||{};
+  const z=zScore(x,mu,sig);
+  const col=zColor(z);
+  const sc=makeScale(mu,sig,[x]);
+  const yRaw=250, yZ=470;
+  drawBell(sc,yRaw,110);
+  drawGuide(sc.Xs(mu),yRaw,yZ,'#7a3fa8');
+  drawGuide(sc.Xs(x),yRaw,yZ,col);
+  drawAxis(yRaw,sc,{axisTitle:'原始分數'});
+  drawTicksRaw(yRaw,sc,{hideScoreAt: almost(x,mu,1e-6)?null:x});
+  drawArrowSpan(sc.Xs(mu),sc.Xs(x), (yRaw+yZ)/2-16, col, 'x − μ = zσ');
+  const nearTick=almost(z,Math.round(z),0.08) || Math.abs(sc.Xs(x)-sc.Xs(mu))<46;
+  const xLabelY = nearTick ? yRaw-44 : yRaw-36;
+  if(almost(x,mu,1e-6)){
+    drawHandle(sc.Xs(x), yRaw, col, 'hX', 'x = μ = '+fmtUI(x), yRaw-44);
+  } else {
+    const lab=(opts.name?opts.name+'  ':'')+'x = '+fmtUI(x);
+    drawHandle(sc.Xs(x), yRaw, col, 'hX', lab, xLabelY);
+  }
+
+  drawAxis(yZ,sc,{axisTitle:'z 軸',color:'#1f2937'});
+  drawTicksZ(yZ,sc,z);
+  drawHandle(sc.Xz(z), yZ, col, 'hZ', 'z = '+fmtUI(z), yZ-28);
+
+  if(opts.live!==false){
+    updateSliderVal('slMu',mu); updateSliderVal('slSig',sig); updateSliderVal('slX',x);
+    const note=isExactDisp(z,2)?'':'<span class="note">（準確至兩位小數）</span>';
+    const read=
+      '<span>'+M('x')+'（得分）</span><span class="v">'+fmtUI(x)+'</span>'
+      +'<span>'+M('\\mu')+'（平均數）</span><span class="v">'+fmtUI(mu)+'</span>'
+      +'<span>'+M('\\sigma')+'（標準差）</span><span class="v">'+fmtUI(sig)+'</span>'
+      +'<span>'+M('z')+'（標準分）</span><span class="v" style="color:'+col+'">'+fmtUI(z)+'</span>';
+    const eq=M(texZCalc(x,mu,sig))+' '+note;
+    const say='口語解釋：這項得分<strong>'+zSignWord(z)+'</strong>。標準分沒有單位。';
+    setLive(read, eq, say, integerZBox(z));
+  }
+  return {sc:sc,z:z,col:col,yRaw:yRaw,yZ:yZ};
+}
+
+function drawTwoSubjects(m,e,opts){
+  opts=opts||{};
+  const z1=zScore(m.x,m.mu,m.sig), z2=zScore(e.x,e.mu,e.sig);
+  const c1='#1d6fd8', c2='#7a3fa8';
+  // shared z scale must cover both z values
+  const zAbs=Math.max(3.4, Math.abs(z1)+0.55, Math.abs(z2)+0.55, 3.4);
+  const dummy={mu:0,sig:1};
+  const sc=makeScale(0,1,[-zAbs,zAbs]); // Xz works; Xs(s)=Xz(s)
+  const yM=150, yE=310, yZ=500;
+  // For subject scales aligned to the shared z axis: position = Xz( (x-mu)/sig )
+  function scSub(sub){ return {Xz:sc.Xz, Xs:function(s){return sc.Xz((s-sub.mu)/sub.sig);}, mu:sub.mu,sig:sub.sig,zmin:sc.zmin,zmax:sc.zmax,x0:sc.x0,x1:sc.x1}; }
+
+  const scM=scSub(m), scE=scSub(e);
+  drawBell(scM,yM,80);
+  drawBell(scE,yE,80);
+  drawGuide(scM.Xs(m.mu),yM,yZ,'#7a3fa8');
+  drawGuide(scM.Xs(m.x),yM,yZ,c1);
+  drawGuide(scE.Xs(e.x),yE,yZ,c2);
+
+  drawAxis(yM,scM,{axisTitle:'數學科',color:'#1d6fd8'});
+  drawTicksRaw(yM,scM,{hideScoreAt:m.x});
+  const mLabY=Math.abs(scM.Xs(m.x)-scM.Xs(m.mu))<46?yM-50:yM-28;
+  drawHandle(scM.Xs(m.x),yM,c1,'hMx','x = '+fmtUI(m.x),mLabY);
+
+  drawAxis(yE,scE,{axisTitle:'英文科',color:'#7a3fa8'});
+  drawTicksRaw(yE,scE,{hideScoreAt:e.x});
+  const eLabY=Math.abs(scE.Xs(e.x)-scE.Xs(e.mu))<46?yE-50:yE-28;
+  drawHandle(scE.Xs(e.x),yE,c2,'hEx','x = '+fmtUI(e.x),eLabY);
+
+  drawAxis(yZ,sc,{axisTitle:'共用 z 軸'});
+  drawTicksZ(yZ,sc, undefined);
+  // two z markers; stagger labels if close
+  let z1y=yZ-34, z2y=yZ-34;
+  if(Math.abs(sc.Xz(z1)-sc.Xz(z2))<90){ z1y=yZ-58; z2y=yZ-30; }
+  drawHandle(sc.Xz(z1),yZ,c1,'hMz','z數 = '+fmtUI(z1),z1y);
+  drawHandle(sc.Xz(z2),yZ,c2,'hEz','z英 = '+fmtUI(z2),z2y);
+
+  if(opts.live!==false){
+    updateSliderVal('slMmu',m.mu); updateSliderVal('slMsig',m.sig); updateSliderVal('slMx',m.x);
+    updateSliderVal('slEmu',e.mu); updateSliderVal('slEsig',e.sig); updateSliderVal('slEx',e.x);
+    const n1=isExactDisp(z1,2)?'':'（準確至兩位小數）';
+    const n2=isExactDisp(z2,2)?'':'（準確至兩位小數）';
+    const read=
+      '<span>數學科 '+M('x,\\mu,\\sigma')+'</span><span class="v">'+fmtUI(m.x)+'，'+fmtUI(m.mu)+'，'+fmtUI(m.sig)+'</span>'
+      +'<span>數學科 '+M('z_{\\text{數}}')+'</span><span class="v" style="color:'+c1+'">'+fmtUI(z1)+(n1?'*':'')+'</span>'
+      +'<span>英文科 '+M('x,\\mu,\\sigma')+'</span><span class="v">'+fmtUI(e.x)+'，'+fmtUI(e.mu)+'，'+fmtUI(e.sig)+'</span>'
+      +'<span>英文科 '+M('z_{\\text{英}}')+'</span><span class="v" style="color:'+c2+'">'+fmtUI(z2)+(n2?'*':'')+'</span>';
+    const eq='<div>數學科　'+M(texZCalc(m.x,m.mu,m.sig))+'</div>'
+            +'<div>英文科　'+M(texZCalc(e.x,e.mu,e.sig))+'</div>';
+    const cc=compareConclusion(z1,z2,m.x,e.x);
+    setLive(read, eq, cc.say, cc.box);
+  }
+  return {sc:sc,scM:scM,scE:scE,z1:z1,z2:z2,yM:yM,yE:yE,yZ:yZ};
+}
+
+function drawRestoreA(a,opts){
+  const x=fromZ(a.z,a.mu,a.sig);
+  const r=drawMeaning(a.mu,a.sig,x,{alwaysHandle:true,live:false});
+  if(opts&&opts.live===false) return r;
+  updateSliderVal('slAmu',a.mu); updateSliderVal('slAsig',a.sig); updateSliderVal('slAz',a.z);
+  const note=isExactDisp(x,2)?'':'<span class="note">（準確至兩位小數）</span>';
+  const col=zColor(a.z);
+  const read=
+    '<span>'+M('z')+'（標準分）</span><span class="v" style="color:'+col+'">'+fmtUI(a.z)+'</span>'
+    +'<span>'+M('\\mu')+'（平均數）</span><span class="v">'+fmtUI(a.mu)+'</span>'
+    +'<span>'+M('\\sigma')+'（標準差）</span><span class="v">'+fmtUI(a.sig)+'</span>'
+    +'<span>'+M('x')+'（得分）</span><span class="v">'+fmtUI(x)+'</span>';
+  const eq=M(texXCalc(a.z,a.mu,a.sig))+' '+note;
+  const say='口語解釋：標準分為 '+fmtUI(a.z)+'，表示該得分<strong>'+zSignWord(a.z)+'</strong>，因此得分為 '+fmtUI(x)+'。';
+  setLive(read, eq, say, integerZBox(a.z));
+  return r;
+}
+
+function solveMuSig(b){
+  if(almost(b.z1,b.z2,1e-9)) return {ok:false};
+  const sig=(b.x2-b.x1)/(b.z2-b.z1);
+  if(!(sig>0) || !isFinite(sig)) return {ok:false, sig:sig};
+  const mu=b.x1-b.z1*sig;
+  return {ok:true, mu:mu, sig:sig};
+}
+
+function drawRestoreB(b,opts){
+  const sol=solveMuSig(b);
+  const yRaw=250, yZ=470;
+  if(!sol.ok){
+    // still show two scores on a generic 0-100 ish line
+    const xmin=Math.min(b.x1,b.x2,0)-5, xmax=Math.max(b.x1,b.x2,100)+5;
+    const x0=90,x1=960;
+    const Xs=function(s){return x0+(s-xmin)/(xmax-xmin)*(x1-x0);};
+    const sc={x0:x0,x1:x1,Xz:function(z){return x0+(z+3)/6*(x1-x0);},Xs:Xs,zmin:-3,zmax:3,mu:0,sig:1};
+    drawAxis(yRaw,sc,{axisTitle:'原始分數'});
+    drawHandle(Xs(b.x1),yRaw,'#1d6fd8','hX1','甲  x = '+fmtUI(b.x1),yRaw-28);
+    drawHandle(Xs(b.x2),yRaw,'#7a3fa8','hX2','乙  x = '+fmtUI(b.x2),yRaw-28);
+    if(!(opts&&opts.live===false)){
+      updateSliderVal('slBx1',b.x1); updateSliderVal('slBz1',b.z1);
+      updateSliderVal('slBx2',b.x2); updateSliderVal('slBz2',b.z2);
+      setLive('', '', '',
+        almost(b.z1,b.z2,1e-9)
+          ? '<div class="warn">兩個標準分相等，無法唯一決定平均數和標準差。（需要 '+M('z_1\\neq z_2')+'）</div>'
+          : '<div class="warn">計算所得的標準差不是正數，請檢查數據。</div>'
+      );
+    }
+    return;
+  }
+  const sc=makeScale(sol.mu,sol.sig,[b.x1,b.x2]);
+  const c1=zColor(b.z1), c2=zColor(b.z2);
+  drawBell(sc,yRaw,110);
+  drawGuide(sc.Xs(sol.mu),yRaw,yZ,'#7a3fa8');
+  drawGuide(sc.Xs(b.x1),yRaw,yZ,c1);
+  drawGuide(sc.Xs(b.x2),yRaw,yZ,c2);
+  drawAxis(yRaw,sc,{axisTitle:'原始分數'});
+  drawTicksRaw(yRaw,sc,{hideScoreAt:[b.x1,b.x2]});
+  let y1=yRaw-28, y2=yRaw-28;
+  if(Math.abs(sc.Xs(b.x1)-sc.Xs(b.x2))<80){ y1=yRaw-70; y2=yRaw-28; }
+  drawHandle(sc.Xs(b.x1),yRaw,c1,'hX1','甲  x = '+fmtUI(b.x1),y1);
+  drawHandle(sc.Xs(b.x2),yRaw,c2,'hX2','乙  x = '+fmtUI(b.x2),y2);
+  drawAxis(yZ,sc,{axisTitle:'z 軸'});
+  drawTicksZ(yZ,sc, undefined);
+  let z1y=yZ-52, z2y=yZ-28;
+  drawHandle(sc.Xz(b.z1),yZ,c1,'hZ1','z甲 = '+fmtUI(b.z1),z1y);
+  drawHandle(sc.Xz(b.z2),yZ,c2,'hZ2','z乙 = '+fmtUI(b.z2),z2y);
+
+  if(!(opts&&opts.live===false)){
+    updateSliderVal('slBx1',b.x1); updateSliderVal('slBz1',b.z1);
+    updateSliderVal('slBx2',b.x2); updateSliderVal('slBz2',b.z2);
+    const noteS=isExactDisp(sol.sig,2)?'':'（準確至兩位小數）';
+    const noteM=isExactDisp(sol.mu,2)?'':'（準確至兩位小數）';
+    const read=
+      '<span>甲 '+M('(x_1,z_1)')+'</span><span class="v">'+fmtUI(b.x1)+'，'+fmtUI(b.z1)+'</span>'
+      +'<span>乙 '+M('(x_2,z_2)')+'</span><span class="v">'+fmtUI(b.x2)+'，'+fmtUI(b.z2)+'</span>'
+      +'<span>'+M('\\sigma')+'</span><span class="v">'+fmtUI(sol.sig)+'</span>'
+      +'<span>'+M('\\mu')+'</span><span class="v">'+fmtUI(sol.mu)+'</span>';
+    const eq='<div>'+M('\\sigma=\\dfrac{x_2-x_1}{z_2-z_1}=\\dfrac{'+fmtTex(b.x2)+'-'+fmtTex(b.x1)+'}{'+fmtTex(b.z2)+'-('+fmtTex(b.z1)+')}='+fmtTex(sol.sig))+ (noteS?' <span class="note">'+noteS+'</span>':'')+'</div>'
+            +'<div>'+M('\\mu=x_1-z_1\\sigma='+fmtTex(b.x1)+'-('+fmtTex(b.z1)+')\\times '+fmtTex(sol.sig)+'='+fmtTex(sol.mu))+ (noteM?' <span class="note">'+noteM+'</span>':'')+'</div>';
+    const say='聯立 '+M('x_1=\\mu+z_1\\sigma')+' 與 '+M('x_2=\\mu+z_2\\sigma')+'，求得平均數為 '+fmtUI(sol.mu)+'，標準差為 '+fmtUI(sol.sig)+'。';
+    const box='<div class="ok">'+M('\\mu='+fmtTex(sol.mu))+'，'+M('\\sigma='+fmtTex(sol.sig))+'</div>';
+    setLive(read, eq, say, box);
+  }
+}
+
+/* ===== demo panels ===== */
+function demoPanel(step){
+  const k=step.kind;
+  let html='<h2>'+step.caption+'</h2>';
+  if(k==='why'){
+    html+='<p>同一位學生在不同科目的測驗中，原始分數的滿分、平均數和標準差都可以不同。</p>'
+      +'<p>只比較原始分數，或只看平均數／標準差，都難以判斷哪一科的<strong>相對表現</strong>較佳。</p>'
+      +'<p>例如：數學科得 72 分，英文科得 85 分。英文科的原始分數較高，是否代表英文科的相對表現較佳？</p>'
+      +'<div class="info">因此我們需要一個沒有單位、可作比較的量——<strong>標準分</strong>。</div>';
+  } else if(k==='def'){
+    html+='<p>在一組平均數為 '+M('\\mu')+' 及標準差為 '+M('\\sigma')+'（'+M('\\sigma\\gt 0')+'）的原始數據中，一已知原始數據 '+M('x')+' 的標準分 '+M('z')+' 定義為</p>'
+      +'<p class="eq" style="text-align:center">'+M('z=\\dfrac{x-\\mu}{\\sigma}')+'</p>'
+      +'<p>等價變形：'+M('x=\\mu+z\\sigma')+'。</p>'
+      +pointsBlock();
+  } else if(k==='exaZ'){
+    html+='<p>某次測驗的平均數為 72 分，標準差為 8 分。志軒得 60 分。求他的標準分，並解釋意義。</p>'
+      +'<p class="eq">'+M('z=\\dfrac{x-\\mu}{\\sigma}=\\dfrac{60-72}{8}=\\dfrac{-12}{8}=-1.5')+'</p>'
+      +'<div class="ok">'+M('\\therefore')+' 志軒的得分低於平均數 1.5 個標準差。</div>'
+      +'<p class="note">標準分沒有單位；'+M('z\\lt 0')+' 表示低於平均數。</p>';
+  } else if(k==='exaX'){
+    html+='<p>同一測驗（平均數 72 分，標準差 8 分）中，雅婷的標準分為 1.5。求她的得分。</p>'
+      +'<p class="eq">'+M('x=\\mu+z\\sigma=72+1.5\\times 8=72+12=84')+'</p>'
+      +'<div class="ok">'+M('\\therefore')+' 雅婷的得分為 84 分，高於平均數 1.5 個標準差。</div>';
+  } else if(k==='cmp'){
+    html+='<p>同一學生：數學科得分 72（平均數 64，標準差 4）；英文科得分 85（平均數 70，標準差 10）。哪一科的相對表現較佳？</p>'
+      +'<p>數學科：'+M('z_{\\text{數}}=\\dfrac{72-64}{4}=\\dfrac{8}{4}=2')+'</p>'
+      +'<p>英文科：'+M('z_{\\text{英}}=\\dfrac{85-70}{10}=\\dfrac{15}{10}=1.5')+'</p>'
+      +'<p>雖然英文科的原始分數較高，但應<strong>比較標準分</strong>。</p>'
+      +'<div class="ok">'+M('\\because')+' 數學科的標準分較大（'+M('2\\gt 1.5')+'），'
+      +M('\\therefore')+' 相對於其他考生，數學科的表現較佳。</div>';
+  } else if(k==='sys'){
+    html+='<p>甲得 57 分，標準分為 '+M('-2')+'；乙得 81 分，標準分為 '+M('2')+'。求這組數據的平均數和標準差。</p>'
+      +'<p>'+M('x_1=\\mu+z_1\\sigma')+'　⇒　'+M('57=\\mu-2\\sigma')+'</p>'
+      +'<p>'+M('x_2=\\mu+z_2\\sigma')+'　⇒　'+M('81=\\mu+2\\sigma')+'</p>'
+      +'<p>兩式相減：'+M('24=4\\sigma')+'　⇒　'+M('\\sigma=6')+'</p>'
+      +'<p>代入：'+M('57=\\mu-12')+'　⇒　'+M('\\mu=69')+'</p>'
+      +'<p class="note">亦可直接用 '+M('\\sigma=\\dfrac{x_2-x_1}{z_2-z_1}=\\dfrac{81-57}{2-(-2)}=\\dfrac{24}{4}=6')+'，再求 '+M('\\mu=x_1-z_1\\sigma=57-(-2)\\times 6=69')+'。</p>'
+      +'<div class="ok">平均數為 69，標準差為 6。</div>';
+  } else {
+    html+='<ol>'
+      +'<li><strong>定義：</strong>'+M('z=\\dfrac{x-\\mu}{\\sigma}')+'，亦可寫成 '+M('x=\\mu+z\\sigma')+'。</li>'
+      +'<li><strong>符號意義：</strong>'+M('z')+' 沒有單位。'+M('z\\gt 0')+' 表示高於平均數，'+M('z=0')+' 表示等於平均數，'+M('z\\lt 0')+' 表示低於平均數；'+M('z')+' 就是與平均數相距多少個標準差。</li>'
+      +'<li><strong>比較時用標準分：</strong>比較不同測驗／科目的相對表現時，應比較標準分，而不是只看原始分數。標準分較大者，相對表現較佳。</li>'
+      +'</ol>'
+      +'<div class="ok">記得：原始分數較高，不一定代表相對表現較佳。</div>';
+  }
+  document.getElementById('panel').innerHTML=html;
+  renderTex(document.getElementById('panel'));
+}
+
+function drawDemo(){
+  const step=DEMO_STEPS[demo.i];
+  document.getElementById('caption').innerHTML=step.caption+'<span class="sub">'+step.sub+'</span>';
+  document.getElementById('controls').innerHTML=demo.controls();
+  document.getElementById('kbdHint').textContent='鍵盤：← → 步驟，空白鍵播放／暫停';
+  demo.bindControls();
+  demoPanel(step);
+  const k=step.kind;
+  if(k==='why'){
+    // show two raw lines, but hide the shared-z conclusion emphasis? still show z axis with question
+    drawTwoSubjects(step.m,step.e,{live:false});
+    // overlay question marks? the live panel already poses the question. Fine.
+  } else if(k==='def'){
+    drawMeaning(step.mu,step.sig,step.x,{live:false,alwaysHandle:true});
+  } else if(k==='exaZ'){
+    drawMeaning(step.mu,step.sig,step.x,{live:false,name:step.name});
+  } else if(k==='exaX'){
+    drawMeaning(step.mu,step.sig,step.x,{live:false,name:step.name});
+    if(step.ghost){
+      const sc=makeScale(step.mu,step.sig,[step.x,step.ghost.x]);
+      const yRaw=250, col=zColor(step.ghost.z);
+      svg.appendChild(el('circle',{cx:sc.Xs(step.ghost.x),cy:yRaw,r:9,fill:col,stroke:'#fff','stroke-width':2,opacity:'0.7'}));
+      svg.appendChild(el('text',{x:sc.Xs(step.ghost.x),y:yRaw+50,class:'lbl-cjk',fill:col,'text-anchor':'middle',opacity:'0.85',textContent:step.ghost.name+'  x = '+fmtUI(step.ghost.x)}));
+    }
+  } else if(k==='cmp'||k==='sum'){
+    drawTwoSubjects(step.m,step.e,{live:false});
+  } else if(k==='sys'){
+    drawRestoreB(step.b,{live:false});
+  }
+}
+
+/* ===== main redraw ===== */
+function chromeKey(){
+  if(state.view==='demo') return 'demo-'+demo.i+'-'+demo.playing;
+  return 'ex-'+state.page+'-'+state.restoreTab;
+}
+
+function setViewChrome(rebuild){
+  setModeButtons();
+  buildFlags();
+}
+
+function redraw(opt){
+  const keep=opt&&opt.keepChrome;
+  clearSvg();
+  addDefs();
+  if(state.view==='demo'){
+    if(!keep || state.chromeKey!==chromeKey()){
+      setViewChrome();
+      state.chromeKey=chromeKey();
+    } else {
+      // still need to refresh demo controls play label and flags
+      setViewChrome();
+      state.chromeKey=chromeKey();
+    }
+    drawDemo();
+    return;
+  }
+  if(!keep || state.chromeKey!==chromeKey()){
+    setViewChrome();
+    buildExploreChrome();
+    state.chromeKey=chromeKey();
+  }
+  if(state.page==='meaning') drawMeaning(state.mu,state.sig,state.x);
+  else if(state.page==='compare') drawTwoSubjects(state.m,state.e);
+  else if(state.restoreTab==='A') drawRestoreA(state.a);
+  else drawRestoreB(state.b);
+}
+
+/* ===== flags / modes ===== */
+document.getElementById('flags').addEventListener('click',function(e){
+  const f=e.target.closest('.flag'); if(!f) return;
+  if(state.view==='explore'){
+    const p=f.dataset.page; if(!p) return;
+    state.page=p;
+    redraw();
+  } else {
+    const i=parseInt(f.dataset.step,10);
+    if(!isNaN(i)) demo.go(i);
+  }
+});
+
+document.getElementById('btnModeExplore').onclick=function(){
+  state.view='explore';
+  demo.token++; demo.playing=false;
+  redraw();
+};
+document.getElementById('btnModeDemo').onclick=function(){
+  state.view='demo';
+  demo.go(demo.i||0);
+};
+
+document.addEventListener('keydown',function(e){
+  if(state.view!=='demo') return;
+  const tag=(e.target&&e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea') return;
+  if(e.key==='ArrowLeft'){e.preventDefault(); demo.go(demo.i-1);}
+  else if(e.key==='ArrowRight'){e.preventDefault(); demo.go(demo.i+1);}
+  else if(e.key===' '||e.key==='Spacebar'){e.preventDefault(); demo.play();}
+});
+
+/* ===== drag ===== */
+function handleKindFromTarget(t){
+  if(!t || t===svg) return null;
+  const id=t.id||'';
+  // only .handle elements
+  if(!(t.classList&&t.classList.contains('handle'))){
+    const h=t.closest && t.closest('.handle');
+    if(!h) return null;
+  }
+  if(id==='hX'||id==='hXHit'||id==='hXStem'||id==='hZ'||id==='hZHit'||id==='hZStem'){
+    if(state.view==='explore' && (state.page==='meaning' || (state.page==='restore'&&state.restoreTab==='A'))) return 'xOrZ';
+  }
+  if(id==='hMx'||id==='hMxHit'||id==='hMxStem') return 'mx';
+  if(id==='hEx'||id==='hExHit'||id==='hExStem') return 'ex';
+  if(id==='hMz'||id==='hMzHit'||id==='hMzStem') return 'mz';
+  if(id==='hEz'||id==='hEzHit'||id==='hEzStem') return 'ez';
+  if(id==='hX1'||id==='hX1Hit'||id==='hX1Stem') return 'x1';
+  if(id==='hX2'||id==='hX2Hit'||id==='hX2Stem') return 'x2';
+  if(id==='hZ1'||id==='hZ1Hit'||id==='hZ1Stem') return 'z1';
+  if(id==='hZ2'||id==='hZ2Hit'||id==='hZ2Stem') return 'z2';
+  return null;
+}
+
+function currentScaleFor(kind){
+  if(kind==='xOrZ'){
+    if(state.page==='restore'&&state.restoreTab==='A'){
+      const x=fromZ(state.a.z,state.a.mu,state.a.sig);
+      return makeScale(state.a.mu,state.a.sig,[x]);
+    }
+    return makeScale(state.mu,state.sig,[state.x]);
+  }
+  if(kind==='mx'||kind==='mz'||kind==='ex'||kind==='ez'){
+    const z1=zScore(state.m.x,state.m.mu,state.m.sig), z2=zScore(state.e.x,state.e.mu,state.e.sig);
+    const zAbs=Math.max(3.4, Math.abs(z1)+0.55, Math.abs(z2)+0.55);
+    return makeScale(0,1,[-zAbs,zAbs]);
+  }
+  if(kind==='x1'||kind==='x2'||kind==='z1'||kind==='z2'){
+    const sol=solveMuSig(state.b);
+    if(sol.ok) return makeScale(sol.mu,sol.sig,[state.b.x1,state.b.x2]);
+    return null;
+  }
+  return null;
+}
+
+function endDrag(e){
+  if(state.drag && e && typeof e.pointerId==='number'){
+    try{ if(svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId); }catch(_){}
+  }
+  state.drag=null;
+}
+
+svg.addEventListener('pointerdown',function(e){
+  if(state.view==='demo') return; // lock figure in demo
+  const kind=handleKindFromTarget(e.target);
+  if(!kind) return;
+  state.drag={kind:kind, pointerId:e.pointerId};
+  try{ svg.setPointerCapture(e.pointerId); }catch(_){}
+  e.preventDefault();
+});
+
+svg.addEventListener('pointermove',function(e){
+  if(!state.drag) return;
+  e.preventDefault();
+  const p=svgPoint(e);
+  const kind=state.drag.kind;
+  const sc=currentScaleFor(kind);
+  if(!sc) return;
+  let z=sc.zFrom(p.x);
+  z=clamp(z, sc.zmin, sc.zmax);
+  z=snapZ(z);
+  if(kind==='xOrZ'){
+    if(state.page==='restore'&&state.restoreTab==='A'){
+      state.a.z=clamp(z,-3.5,3.5);
+    } else {
+      state.x=fromZ(z,state.mu,state.sig);
+    }
+  } else if(kind==='mx'||kind==='mz'){
+    state.m.x=fromZ(z,state.m.mu,state.m.sig);
+  } else if(kind==='ex'||kind==='ez'){
+    state.e.x=fromZ(z,state.e.mu,state.e.sig);
+  } else if(kind==='x1'||kind==='z1'){
+    // dragging on computed scale: changing x1 keeps z1, would change mu/sig; better change x and keep z
+    if(kind==='x1'){ state.b.x1=fromZ(z, sc.mu, sc.sig); }
+    else { state.b.z1=snapZ(clamp(z,-3,3)); }
+  } else if(kind==='x2'||kind==='z2'){
+    if(kind==='x2'){ state.b.x2=fromZ(z, sc.mu, sc.sig); }
+    else { state.b.z2=snapZ(clamp(z,-3,3)); }
+  }
+  redraw({keepChrome:true});
+},{passive:false});
+
+svg.addEventListener('pointerup',endDrag);
+svg.addEventListener('pointercancel',endDrag);
+svg.addEventListener('lostpointercapture',function(){state.drag=null;});
+
+/* ===== query params ===== */
+function applySnap(id){
+  if(!id) return;
+  if(id==='btnCompare'||id==='btnCompareP'){ applyTypicalCompare(); return; }
+  if(id==='btnZ0'||id==='btnZ0p'){ jumpZ(0); return; }
+  if(id==='btnZ1'||id==='btnZ1p'){ jumpZ(1); return; }
+  if(id==='btnZ2'||id==='btnZ2p'){ jumpZ(2); return; }
+  if(id==='btnZm15'||id==='btnZm15p'){ jumpZ(-1.5); return; }
+  if(id==='btnRestoreEx'){
+    state.view='explore'; state.page='restore'; state.restoreTab='B';
+    state.b={x1:DEF.restoreB.x1,z1:DEF.restoreB.z1,x2:DEF.restoreB.x2,z2:DEF.restoreB.z2};
+    redraw(); return;
+  }
+  const b=document.getElementById(id);
+  if(b) b.click();
+}
+
+(function init(){
+  const q=new URLSearchParams(location.search);
+  const mode=q.get('mode');
+  if(mode==='demo'){
+    state.view='demo';
+    const st=parseInt(q.get('step'),10);
+    const idx=(!isNaN(st) && st>=1 && st<=DEMO_STEPS.length)? st-1 : 0;
+    demo.i=idx;
+    redraw();
+  } else {
+    state.view='explore';
+    const page=q.get('page');
+    if(page==='compare'||page==='meaning'||page==='restore') state.page=page;
+    if(q.get('tab')==='B') state.restoreTab='B';
+    redraw();
+    const snap=q.get('snap');
+    if(snap) applySnap(snap);
+  }
+  // if mode=explore with snap, already drawn
+  if(mode==='demo'){ /* done */ }
+})();
+
+})();
+</script>
+</body>
+</html>
